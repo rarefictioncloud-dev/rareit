@@ -24,21 +24,21 @@ function Layout() {
   );
 }
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      { index: true, element: <Home /> },
-      { path: "services", element: <Services /> },
-      { path: "industries", element: <Industries /> },
-      { path: "our-work", element: <OurWork /> },
-      { path: "about", element: <About /> },
-      { path: "careers", element: <Careers /> },
-      { path: "contact", element: <Contact /> },
-      { path: "*", element: <NotFound /> },
-    ],
-  },
-]);
-
-export default router;
+export const router = createBrowserRouter(
+  [
+    {
+      element: <Layout />,
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "services", element: <Services /> },
+        { path: "industries", element: <Industries /> },
+        { path: "our-work", element: <OurWork /> },
+        { path: "about", element: <About /> },
+        { path: "careers", element: <Careers /> },
+        { path: "contact", element: <Contact /> },
+        { path: "*", element: <NotFound /> },
+      ],
+    },
+  ],
+  { basename: import.meta.env.BASE_URL }
+);
