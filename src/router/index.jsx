@@ -29,7 +29,7 @@ const router = createBrowserRouter(
     {
       element: <Layout />,
       children: [
-        { index: true, element: <Home /> },
+        { path: "/", element: <Home /> },
         { path: "services", element: <Services /> },
         { path: "industries", element: <Industries /> },
         { path: "our-work", element: <OurWork /> },
@@ -40,7 +40,7 @@ const router = createBrowserRouter(
       ],
     },
   ],
-  { basename: "/rareit" }
+  { basename: import.meta.env.BASE_URL }
 );
 
 export default router;
