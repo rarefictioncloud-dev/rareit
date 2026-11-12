@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-script: "Dancing Script", "Brush Script MT", cursive;
+  --color-brand: #d40f14;
+  --color-brand-dark: #a80b10;
+  --color-ink: #0d0d0f;
+  --color-muted: #55555c;
+  --color-line: #e7e7ea;
+}
