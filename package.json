@@ -3,7 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://rarefictioncloud-dev.github.io/rarecreativestudios/",
+  "homepage": "https://rarefictioncloud-dev.github.io/rareit/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rarefictioncloud-dev/rareit.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
