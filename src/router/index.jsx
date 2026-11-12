@@ -24,7 +24,7 @@ function Layout() {
   );
 }
 
-export const router = createBrowserRouter(
+const router = createBrowserRouter(
   [
     {
       element: <Layout />,
@@ -42,3 +42,5 @@ export const router = createBrowserRouter(
   ],
   { basename: import.meta.env.BASE_URL }
 );
+
+export default router;
