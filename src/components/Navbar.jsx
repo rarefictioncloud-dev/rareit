@@ -18,10 +18,10 @@ import {
 import Logo from "./Logo";
 
 const serviceItems = [
-  { icon: Workflow, label: "Process Automation", to: "/services#automation" },
-  { icon: Palette, label: "Web Designing", to: "/services#web" },
-  { icon: Code2, label: "Custom Software", to: "/services#custom" },
-  { icon: Smartphone, label: "Mobile Apps", to: "/services#mobile" },
+  { icon: Workflow, label: "Process Automation", to: "/services/process-automation" },
+  { icon: Palette, label: "Web Designing", to: "/services/web-designing" },
+  { icon: Code2, label: "Custom Software", to: "/services/custom-software" },
+  { icon: Smartphone, label: "Mobile Apps", to: "/services/mobile-apps" },
 ];
 
 const industryItems = [
@@ -34,7 +34,7 @@ const industryItems = [
 
 const links = [
   { to: "/", label: "Home", end: true },
-  { to: "/services", label: "Services", items: serviceItems },
+  { to: "/services/process-automation", label: "Services", items: serviceItems },
   { to: "/industries", label: "Industries", items: industryItems },
   { to: "/our-work", label: "Our Work" },
   { to: "/about", label: "About" },
