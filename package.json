@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://rarefictioncloud-dev.github.io/rarecreativestudios/",
+  "homepage": "https://rareit.in/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:github": "vite build --mode github && node -e \"import('fs').then(f=>f.copyFileSync('dist/index.html','dist/404.html'))\"",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build:github",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
