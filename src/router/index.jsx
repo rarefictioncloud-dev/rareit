@@ -1,9 +1,13 @@
+// src/router/index.jsx
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Home from "../pages/Home";
-import Services from "../pages/Services";
+import PA from "../pages/pa";
+import WD from "../pages/Wd";
+import CS from "../pages/Cs";
+import MA from "../pages/Ma";
 import Industries from "../pages/Industries";
 import OurWork from "../pages/OurWork";
 import About from "../pages/About";
@@ -30,7 +34,10 @@ const router = createBrowserRouter(
       element: <Layout />,
       children: [
         { path: "/", element: <Home /> },
-        { path: "services", element: <Services /> },
+        { path: "services/process-automation", element: <PA /> },
+        { path: "services/web-designing", element: <WD /> },
+        { path: "services/custom-software", element: <CS /> },
+        { path: "services/mobile-apps", element: <MA /> },
         { path: "industries", element: <Industries /> },
         { path: "our-work", element: <OurWork /> },
         { path: "about", element: <About /> },
