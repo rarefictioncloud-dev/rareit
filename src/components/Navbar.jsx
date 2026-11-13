@@ -9,6 +9,7 @@ import {
   Palette,
   Code2,
   Smartphone,
+  Database,
   HeartPulse,
   Factory,
   ShoppingCart,
@@ -22,6 +23,7 @@ const serviceItems = [
   { icon: Palette, label: "Web Designing", desc: "Fast, modern business websites", to: "/services/web-designing" },
   { icon: Code2, label: "Custom Software", desc: "ERP, CRM and internal tools", to: "/services/custom-software" },
   { icon: Smartphone, label: "Mobile Apps", desc: "Apps for your customers and team", to: "/services/mobile-apps" },
+  { icon: Database, label: "SAP", desc: "Set up, connect and extend SAP", to: "/services/sap" },
 ];
 
 const industryItems = [

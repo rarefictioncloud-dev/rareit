@@ -8,6 +8,7 @@ import PA from "../pages/pa";
 import WD from "../pages/Wd";
 import CS from "../pages/Cs";
 import MA from "../pages/Ma";
+import SAP from "../pages/sap";
 import Industries from "../pages/Industries";
 import Healthcare from "../pages/healthcare";
 import Manufacturing from "../pages/manufacturing";
@@ -43,6 +44,7 @@ const router = createBrowserRouter(
         { path: "services/web-designing", element: <WD /> },
         { path: "services/custom-software", element: <CS /> },
         { path: "services/mobile-apps", element: <MA /> },
+        { path: "services/sap", element: <SAP /> },
         { path: "industries", element: <Industries /> },
         { path: "industries/healthcare", element: <Healthcare /> },
         { path: "industries/manufacturing", element: <Manufacturing /> },

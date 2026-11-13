@@ -11,10 +11,11 @@ const company = [
 ];
 
 const services = [
-  { to: "/services#automation", label: "Process Automation" },
-  { to: "/services#web", label: "Web Designing" },
-  { to: "/services#custom", label: "Custom Software" },
-  { to: "/services#mobile", label: "Mobile Apps" },
+  { to: "/services/process-automation", label: "Process Automation" },
+  { to: "/services/web-designing", label: "Web Designing" },
+  { to: "/services/custom-software", label: "Custom Software" },
+  { to: "/services/mobile-apps", label: "Mobile Apps" },
+  { to: "/services/sap", label: "SAP" },
 ];
 
 const socials = [
