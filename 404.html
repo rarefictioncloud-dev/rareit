@@ -1,80 +1,171 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Title and description -->
-    <title>Rare IT</title>
+    <!-- Primary SEO. NOTE: replace https://rareit.in with your real domain everywhere -->
+    <title>RareIT | IT Company in Hyderabad – Software, Web &amp; Mobile Apps</title>
     <meta
       name="description"
-      content="Rare IT is a Hyderabad IT company building process automation, websites, custom software and mobile apps for growing businesses."
+      content="Rare IT (RareIT) is an IT company in Madhapur, Hyderabad. We build process automation, websites, custom software, ERP, CRM and mobile apps for growing businesses."
     />
     <meta
       name="keywords"
-      content="Rare IT, IT company Hyderabad, process automation, web designing, custom software, ERP, CRM, mobile app development, Madhapur"
+      content="Rare IT, RareIT, rareit, rareit.in, IT company Hyderabad, software company Madhapur, process automation, web designing Hyderabad, custom software, ERP, CRM, mobile app development"
     />
     <meta name="author" content="Rare IT" />
-    <meta name="robots" content="index, follow" />
+    <meta name="application-name" content="Rare IT" />
+    <meta name="apple-mobile-web-app-title" content="Rare IT" />
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
     <meta name="theme-color" content="#d40f14" />
+    <link rel="canonical" href="https://rareit.in/" />
+    <link rel="alternate" hreflang="en-IN" href="https://rareit.in/" />
+    <link rel="alternate" hreflang="x-default" href="https://rareit.in/" />
+    <link rel="sitemap" type="application/xml" href="/rareit/sitemap.xml" />
 
-    <!-- Tab icon (inline SVG, the Rare IT mark in brand red) -->
+    <!-- Local SEO -->
+    <meta name="geo.region" content="IN-TG" />
+    <meta name="geo.placename" content="Hyderabad" />
+
+    <!-- Tab icon (inline SVG) -->
     <link
       rel="icon"
       type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d40f14'/%3E%3Ctext x='32' y='47' font-family='Georgia,serif' font-size='44' font-style='italic' font-weight='700' fill='white' text-anchor='middle'%3ER!%3C/text%3E%3C/svg%3E"
     />
+    <!-- Also add real files to /public: favicon.ico (48x48), apple-touch-icon.png (180x180) -->
+    <!-- <link rel="icon" href="/favicon.ico" sizes="48x48" /> -->
+    <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
 
-    <!-- Open Graph (link previews on WhatsApp, LinkedIn, Facebook) -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Rare IT" />
+    <meta property="og:url" content="https://rareit.in/" />
     <meta property="og:title" content="Rare IT | Build. Innovate. Grow." />
     <meta
       property="og:description"
-      content="A next-gen IT partner helping businesses transform ideas into powerful digital solutions."
+      content="A next-gen IT partner in Hyderabad helping businesses turn ideas into powerful digital solutions."
     />
     <meta property="og:locale" content="en_IN" />
+    <!-- Create a 1200x630 image at /public/og-image.png -->
+    <meta property="og:image" content="https://rareit.in/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Rare IT – IT company in Hyderabad" />
 
     <!-- Twitter / X -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Rare IT | Build. Innovate. Grow." />
     <meta
       name="twitter:description"
-      content="A next-gen IT partner helping businesses transform ideas into powerful digital solutions."
+      content="A next-gen IT partner in Hyderabad helping businesses turn ideas into powerful digital solutions."
     />
+    <meta name="twitter:image" content="https://rareit.in/og-image.png" />
 
-    <!-- Structured data for Google -->
+    <!-- Structured data: tells Google "rareit" / "RareIT" / "Rare IT" are the same brand -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Rare IT",
-        "description": "IT services company in Hyderabad offering process automation, web designing, custom software and mobile app development.",
-        "slogan": "Innovate. Transform. Grow.",
-        "email": "info@rareit.in",
-        "telephone": "+91 7997658999",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madhapur",
-          "addressLocality": "Hyderabad",
-          "addressRegion": "Telangana",
-          "postalCode": "500081",
-          "addressCountry": "IN"
-        },
-        "areaServed": "IN",
-        "knowsAbout": [
-          "Process Automation",
-          "Web Designing",
-          "Custom Software",
-          "Mobile App Development"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://rareit.in/#website",
+            "url": "https://rareit.in/",
+            "name": "Rare IT",
+            "alternateName": ["RareIT", "rareit", "Rare IT Hyderabad"],
+            "inLanguage": "en-IN",
+            "publisher": { "@id": "https://rareit.in/#organization" }
+          },
+          {
+            "@type": ["Organization", "ProfessionalService"],
+            "@id": "https://rareit.in/#organization",
+            "name": "Rare IT",
+            "alternateName": ["RareIT", "rareit"],
+            "url": "https://rareit.in/",
+            "logo": "https://rareit.in/og-image.png",
+            "image": "https://rareit.in/og-image.png",
+            "description": "IT services company in Hyderabad offering process automation, web designing, custom software and mobile app development.",
+            "slogan": "Innovate. Transform. Grow.",
+            "email": "info@rareit.in",
+            "telephone": "+91-7997658999",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madhapur",
+              "addressLocality": "Hyderabad",
+              "addressRegion": "Telangana",
+              "postalCode": "500081",
+              "addressCountry": "IN"
+            },
+            "areaServed": [
+              { "@type": "City", "name": "Hyderabad" },
+              { "@type": "Country", "name": "India" }
+            ],
+            "knowsAbout": [
+              "Process Automation",
+              "Web Designing",
+              "Custom Software",
+              "ERP",
+              "CRM",
+              "Mobile App Development"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+91-7997658999",
+              "email": "info@rareit.in",
+              "contactType": "customer service",
+              "areaServed": "IN",
+              "availableLanguage": ["English", "Telugu", "Hindi"]
+            },
+            "sameAs": [
+              "https://www.linkedin.com/company/YOUR-PAGE",
+              "https://www.instagram.com/YOUR-HANDLE",
+              "https://www.facebook.com/YOUR-PAGE"
+            ]
+          }
         ]
       }
     </script>
+    <!-- Keeps the crawler text in the page but never paints it before React mounts -->
+    <style>html,body{background:#fff;margin:0}#seo-content{clip:rect(0, 0, 0, 0);white-space:nowrap;border:0;width:1px;height:1px;margin:-1px;padding:0;position:absolute;overflow:hidden}</style>
     <script type="module" crossorigin src="/rareit/assets/index-BPmcADtu.js"></script>
     <link rel="stylesheet" crossorigin href="/rareit/assets/index-DA_IpV0p.css">
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Crawler-readable content. React replaces everything inside #root on load,
+      so visitors never see this, but search engines and link previews do.
+    -->
+    <div id="root">
+      <div id="seo-content">
+      <header>
+        <h1>Rare IT – IT Company in Hyderabad</h1>
+        <p>
+          Rare IT (RareIT) builds process automation, websites, custom software,
+          ERP and CRM systems, and mobile apps for growing businesses.
+        </p>
+      </header>
+      <main>
+        <h2>Our services</h2>
+        <ul>
+          <li>Process automation</li>
+          <li>Web designing and development</li>
+          <li>Custom software, ERP and CRM</li>
+          <li>Mobile app development</li>
+        </ul>
+        <h2>Contact Rare IT</h2>
+        <address>
+          Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madhapur,
+          Hyderabad, Telangana 500081<br />
+          Email: <a href="mailto:info@rareit.in">info@rareit.in</a> · Phone:
+          <a href="tel:+917997658999">+91 7997658999</a>
+        </address>
+      </main>
+      </div>
+    </div>
     <noscript>
       Rare IT is an IT services company in Hyderabad. We build process
       automation, websites, custom software and mobile apps. Please enable
