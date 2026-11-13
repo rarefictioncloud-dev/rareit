@@ -18,7 +18,7 @@ import {
 import Logo from "./Logo";
 
 const serviceItems = [
-  { icon: Workflow, label: "Process Automation", desc: "Save hours on repeat tasks", to: "/services/process-automation" },
+  { icon: Workflow, label: "Process Automation SOP", desc: "Save hours on repeat tasks", to: "/services/process-automation" },
   { icon: Palette, label: "Web Designing", desc: "Fast, modern business websites", to: "/services/web-designing" },
   { icon: Code2, label: "Custom Software", desc: "ERP, CRM and internal tools", to: "/services/custom-software" },
   { icon: Smartphone, label: "Mobile Apps", desc: "Apps for your customers and team", to: "/services/mobile-apps" },
