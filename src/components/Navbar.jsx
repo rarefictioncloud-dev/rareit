@@ -49,7 +49,6 @@ const links = [
     label: "Industries",
     match: "/industries",
     heading: "Who we build for",
-    footer: { label: "View all industries", to: "/industries" },
     items: industryItems,
   },
   { to: "/about", label: "About" },
@@ -186,14 +185,16 @@ export default function Navbar() {
                           </li>
                         ))}
                       </ul>
-                      <Link
-                        to={footer.to}
-                        onClick={() => setDesktopOpen(null)}
-                        className="mt-2 flex items-center justify-between rounded-2xl bg-ink px-4 py-3 text-xs font-bold text-white transition hover:bg-brand"
-                      >
-                        {footer.label}
-                        <ArrowRight size={14} />
-                      </Link>
+                      {footer && (
+                        <Link
+                          to={footer.to}
+                          onClick={() => setDesktopOpen(null)}
+                          className="mt-2 flex items-center justify-between rounded-2xl bg-ink px-4 py-3 text-xs font-bold text-white transition hover:bg-brand"
+                        >
+                          {footer.label}
+                          <ArrowRight size={14} />
+                        </Link>
+                      )}
                     </div>
                   </div>
                 )}
@@ -264,16 +265,18 @@ export default function Navbar() {
                             </Link>
                           </li>
                         ))}
-                        <li>
-                          <Link
-                            to={footer.to}
-                            onClick={() => setOpen(false)}
-                            className="mt-1 flex items-center gap-2 p-2 text-[13px] font-semibold text-brand"
-                          >
-                            {footer.label}
-                            <ArrowRight size={14} />
-                          </Link>
-                        </li>
+                        {footer && (
+                          <li>
+                            <Link
+                              to={footer.to}
+                              onClick={() => setOpen(false)}
+                              className="mt-1 flex items-center gap-2 p-2 text-[13px] font-semibold text-brand"
+                            >
+                              {footer.label}
+                              <ArrowRight size={14} />
+                            </Link>
+                          </li>
+                        )}
                       </ul>
                     )}
                   </>
