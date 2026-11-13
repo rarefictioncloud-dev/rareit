@@ -378,11 +378,7 @@ export default function Home() {
           ))}
         </ul>
 
-        <div className="mt-10 text-center">
-          <Link to="/services" className="inline-flex items-center gap-2 border-b-2 border-brand pb-1 text-sm font-semibold">
-            Explore All Services <ArrowRight size={14} />
-          </Link>
-        </div>
+    
       </section>
 
       {/* ===== WHAT MAKES IT SMARTER (black band) ===== */}

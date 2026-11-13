@@ -1,4 +1,5 @@
 // src/pages/pa.jsx
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -14,6 +15,8 @@ import {
   TrendingDown,
   Users,
   Plus,
+  Zap,
+  Settings,
 } from "lucide-react";
 
 const wrap = "mx-auto w-[min(1180px,100%-48px)]";
@@ -40,6 +43,27 @@ const flow = [
   "The right person gets an approval task",
   "Records update across your systems",
   "Everyone is notified, and the log is saved",
+];
+
+const parts = [
+  {
+    icon: Zap,
+    title: "Trigger",
+    text: "Something happens that starts the workflow: a form is filled, an email arrives, an order is placed or a date is reached.",
+    example: "Example: a customer submits an enquiry form.",
+  },
+  {
+    icon: Settings,
+    title: "Actions",
+    text: "The system does the work for you: it checks the data, looks up records, creates tasks, updates sheets and sends messages.",
+    example: "Example: add the lead to your CRM and assign it to a sales person.",
+  },
+  {
+    icon: Check,
+    title: "Result",
+    text: "The right people are informed, your records are up to date and every step is logged for review.",
+    example: "Example: the team gets a WhatsApp alert and the customer gets a confirmation.",
+  },
 ];
 
 const useCases = [
@@ -85,6 +109,42 @@ const deliverables = [
   "Monitoring, fixes and updates after go-live",
 ];
 
+// Example tools we can connect, grouped by category. Edit freely.
+const appCategories = ["All", "CRM and sales", "Email and chat", "Sheets and files", "Accounting and payments", "Forms and support", "Online stores", "Projects", "Databases and cloud"];
+
+const apps = [
+  { name: "Zoho CRM", cat: "CRM and sales" },
+  { name: "HubSpot", cat: "CRM and sales" },
+  { name: "Salesforce", cat: "CRM and sales" },
+  { name: "Pipedrive", cat: "CRM and sales" },
+  { name: "Gmail", cat: "Email and chat" },
+  { name: "Outlook", cat: "Email and chat" },
+  { name: "WhatsApp Business", cat: "Email and chat" },
+  { name: "Slack", cat: "Email and chat" },
+  { name: "Google Sheets", cat: "Sheets and files" },
+  { name: "Excel", cat: "Sheets and files" },
+  { name: "Google Drive", cat: "Sheets and files" },
+  { name: "Dropbox", cat: "Sheets and files" },
+  { name: "Zoho Books", cat: "Accounting and payments" },
+  { name: "QuickBooks", cat: "Accounting and payments" },
+  { name: "Razorpay", cat: "Accounting and payments" },
+  { name: "Stripe", cat: "Accounting and payments" },
+  { name: "Google Forms", cat: "Forms and support" },
+  { name: "Typeform", cat: "Forms and support" },
+  { name: "Freshdesk", cat: "Forms and support" },
+  { name: "Zendesk", cat: "Forms and support" },
+  { name: "Shopify", cat: "Online stores" },
+  { name: "WooCommerce", cat: "Online stores" },
+  { name: "Trello", cat: "Projects" },
+  { name: "Asana", cat: "Projects" },
+  { name: "Jira", cat: "Projects" },
+  { name: "Notion", cat: "Projects" },
+  { name: "Firebase", cat: "Databases and cloud" },
+  { name: "MySQL", cat: "Databases and cloud" },
+  { name: "PostgreSQL", cat: "Databases and cloud" },
+  { name: "AWS", cat: "Databases and cloud" },
+];
+
 const benefits = [
   { icon: Clock, title: "Hours back every week", text: "Repetitive tasks run in the background so your team can focus on real work." },
   { icon: TrendingDown, title: "Fewer errors and delays", text: "Rules replace manual steps, so data stays consistent and nothing gets forgotten." },
@@ -124,6 +184,10 @@ const faqs = [
     a: "Start with tasks that are frequent, rule based and error prone. In the discovery stage we rank your processes by effort saved and risk, and begin with the easiest win.",
   },
   {
+    q: "Which apps and tools can you connect?",
+    a: "Most tools that offer an API or standard integration, including CRMs, email, spreadsheets, accounting, payments, forms and online stores. If your tool is not listed, tell us and we will check what is possible.",
+  },
+  {
     q: "Will it work with the tools we already use?",
     a: "In most cases yes. We connect through APIs, webhooks and standard integrations, so you do not have to replace your current systems.",
   },
@@ -142,6 +206,9 @@ const faqs = [
 ];
 
 export default function PA() {
+  const [cat, setCat] = useState("All");
+  const shown = cat === "All" ? apps : apps.filter((a) => a.cat === cat);
+
   return (
     <div className="bg-neutral-50 text-ink">
       {/* Hero */}
@@ -200,8 +267,33 @@ export default function PA() {
         </div>
       </section>
 
-      {/* Use cases */}
+      {/* How an automation works */}
       <section className="py-16 lg:py-24">
+        <div className={wrap}>
+          <h2 className="max-w-3xl text-4xl font-extrabold tracking-tighter sm:text-5xl">
+            How an automation <span className="text-brand">works.</span>
+          </h2>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
+            Every automation follows the same simple pattern: something happens, the system acts, and the right people
+            see the result.
+          </p>
+          <div className="mt-12 grid gap-5 lg:grid-cols-3">
+            {parts.map(({ icon: Icon, title, text, example }) => (
+              <article key={title} className="rounded-3xl border border-ink/10 bg-white p-7">
+                <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-white">
+                  <Icon size={22} />
+                </span>
+                <h3 className="mt-5 text-xl font-extrabold tracking-tight">{title}</h3>
+                <p className="mt-2 leading-relaxed text-muted">{text}</p>
+                <p className="mt-4 border-t border-line pt-4 text-sm font-semibold">{example}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Use cases */}
+      <section className="pb-16 lg:pb-24">
         <div className={wrap}>
           <h2 className="max-w-3xl text-4xl font-extrabold tracking-tighter sm:text-5xl">
             What we can <span className="text-brand">automate for you.</span>
@@ -249,6 +341,53 @@ export default function PA() {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* Apps we connect */}
+      <section className="bg-white py-16 lg:py-24">
+        <div className={wrap}>
+          <h2 className="max-w-3xl text-4xl font-extrabold tracking-tighter sm:text-5xl">
+            Apps we can <span className="text-brand">connect.</span>
+          </h2>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
+            Pick a category to see examples of tools we connect into one workflow. Availability depends on each tool's
+            API, and we confirm what is possible during discovery.
+          </p>
+
+          <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label="Filter apps by category">
+            {appCategories.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setCat(c)}
+                aria-pressed={cat === c}
+                className={`rounded-full border px-4 py-2 text-sm font-bold transition ${
+                  cat === c
+                    ? "border-ink bg-ink text-white"
+                    : "border-ink/10 bg-white hover:border-ink"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {shown.map((a) => (
+              <li key={a.name} className="rounded-2xl border border-line bg-neutral-50 p-5">
+                <p className="font-extrabold tracking-tight">{a.name}</p>
+                <p className="mt-1 text-sm text-muted">{a.cat}</p>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-8 flex flex-col items-start justify-between gap-4 rounded-3xl border border-ink/10 p-6 sm:flex-row sm:items-center">
+            <p className="font-semibold">Do not see your tool? If it has an API, we can most likely connect it.</p>
+            <Link to="/contact" className="border-b-2 border-brand pb-0.5 text-sm font-bold hover:text-brand">
+              Ask about your tool
+            </Link>
+          </div>
         </div>
       </section>
 

@@ -36,7 +36,6 @@ const links = [
   { to: "/", label: "Home", end: true },
   { to: "/services/process-automation", label: "Services", items: serviceItems },
   { to: "/industries", label: "Industries", items: industryItems },
-  { to: "/our-work", label: "Our Work" },
   { to: "/about", label: "About" },
   { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
