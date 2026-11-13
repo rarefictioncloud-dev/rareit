@@ -25,16 +25,9 @@ import {
   Sparkles,
   Users,
   Eye,
-  Bell,
-  Settings,
-  Home as HomeIcon,
-  BarChart3,
-  Clock,
 } from "lucide-react";
 
 /* ---------- DATA ---------- */
-const heroPoints = ["Built to order", "Senior-led teams", "Long-term support"];
-
 const pillars = [
   { icon: Sparkles, title: "Built to order", text: "Every solution is designed around your business." },
   { icon: Users, title: "Senior-led teams", text: "Experienced people on every project." },
@@ -44,49 +37,39 @@ const pillars = [
 
 const services = [
   {
-    id: "automation",
     to: "/services/process-automation",
     icon: Workflow,
     title: "Process Automation",
     text: "Automate repetitive workflows, approvals and reporting across your tools, so your team can focus on work that matters.",
     points: ["Workflow automation", "Tool integrations", "Smart reporting"],
-    span: "md:col-span-2 lg:col-span-4",
   },
   {
-    id: "web",
     to: "/services/web-designing",
     icon: Palette,
     title: "Web Designing",
     text: "Fast, responsive, brand-led websites and portals that build trust at first glance.",
     points: ["UI/UX design", "Responsive builds", "SEO-ready"],
-    span: "lg:col-span-2",
   },
   {
-    id: "custom",
     to: "/services/custom-software",
     icon: Code2,
     title: "Custom Software",
     text: "ERP, CRM and internal platforms engineered around the way you work.",
     points: ["Web applications", "API integration", "Modernisation"],
-    span: "lg:col-span-2",
   },
   {
-    id: "mobile",
     to: "/services/mobile-apps",
     icon: Smartphone,
     title: "Mobile Apps",
     text: "Polished iOS and Android apps, designed with real users in mind.",
-    points: ["iOS & Android", "Product design", "Launch & updates"],
-    span: "lg:col-span-2",
+    points: ["iOS and Android", "Product design", "Launch and updates"],
   },
   {
-    id: "sap",
     to: "/services/sap",
     icon: Database,
     title: "SAP",
     text: "Set up, connect and extend SAP so finance, sales and stock run from one system.",
-    points: ["Integrations", "Dashboards", "Training & support"],
-    span: "lg:col-span-2",
+    points: ["Integrations", "Dashboards", "Training and support"],
   },
 ];
 
@@ -118,7 +101,7 @@ const smarts = [
 const industries = [
   { icon: HeartPulse, to: "/industries/healthcare", label: "Healthcare", text: "Secure, compliant digital care, from patient portals to clinic workflows." },
   { icon: Factory, to: "/industries/manufacturing", label: "Manufacturing", text: "Connected operations, production tracking and smarter reporting." },
-  { icon: ShoppingCart, to: "/industries/retail", label: "Retail & E-commerce", text: "Seamless storefronts, inventory flows and customer journeys." },
+  { icon: ShoppingCart, to: "/industries/retail", label: "Retail and E-commerce", text: "Seamless storefronts, inventory flows and customer journeys." },
   { icon: Landmark, to: "/industries/finance", label: "Finance", text: "Trusted, scalable tools for approvals, records and compliance." },
   { icon: GraduationCap, to: "/industries/education", label: "Education", text: "Learning platforms and admin tools without the paperwork." },
 ];
@@ -145,163 +128,34 @@ const tools = [
 ];
 
 /* ---------- SMALL PIECES ---------- */
-const wrap = "mx-auto w-[min(1180px,100%-48px)]";
+const wrap = "mx-auto w-[min(1760px,100%-64px)]";
 
 const gridTexture =
-  "[background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:56px_56px]";
+  "[background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:56px_56px]";
 
-const PrimaryBtn = ({ to, children }) => (
+const fieldCls =
+  "w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-ink/40 focus:border-brand";
+
+const PrimaryBtn = ({ to, children, dark = false }) => (
   <Link
     to={to}
     className="group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
   >
     {children}
-    <span className="grid size-10 place-items-center rounded-full bg-white text-brand transition group-hover:translate-x-0.5">
+    <span
+      className={`grid size-10 place-items-center rounded-full transition group-hover:translate-x-0.5 ${
+        dark ? "bg-ink text-white" : "bg-white text-brand"
+      }`}
+    >
       <ArrowRight size={16} />
     </span>
   </Link>
 );
 
-/* Hero visual: dashboard + phone (pure Tailwind, numbers are illustrative only) */
-function HeroVisual() {
-  const bars = [38, 62, 48, 80, 58, 92, 74, 66, 84, 96];
-  const stats = [
-    ["Workflows", "12"],
-    ["Tasks run", "1,284"],
-    ["Hours saved", "38"],
-  ];
-  const rows = [
-    { name: "Invoice approval", state: "Running", done: false },
-    { name: "Customer onboarding", state: "Complete", done: true },
-  ];
-
-  return (
-    <div className="relative mx-auto w-full max-w-[580px] pb-10">
-      <div className="overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-[0_40px_90px_rgba(13,13,15,0.16)]">
-        <div className="flex items-center gap-2 border-b border-ink/10 bg-neutral-100 px-4 py-3">
-          <span className="size-2.5 rounded-full bg-ink/20" />
-          <span className="size-2.5 rounded-full bg-ink/20" />
-          <span className="size-2.5 rounded-full bg-brand" />
-          <span className="ml-4 rounded-md bg-white px-3 py-1 text-[10px] font-medium text-muted">
-            app.rareit.com / dashboard
-          </span>
-        </div>
-
-        <div className="grid grid-cols-[52px_1fr]">
-          <div className="flex flex-col items-center gap-5 border-r border-ink/10 bg-ink py-6 text-white/60">
-            <span className="grid size-9 place-items-center rounded-lg bg-brand text-white">
-              <HomeIcon size={16} />
-            </span>
-            <Workflow size={16} />
-            <BarChart3 size={16} />
-            <Bell size={16} />
-            <Settings size={16} className="mt-10" />
-          </div>
-
-          <div className="p-5 text-left">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">Overview</p>
-                <h3 className="text-base font-extrabold tracking-tight">Automation dashboard</h3>
-              </div>
-              <span className="rounded-full bg-ink px-3 py-1 text-[10px] font-semibold text-white">Live</span>
-            </div>
-
-            <div className="grid grid-cols-3 gap-2.5">
-              {stats.map(([k, v]) => (
-                <div key={k} className="rounded-xl border border-ink/10 bg-neutral-50 p-3">
-                  <span className="block text-[10px] text-muted">{k}</span>
-                  <strong className="text-xl font-extrabold tracking-tighter">{v}</strong>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-3 rounded-xl border border-ink/10 p-3">
-              <div className="mb-3 flex items-center justify-between text-[11px] font-semibold">
-                Tasks automated <span className="text-brand">Last 10 days</span>
-              </div>
-              <div className="flex h-24 items-end gap-1.5">
-                {bars.map((h, i) => (
-                  <span
-                    key={i}
-                    style={{ height: `${h}%` }}
-                    className={`flex-1 rounded-t-md ${i === 9 ? "bg-brand" : "bg-ink/15"}`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <ul className="mt-3 space-y-2">
-              {rows.map((r) => (
-                <li
-                  key={r.name}
-                  className="flex items-center justify-between rounded-lg border border-ink/10 px-3 py-2 text-[11px] font-medium"
-                >
-                  {r.name}
-                  <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                      r.done ? "bg-ink text-white" : "border border-brand text-brand"
-                    }`}
-                  >
-                    {r.done && <Check size={10} strokeWidth={3} />}
-                    {r.state}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* phone */}
-      <div className="absolute bottom-0 right-3 hidden w-[150px] rounded-[28px] border-[5px] border-ink bg-white p-3 text-left shadow-[0_30px_60px_rgba(13,13,15,0.25)] sm:block">
-        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-ink/20" />
-        <p className="text-[10px] font-bold">Orders today</p>
-        <div className="mt-2 space-y-1.5">
-          {["Order placed", "Packed", "Out for delivery"].map((t, i) => (
-            <div
-              key={t}
-              className="flex items-center gap-1.5 rounded-lg bg-neutral-50 px-2 py-1.5 text-[9px] font-semibold"
-            >
-              <span className={`size-1.5 rounded-full ${i === 2 ? "bg-brand" : "bg-ink"}`} />
-              {t}
-            </div>
-          ))}
-        </div>
-        <div className="mt-3 rounded-full bg-brand py-1.5 text-center text-[9px] font-bold text-white">
-          Track order
-        </div>
-      </div>
-
-      {/* floating chips */}
-      <div className="absolute -left-6 top-24 hidden items-center gap-3 rounded-2xl border border-ink/10 bg-white px-4 py-3 text-left shadow-[0_20px_40px_rgba(13,13,15,0.12)] lg:flex">
-        <span className="grid size-9 place-items-center rounded-full bg-brand text-white">
-          <Check size={16} strokeWidth={3} />
-        </span>
-        <div>
-          <span className="block text-[10px] text-muted">Approval sent</span>
-          <strong className="text-xs">No manual steps</strong>
-        </div>
-      </div>
-      <div className="absolute bottom-0 left-8 hidden items-center gap-3 rounded-2xl bg-ink px-4 py-3 text-left text-white shadow-[0_20px_40px_rgba(13,13,15,0.25)] sm:flex">
-        <span className="grid size-9 place-items-center rounded-full bg-brand">
-          <Clock size={16} />
-        </span>
-        <div>
-          <span className="block text-[10px] text-white/60">Time saved</span>
-          <strong className="text-xs">38 hours this week</strong>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const fieldCls =
-  "w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-ink/40 focus:border-brand";
-
 /* ---------- PAGE ---------- */
 export default function Home() {
   const [sent, setSent] = useState(false);
+  const [ind, setInd] = useState(0);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -310,120 +164,162 @@ export default function Home() {
   };
 
   return (
-    <div className="overflow-x-hidden bg-neutral-50 font-sans text-ink">
+    <div className="overflow-x-hidden bg-white font-sans text-ink">
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(13,13,15,0.1)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_70%_30%,black,transparent_70%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(13,13,15,0.12)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_75%_35%,black,transparent_70%)]" />
 
-        <div className={`${wrap} relative grid items-center gap-16 pb-16 pt-14 lg:grid-cols-[1.05fr_1fr] lg:pb-24 lg:pt-20`}>
+        <div className={`${wrap} relative grid items-center gap-14 pb-14 pt-14 lg:grid-cols-[1.1fr_1fr] lg:pb-20 lg:pt-20`}>
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white px-4 py-1.5 text-xs font-semibold text-ink/70">
-              <span className="size-2 rounded-full bg-brand" />
-              IT partner based in Hyderabad
-            </span>
-            <h1 className="mt-6 text-[clamp(48px,6.6vw,92px)] font-extrabold leading-[0.95] tracking-tighter">
-              Build. Innovate.
+     
+            <h1 className="text-[clamp(56px,9vw,150px)] font-extrabold leading-[0.88] tracking-tighter">
+              Build.
+              <br />
+              Innovate.
               <br />
               <span className="text-brand">Grow.</span>
             </h1>
-            <p className="mt-7 max-w-[520px] text-lg leading-relaxed text-muted">
-              A next-gen IT partner helping businesses transform ideas into
-              powerful digital solutions.
+            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-muted">
+              A next-gen IT partner helping businesses transform ideas into powerful digital solutions.
             </p>
-
-            <div className="mt-9 flex flex-wrap items-center gap-6">
+            <div className="mt-10 flex flex-wrap items-center gap-6">
               <PrimaryBtn to="/contact">Start a project</PrimaryBtn>
-              <a href="#services" className="border-b-2 border-brand pb-1 text-sm font-semibold hover:text-brand">
+              <a href="#services" className="border-b-2 border-ink pb-1 text-sm font-semibold transition hover:border-brand hover:text-brand">
                 Explore our services
               </a>
             </div>
-
-            <ul className="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-[13px] font-semibold text-ink/70">
-              {heroPoints.map((p) => (
-                <li key={p} className="inline-flex items-center gap-2">
-                  <span className="grid size-4 place-items-center rounded-full bg-brand text-white">
-                    <Check size={10} strokeWidth={3.5} />
-                  </span>
-                  {p}
-                </li>
-              ))}
-            </ul>
           </div>
 
-          <HeroVisual />
+          {/* live workflow visual */}
+          <div className="relative mx-auto w-full max-w-[600px] pb-8 lg:mr-0">
+            <div className="relative overflow-hidden rounded-[36px] bg-ink p-7 text-white shadow-[0_40px_90px_rgba(13,13,15,0.25)] sm:p-9">
+              <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_70%)]`} />
+              <div className="relative">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold text-white/60">Example workflow</p>
+                    <h3 className="text-xl font-extrabold tracking-tight">Order to delivery, automated</h3>
+                  </div>
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-[11px] font-semibold">
+                    <span className="relative flex size-2">
+                      <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand" />
+                      <span className="relative inline-flex size-2 rounded-full bg-brand" />
+                    </span>
+                    Live
+                  </span>
+                </div>
+
+                <ol className="relative mt-7 space-y-3">
+                  <span aria-hidden="true" className="absolute bottom-8 left-[37px] top-8 w-0.5 bg-brand" />
+                  {[
+                    { icon: ShoppingCart, t: "New order", d: "Received from your store" },
+                    { icon: Database, t: "Check stock", d: "Matched with inventory" },
+                    { icon: Landmark, t: "Send invoice", d: "Created and emailed" },
+                    { icon: Users, t: "Notify team", d: "Right people, right time" },
+                  ].map(({ icon: Icon, t, d }, i, arr) => (
+                    <li key={t} className="relative flex items-center gap-4 rounded-2xl border border-white/10 bg-neutral-900 p-4">
+                      <span className={`relative grid size-11 shrink-0 place-items-center rounded-full ${i === arr.length - 1 ? "bg-brand" : "bg-white text-ink"}`}>
+                        {i === arr.length - 1 && <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand" />}
+                        <Icon size={18} strokeWidth={1.8} className="relative" />
+                      </span>
+                      <div>
+                        <p className="text-sm font-bold">{t}</p>
+                        <p className="text-xs text-white/60">{d}</p>
+                      </div>
+                      <Check size={18} strokeWidth={3} className="ml-auto text-brand" />
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+
+            <div className="absolute -left-4 bottom-0 hidden items-center gap-3 rounded-2xl border-2 border-ink bg-white px-4 py-3 shadow-[0_20px_40px_rgba(13,13,15,0.15)] sm:flex lg:-left-10">
+              <span className="grid size-9 place-items-center rounded-full bg-brand text-white">
+                <Plug size={16} />
+              </span>
+              <div>
+                <span className="block text-[10px] text-muted">Works with your tools</span>
+                <strong className="text-xs">No manual steps</strong>
+              </div>
+            </div>
+            <div className="absolute -right-3 top-16 hidden items-center gap-2 rounded-full bg-brand px-4 py-2 text-xs font-bold text-white shadow-[0_16px_30px_rgba(13,13,15,0.2)] sm:flex lg:-right-6">
+              <ShieldCheck size={14} /> Secure by design
+            </div>
+          </div>
         </div>
+
+        {/* quick service links */}
+        <ul className={`${wrap} relative grid border-t-2 border-ink sm:grid-cols-2 lg:grid-cols-5`}>
+          {services.map(({ to, icon: Icon, title }, i) => (
+            <li key={title} className={i > 0 ? "lg:border-l lg:border-ink/15" : ""}>
+              <Link
+                to={to}
+                className="group flex items-center gap-4 px-5 py-7 transition-colors duration-300 hover:bg-brand hover:text-white"
+              >
+                <Icon size={26} strokeWidth={1.5} className="text-brand transition group-hover:text-white" />
+                <span className="text-[15px] font-bold">{title}</span>
+                <ArrowUpRight size={18} className="ml-auto opacity-40 transition group-hover:opacity-100" />
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* ===== PILLARS STRIP ===== */}
-      <section className="border-y border-ink/10 bg-white">
+      <section className="bg-ink text-white">
         <ul className={`${wrap} grid sm:grid-cols-2 lg:grid-cols-4`}>
           {pillars.map(({ icon: Icon, title, text }, i) => (
             <li
               key={title}
-              className={`flex items-start gap-4 py-8 sm:px-6 ${i > 0 ? "lg:border-l lg:border-ink/10" : "lg:pl-0"} ${
-                i % 2 === 1 ? "sm:border-l sm:border-ink/10" : ""
+              className={`flex items-start gap-4 py-9 sm:px-6 ${i > 0 ? "lg:border-l lg:border-white/15" : "lg:pl-0"} ${
+                i % 2 === 1 ? "sm:border-l sm:border-white/15 lg:border-l" : ""
               }`}
             >
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-white">
-                <Icon size={19} strokeWidth={1.7} />
-              </span>
+              <Icon size={26} strokeWidth={1.5} className="mt-0.5 shrink-0 text-brand" />
               <div>
                 <h3 className="text-[15px] font-bold">{title}</h3>
-                <p className="mt-1 text-[13px] leading-relaxed text-muted">{text}</p>
+                <p className="mt-1 text-[13px] leading-relaxed text-white/60">{text}</p>
               </div>
             </li>
           ))}
         </ul>
       </section>
 
-      {/* ===== SERVICES (bento) ===== */}
-      <section id="services" className={`${wrap} py-24`}>
-        <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <h2 className="max-w-2xl text-[clamp(36px,4.6vw,58px)] font-extrabold leading-[1] tracking-tighter">
-            Built for your business.
-            <br />
-            <span className="text-brand">Not retrofitted to it.</span>
+      {/* ===== SERVICES (large rows) ===== */}
+      <section id="services" className={`${wrap} grid gap-12 py-24 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <h2 className="text-[clamp(38px,4.8vw,64px)] font-extrabold leading-[0.98] tracking-tighter">
+            Built for your business. <span className="text-brand">Not retrofitted to it.</span>
           </h2>
-          <p className="max-w-sm text-[15px] leading-relaxed text-muted">
-            Every Rare IT solution is designed from scratch around how your teams work, with software, websites and
-            apps that fit from day one.
+          <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-muted">
+            Every Rare IT solution is designed from scratch around how your teams work, with software, websites and apps
+            that fit from day one.
           </p>
         </div>
 
-        <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-6">
-          {services.map(({ id, to, icon: Icon, title, text, points, span }) => (
-            <li key={id} className={span}>
+        <ul className="border-t-2 border-ink">
+          {services.map(({ to, icon: Icon, title, text, points }) => (
+            <li key={title} className="border-b border-ink/15">
               <Link
                 to={to}
-                className="group flex h-full flex-col rounded-3xl border border-ink/10 bg-white p-8 transition duration-300 hover:-translate-y-1 hover:border-ink hover:shadow-[0_24px_50px_rgba(13,13,15,0.12)]"
+                className="group grid gap-5 px-2 py-9 transition-colors duration-300 hover:bg-ink hover:text-white sm:grid-cols-[auto_1fr_auto] sm:items-start sm:gap-8 sm:px-6"
               >
                 <span className="grid size-14 place-items-center rounded-2xl bg-ink text-white transition group-hover:bg-brand">
                   <Icon size={26} strokeWidth={1.6} />
                 </span>
-                <h3 className="mt-7 text-2xl font-extrabold tracking-tight">{title}</h3>
-                <p className="mt-3 max-w-md text-[15px] leading-relaxed text-muted">{text}</p>
-
-                {id === "automation" && (
-                  <div className="mt-6 flex flex-wrap items-center gap-2 text-[11px] font-bold">
-                    {flow.map((s, i) => (
-                      <span key={s} className="inline-flex items-center gap-2">
-                        <span className="rounded-full border border-ink/15 bg-neutral-50 px-3 py-1.5">{s}</span>
-                        {i < flow.length - 1 && <ArrowRight size={12} className="text-brand" />}
-                      </span>
+                <div>
+                  <h3 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h3>
+                  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-muted transition group-hover:text-white/70">{text}</p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {points.map((p) => (
+                      <li key={p} className="rounded-full border border-ink/15 px-3 py-1 text-[11px] font-semibold text-ink/70 transition group-hover:border-white/30 group-hover:text-white/80">
+                        {p}
+                      </li>
                     ))}
-                  </div>
-                )}
-
-                <ul className="mt-5 flex flex-wrap gap-2">
-                  {points.map((p) => (
-                    <li key={p} className="rounded-full border border-ink/10 px-3 py-1 text-[11px] font-semibold text-ink/70">
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-                <span className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-semibold text-brand">
-                  Learn more
-                  <ArrowUpRight size={16} className="transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </ul>
+                </div>
+                <span className="grid size-12 place-items-center rounded-full border border-ink/20 transition group-hover:border-brand group-hover:bg-brand">
+                  <ArrowUpRight size={20} className="transition group-hover:rotate-12" />
                 </span>
               </Link>
             </li>
@@ -431,104 +327,122 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* ===== WHAT MAKES IT SMARTER (black band) ===== */}
+      {/* ===== SMARTER (black band) ===== */}
       <section className="relative overflow-hidden bg-ink py-24 text-white">
-        <div
-          className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_0%,black,transparent_65%)]`}
-        />
-        <div className={`${wrap} relative grid gap-14 lg:grid-cols-[0.9fr_1.4fr]`}>
-          <div>
-            <h2 className="text-[clamp(34px,4.4vw,54px)] font-extrabold leading-[1.02] tracking-tighter">
-              What makes Rare IT
-              <br />
-              solutions <span className="text-brand">smarter?</span>
+        <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_0%,black,transparent_65%)]`} />
+        <div className={`${wrap} relative`}>
+          <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-end">
+            <h2 className="text-[clamp(38px,5vw,72px)] font-extrabold leading-[0.98] tracking-tighter">
+              What makes Rare IT solutions <span className="text-brand">smarter?</span>
             </h2>
-            <p className="mb-8 mt-6 max-w-sm text-[15px] leading-relaxed text-white/65">
-              Automation, clean design and solid engineering work together, so your business runs faster with less
-              manual effort.
+            <p className="max-w-md text-[15px] leading-relaxed text-white/65">
+              Automation, clean design and solid engineering work together, so your business runs faster with less manual
+              effort.
             </p>
-            <Link to="/contact" className="inline-flex items-center gap-2 border-b-2 border-brand pb-1 text-sm font-semibold">
-              See it in action <ArrowRight size={14} />
-            </Link>
           </div>
 
-          <ul className="grid gap-px overflow-hidden rounded-3xl bg-white/10 sm:grid-cols-2">
-            {smarts.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="bg-ink p-8 transition hover:bg-white/[0.04]">
-                <span className="grid size-12 place-items-center rounded-2xl bg-brand">
-                  <Icon size={22} strokeWidth={1.7} />
+          {/* automation flow */}
+          <div className="mt-14 flex flex-wrap items-center gap-3 rounded-3xl border border-white/15 p-5 sm:p-6">
+            <span className="mr-2 text-sm font-semibold text-white/60">One order, no manual steps</span>
+            {flow.map((s, i) => (
+              <span key={s} className="inline-flex items-center gap-3">
+                <span className={`rounded-full px-4 py-2 text-xs font-bold ${i === flow.length - 1 ? "bg-brand text-white" : "bg-white text-ink"}`}>
+                  {s}
                 </span>
-                <h3 className="mt-6 text-xl font-bold">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/65">{text}</p>
+                {i < flow.length - 1 && <ArrowRight size={14} className="text-brand" />}
+              </span>
+            ))}
+          </div>
+
+          <ul className="mt-6 grid gap-px overflow-hidden rounded-3xl bg-white/15 sm:grid-cols-2 lg:grid-cols-4">
+            {smarts.map(({ icon: Icon, title, text }) => (
+              <li key={title} className="bg-ink p-8 transition hover:bg-neutral-900">
+                <Icon size={30} strokeWidth={1.5} className="text-brand" />
+                <h3 className="mt-8 text-xl font-bold leading-tight">{title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/65">{text}</p>
               </li>
             ))}
           </ul>
+
+          <div className="mt-10">
+            <PrimaryBtn to="/contact">See it in action</PrimaryBtn>
+          </div>
         </div>
       </section>
 
-      {/* ===== INDUSTRIES ===== */}
-      <section className="border-b border-ink/10 bg-white py-24">
-        <div className={wrap}>
-          <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-            <h2 className="max-w-2xl text-[clamp(34px,4.4vw,54px)] font-extrabold leading-[1.02] tracking-tighter">
-              Built for your industry. <span className="text-brand">Not retrofitted to it.</span>
-            </h2>
-            <Link to="/industries" className="inline-flex items-center gap-2 border-b-2 border-brand pb-1 text-sm font-semibold">
-              View all industries <ArrowRight size={14} />
-            </Link>
-          </div>
+      {/* ===== INDUSTRIES (expanding panels) ===== */}
+      <section className={`${wrap} py-24`}>
+        <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
+          <h2 className="max-w-3xl text-[clamp(38px,4.8vw,64px)] font-extrabold leading-[0.98] tracking-tighter">
+            Built for your industry. <span className="text-brand">Not retrofitted to it.</span>
+          </h2>
+          <Link to="/industries" className="inline-flex items-center gap-2 border-b-2 border-brand pb-1 text-sm font-semibold">
+            View all industries <ArrowRight size={14} />
+          </Link>
+        </div>
 
-          <ul className="grid overflow-hidden rounded-3xl border border-ink/10 sm:grid-cols-2 lg:grid-cols-5">
-            {industries.map(({ icon: Icon, to, label, text }) => (
-              <li key={label} className="border-b border-ink/10 last:border-b-0 sm:border-r lg:border-b-0 lg:last:border-r-0">
+        <ul className="flex flex-col gap-3 lg:h-[460px] lg:flex-row">
+          {industries.map(({ icon: Icon, to, label, text }, i) => {
+            const open = ind === i;
+            return (
+              <li
+                key={label}
+                onMouseEnter={() => setInd(i)}
+                className={`relative overflow-hidden rounded-3xl border transition-all duration-500 ${
+                  open ? "border-brand bg-brand text-white lg:flex-[3]" : "border-ink/15 bg-white text-ink lg:flex-1"
+                }`}
+              >
                 <Link
                   to={to}
-                  className="group flex h-full min-h-72 flex-col justify-between p-7 transition-colors duration-300 hover:bg-ink"
+                  onFocus={() => setInd(i)}
+                  className="flex h-full min-h-28 flex-col justify-between p-7"
                 >
-                  <Icon size={34} strokeWidth={1.3} className="text-brand" />
+                  <Icon size={open ? 44 : 34} strokeWidth={1.3} className={open ? "text-white" : "text-brand"} />
                   <div>
-                    <h3 className="text-lg font-bold leading-tight transition group-hover:text-white">{label}</h3>
-                    <p className="mt-2 text-[13px] leading-relaxed text-muted transition group-hover:text-white/70">{text}</p>
-                    <ArrowRight size={18} className="mt-5 transition group-hover:translate-x-1 group-hover:text-brand" />
+                    <h3 className="text-xl font-bold leading-tight lg:text-2xl">{label}</h3>
+                    <div className={`grid transition-all duration-500 ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 lg:opacity-0"}`}>
+                      <div className="overflow-hidden">
+                        <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/90">{text}</p>
+                        <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold">
+                          Explore <ArrowUpRight size={16} />
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </Link>
               </li>
-            ))}
-          </ul>
-        </div>
+            );
+          })}
+        </ul>
       </section>
 
-      {/* ===== HOW WE WORK ===== */}
-      <section className={`${wrap} py-24`}>
-        <div className="mb-14 max-w-2xl">
-          <h2 className="text-[clamp(34px,4.4vw,54px)] font-extrabold leading-[1.02] tracking-tighter">
+      {/* ===== PROCESS ===== */}
+      <section className="border-y border-ink/15 bg-neutral-50 py-24">
+        <div className={wrap}>
+          <h2 className="mb-14 max-w-2xl text-[clamp(38px,4.8vw,64px)] font-extrabold leading-[0.98] tracking-tighter">
             A disciplined process, <span className="text-brand">built for trust.</span>
           </h2>
-        </div>
-        <ol className="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <span aria-hidden="true" className="absolute left-0 right-0 top-[52px] hidden h-px bg-ink/15 lg:block" />
-          {steps.map(({ icon: Icon, title, text }, i) => (
-            <li key={title} className="group relative rounded-3xl border border-ink/10 bg-white p-7 transition hover:-translate-y-1 hover:border-ink">
-              <div className="flex items-center justify-between">
-                <span className="grid size-12 place-items-center rounded-2xl bg-ink text-white transition group-hover:bg-brand">
+          <ol className="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            <span aria-hidden="true" className="absolute left-0 right-0 top-7 hidden h-0.5 bg-ink lg:block" />
+            {steps.map(({ icon: Icon, title, text }, i) => (
+              <li key={title} className="relative">
+                <span className="relative grid size-14 place-items-center rounded-full bg-brand text-white ring-8 ring-neutral-50">
                   <Icon size={22} strokeWidth={1.7} />
                 </span>
-                <span className="text-5xl font-extrabold leading-none tracking-tighter text-transparent [-webkit-text-stroke:1.5px_#0d0d0f]">
-                  0{i + 1}
-                </span>
-              </div>
-              <h3 className="mt-8 text-xl font-bold">{title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
-            </li>
-          ))}
-        </ol>
+                <span className="mt-6 block text-sm font-bold text-brand">Step {i + 1}</span>
+                <h3 className="mt-1 text-2xl font-extrabold tracking-tight">{title}</h3>
+                <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">{text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
-      {/* ===== TOOLS WE CONNECT ===== */}
-      <section className="border-y border-ink/10 bg-white py-20">
+      {/* ===== TOOLS ===== */}
+      <section className="py-20">
         <div className={`${wrap} grid items-center gap-10 lg:grid-cols-[0.9fr_1.4fr]`}>
           <div>
-            <h2 className="text-[clamp(30px,3.6vw,44px)] font-extrabold leading-[1.05] tracking-tighter">
+            <h2 className="text-[clamp(32px,3.8vw,48px)] font-extrabold leading-[1.02] tracking-tighter">
               Works with the tools <span className="text-brand">you already use.</span>
             </h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
@@ -539,7 +453,7 @@ export default function Home() {
             {tools.map((t) => (
               <li
                 key={t}
-                className="rounded-full border border-ink/10 bg-neutral-50 px-5 py-2.5 text-sm font-bold transition hover:border-ink hover:bg-ink hover:text-white"
+                className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-bold transition hover:border-brand hover:bg-brand hover:text-white"
               >
                 {t}
               </li>
@@ -549,52 +463,51 @@ export default function Home() {
       </section>
 
       {/* ===== ABOUT ===== */}
-      <section className={`${wrap} grid gap-10 py-24 lg:grid-cols-2 lg:gap-20`}>
-        <h2 className="text-[clamp(36px,4.6vw,58px)] font-extrabold leading-[1] tracking-tighter">
-          Technology
-          <br />
-          with <span className="text-brand">Purpose.</span>
-        </h2>
-
-        <div className="lg:pt-2">
-          <p className="mb-6 max-w-lg text-[15px] leading-relaxed text-muted">
-            Rare IT is a focused team that believes technology should create meaningful change. We hold ourselves to
-            the standards of long-established firms, with the speed and attention of a team that treats every client as
-            a partner.
-          </p>
-          <ul className="mb-9 space-y-3 text-sm font-semibold">
-            {["Senior engineers on every project", "Transparent communication, no surprises", "Built to scale with your business"].map((t) => (
-              <li key={t} className="flex items-center gap-3">
-                <span className="grid size-5 place-items-center rounded-full bg-brand text-white">
-                  <Check size={12} strokeWidth={3} />
-                </span>
-                {t}
-              </li>
-            ))}
-          </ul>
-          <PrimaryBtn to="/about">Our Story</PrimaryBtn>
+      <section className="bg-ink text-white">
+        <div className={`${wrap} grid gap-10 py-24 lg:grid-cols-2 lg:gap-20`}>
+          <h2 className="text-[clamp(42px,5.6vw,84px)] font-extrabold leading-[0.95] tracking-tighter">
+            Technology
+            <br />
+            with <span className="text-brand">Purpose.</span>
+          </h2>
+          <div className="lg:pt-3">
+            <p className="mb-6 max-w-lg text-[15px] leading-relaxed text-white/70">
+              Rare IT is a focused team that believes technology should create meaningful change. We hold ourselves to the
+              standards of long-established firms, with the speed and attention of a team that treats every client as a
+              partner.
+            </p>
+            <ul className="mb-9 space-y-3 text-sm font-semibold">
+              {["Senior engineers on every project", "Transparent communication, no surprises", "Built to scale with your business"].map((t) => (
+                <li key={t} className="flex items-center gap-3">
+                  <span className="grid size-5 place-items-center rounded-full bg-brand text-white">
+                    <Check size={12} strokeWidth={3} />
+                  </span>
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <PrimaryBtn to="/about">Our Story</PrimaryBtn>
+          </div>
         </div>
       </section>
 
       {/* ===== LET'S CONNECT ===== */}
-      <section className={`${wrap} pb-24`}>
-        <div className="grid overflow-hidden rounded-[36px] bg-ink text-white lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative overflow-hidden p-10 sm:p-14">
-            <span className="pointer-events-none absolute -bottom-24 -left-24 size-72 rounded-full bg-brand" />
+      <section className={`${wrap} py-24`}>
+        <div className="grid overflow-hidden rounded-[36px] border-2 border-ink lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative overflow-hidden bg-brand p-10 text-white sm:p-14">
+            <span className="pointer-events-none absolute -bottom-28 -right-28 size-80 rounded-full bg-ink" />
             <div className="relative">
-              <h3 className="text-[clamp(30px,3.6vw,46px)] font-extrabold leading-[1.05] tracking-tight">
-                Let’s Build Something
-                <br />
-                Great Together.
+              <h3 className="text-[clamp(32px,4vw,52px)] font-extrabold leading-[1] tracking-tight">
+                Let’s Build Something Great Together.
               </h3>
-              <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/70">
+              <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/90">
                 Partner with Rare IT for innovative, scalable and future-ready solutions. Tell us about your project and
-                we’ll get back to you within 24 business hours.
+                we’ll get back to you.
               </p>
             </div>
           </div>
 
-          <div className="bg-white p-8 text-ink sm:p-12">
+          <div className="bg-white p-8 sm:p-12">
             {sent ? (
               <div className="grid h-full place-items-center text-center">
                 <div>
@@ -633,6 +546,7 @@ export default function Home() {
                 </button>
               </form>
             )}
+            <p className="mt-6 text-xs text-muted">SAP is a trademark of SAP SE. Rare IT is an independent IT company.</p>
           </div>
         </div>
       </section>
