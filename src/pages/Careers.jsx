@@ -285,23 +285,10 @@ export default function Careers() {
               Tell us about yourself and share a link to your work, resume or
               LinkedIn profile. We read every application.
             </p>
-            <ul className="mt-8 space-y-3 text-sm font-semibold">
-              {[
-                "Replies within 24 business hours",
-                "Freshers and experienced applicants welcome",
-                "Office in Madhapur, Hyderabad",
-              ].map((t) => (
-                <li key={t} className="flex items-center gap-3">
-                  <span className="grid h-5 w-5 place-items-center rounded-full bg-brand text-white">
-                    <Check size={12} strokeWidth={3} />
-                  </span>
-                  {t}
-                </li>
-              ))}
-            </ul>
+           
             <p className="mt-8 inline-flex items-center gap-2 text-sm text-muted">
               <Clock size={14} className="text-brand" />
-              Prefer email? Write to info@rareit.in
+              Prefer email? Write to hr@rareit.in
             </p>
           </div>
 

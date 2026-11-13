@@ -160,15 +160,7 @@ export default function About() {
             automate routine work, launch strong websites and apps, and run on
             software made for them.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-6">
-            <PrimaryBtn to="/contact">Talk to us</PrimaryBtn>
-            <Link
-              to="/services/process-automation"
-              className="border-b-2 border-brand pb-0.5 text-sm font-bold transition hover:text-brand"
-            >
-              Our services
-            </Link>
-          </div>
+          
         </div>
       </section>
 
