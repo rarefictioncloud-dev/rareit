@@ -58,6 +58,7 @@ const links = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(null);
+  const [desktopOpen, setDesktopOpen] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const { pathname } = useLocation();
 
@@ -69,10 +70,11 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // close the mobile menu when the page changes
+  // close the menus when the page changes
   useEffect(() => {
     setOpen(false);
     setExpanded(null);
+    setDesktopOpen(null);
   }, [pathname]);
 
   return (
@@ -88,72 +90,114 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-9 lg:flex">
-          {links.map(({ to, label, end, match, items, heading, footer }) => (
-            <li key={to} className="group relative">
-              <NavLink
-                to={to}
-                end={end}
-                className={({ isActive }) => {
-                  const active = match ? pathname.startsWith(match) : isActive;
-                  return `relative flex h-[76px] items-center gap-1 text-[13px] font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:origin-left after:rounded-full after:bg-brand after:transition-transform after:duration-300 ${
-                    active
-                      ? "text-brand after:scale-x-100"
-                      : "text-ink after:scale-x-0 hover:text-brand group-hover:after:scale-x-100"
-                  }`;
+          {links.map(({ to, label, end, match, items, heading, footer }) => {
+            const isOpen = desktopOpen === label;
+            const active = match ? pathname.startsWith(match) : false;
+
+            return (
+              <li
+                key={to}
+                className="relative"
+                onMouseEnter={() => items && setDesktopOpen(label)}
+                onMouseLeave={() => items && setDesktopOpen(null)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setDesktopOpen(null);
+                }}
+                onBlur={(e) => {
+                  if (items && !e.currentTarget.contains(e.relatedTarget)) {
+                    setDesktopOpen(null);
+                  }
                 }}
               >
-                {label}
-                {items && (
-                  <ChevronDown
-                    size={13}
-                    className="transition-transform duration-200 group-hover:rotate-180"
-                  />
-                )}
-              </NavLink>
-
-              {/* Dropdown panel */}
-              {items && (
-                <div className="invisible absolute left-1/2 top-full -translate-x-1/2 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  <div className="relative w-[360px] rounded-3xl border border-line bg-white p-3 shadow-[0_24px_60px_rgba(13,13,15,0.14)]">
-                    <span
-                      aria-hidden="true"
-                      className="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 border-l border-t border-line bg-white"
+                {items ? (
+                  /* Dropdown parents are buttons: clicking them never changes the page */
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={isOpen}
+                    onClick={() => setDesktopOpen(isOpen ? null : label)}
+                    className={`relative flex h-[76px] items-center gap-1 text-[13px] font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:origin-left after:rounded-full after:bg-brand after:transition-transform after:duration-300 ${
+                      active
+                        ? "text-brand after:scale-x-100"
+                        : isOpen
+                        ? "text-brand after:scale-x-100"
+                        : "text-ink after:scale-x-0 hover:text-brand"
+                    }`}
+                  >
+                    {label}
+                    <ChevronDown
+                      size={13}
+                      className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
                     />
-                    <p className="px-3 pb-1 pt-2 text-xs font-bold text-muted">{heading}</p>
-                    <ul>
-                      {items.map(({ icon: Icon, label: itemLabel, desc, to: itemTo }) => (
-                        <li key={itemLabel}>
-                          <Link
-                            to={itemTo}
-                            className="group/item flex items-center gap-4 rounded-2xl p-3 transition hover:bg-neutral-50"
-                          >
-                            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-ink text-white transition-colors group-hover/item:bg-brand">
-                              <Icon size={20} strokeWidth={1.8} />
-                            </span>
-                            <span className="flex-1">
-                              <span className="block text-sm font-bold text-ink">{itemLabel}</span>
-                              <span className="block text-xs text-muted">{desc}</span>
-                            </span>
-                            <ArrowRight
-                              size={16}
-                              className="-translate-x-1 text-brand opacity-0 transition group-hover/item:translate-x-0 group-hover/item:opacity-100"
-                            />
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    <Link
-                      to={footer.to}
-                      className="mt-2 flex items-center justify-between rounded-2xl bg-ink px-4 py-3 text-xs font-bold text-white transition hover:bg-brand"
-                    >
-                      {footer.label}
-                      <ArrowRight size={14} />
-                    </Link>
+                  </button>
+                ) : (
+                  <NavLink
+                    to={to}
+                    end={end}
+                    className={({ isActive }) =>
+                      `relative flex h-[76px] items-center gap-1 text-[13px] font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:origin-left after:rounded-full after:bg-brand after:transition-transform after:duration-300 ${
+                        isActive
+                          ? "text-brand after:scale-x-100"
+                          : "text-ink after:scale-x-0 hover:text-brand hover:after:scale-x-100"
+                      }`
+                    }
+                  >
+                    {label}
+                  </NavLink>
+                )}
+
+                {/* Dropdown panel */}
+                {items && (
+                  <div
+                    className={`absolute left-1/2 top-full -translate-x-1/2 pt-2 transition-all duration-200 ${
+                      isOpen
+                        ? "visible translate-y-0 opacity-100"
+                        : "invisible translate-y-2 opacity-0"
+                    }`}
+                  >
+                    <div className="relative w-[360px] rounded-3xl border border-line bg-white p-3 shadow-[0_24px_60px_rgba(13,13,15,0.14)]">
+                      <span
+                        aria-hidden="true"
+                        className="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 border-l border-t border-line bg-white"
+                      />
+                      <p className="px-3 pb-1 pt-2 text-xs font-bold text-muted">{heading}</p>
+                      <ul>
+                        {items.map(({ icon: Icon, label: itemLabel, desc, to: itemTo }) => (
+                          <li key={itemLabel}>
+                            <Link
+                              to={itemTo}
+                              onClick={() => setDesktopOpen(null)}
+                              className="group/item flex items-center gap-4 rounded-2xl p-3 transition hover:bg-neutral-50"
+                            >
+                              <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-ink text-white transition-colors group-hover/item:bg-brand">
+                                <Icon size={20} strokeWidth={1.8} />
+                              </span>
+                              <span className="flex-1">
+                                <span className="block text-sm font-bold text-ink">{itemLabel}</span>
+                                <span className="block text-xs text-muted">{desc}</span>
+                              </span>
+                              <ArrowRight
+                                size={16}
+                                className="-translate-x-1 text-brand opacity-0 transition group-hover/item:translate-x-0 group-hover/item:opacity-100"
+                              />
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                      <Link
+                        to={footer.to}
+                        onClick={() => setDesktopOpen(null)}
+                        className="mt-2 flex items-center justify-between rounded-2xl bg-ink px-4 py-3 text-xs font-bold text-white transition hover:bg-brand"
+                      >
+                        {footer.label}
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
-            </li>
-          ))}
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         {/* Desktop CTA */}
@@ -205,6 +249,7 @@ export default function Navbar() {
                           <li key={itemLabel}>
                             <Link
                               to={itemTo}
+                              onClick={() => setOpen(false)}
                               className="flex items-center gap-3 rounded-2xl p-2 transition hover:bg-neutral-50"
                             >
                               <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-white">
@@ -220,6 +265,7 @@ export default function Navbar() {
                         <li>
                           <Link
                             to={footer.to}
+                            onClick={() => setOpen(false)}
                             className="mt-1 flex items-center gap-2 p-2 text-[13px] font-semibold text-brand"
                           >
                             {footer.label}

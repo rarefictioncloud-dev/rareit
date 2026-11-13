@@ -45,6 +45,7 @@ const pillars = [
 const services = [
   {
     id: "automation",
+    to: "/services/process-automation",
     icon: Workflow,
     title: "Process Automation",
     text: "Automate repetitive workflows, approvals and reporting across your tools, so your team can focus on work that matters.",
@@ -52,6 +53,7 @@ const services = [
   },
   {
     id: "web",
+    to: "/services/web-designing",
     icon: Palette,
     title: "Web Designing",
     text: "Fast, responsive, brand-led websites and portals that build trust at first glance and turn visitors into customers.",
@@ -59,6 +61,7 @@ const services = [
   },
   {
     id: "custom",
+    to: "/services/custom-software",
     icon: Code2,
     title: "Custom Software",
     text: "Web platforms and internal business software engineered around the way you work, built to grow with you.",
@@ -66,6 +69,7 @@ const services = [
   },
   {
     id: "mobile",
+    to: "/services/mobile-apps",
     icon: Smartphone,
     title: "Mobile App Development",
     text: "Polished iOS and Android apps, designed with real users in mind and built to last.",
@@ -97,11 +101,11 @@ const smarts = [
 ];
 
 const industries = [
-  { icon: HeartPulse, label: "Healthcare", text: "Secure, compliant digital care, from patient portals to clinic workflows." },
-  { icon: Factory, label: "Manufacturing", text: "Connected operations, production tracking and smarter reporting." },
-  { icon: ShoppingCart, label: "Retail & E-commerce", text: "Seamless storefronts, inventory flows and customer journeys." },
-  { icon: Landmark, label: "Finance", text: "Trusted, scalable tools for approvals, records and compliance." },
-  { icon: GraduationCap, label: "Education", text: "Learning platforms and admin tools without the paperwork." },
+  { icon: HeartPulse, to: "/industries/healthcare", label: "Healthcare", text: "Secure, compliant digital care, from patient portals to clinic workflows." },
+  { icon: Factory, to: "/industries/manufacturing", label: "Manufacturing", text: "Connected operations, production tracking and smarter reporting." },
+  { icon: ShoppingCart, to: "/industries/retail", label: "Retail & E-commerce", text: "Seamless storefronts, inventory flows and customer journeys." },
+  { icon: Landmark, to: "/industries/finance", label: "Finance", text: "Trusted, scalable tools for approvals, records and compliance." },
+  { icon: GraduationCap, to: "/industries/education", label: "Education", text: "Learning platforms and admin tools without the paperwork." },
 ];
 
 const steps = [
@@ -351,10 +355,10 @@ export default function Home() {
         </div>
 
         <ul className="grid gap-5 md:grid-cols-2">
-          {services.map(({ id, icon: Icon, title, text, points }, i) => (
+          {services.map(({ id, to, icon: Icon, title, text, points }, i) => (
             <li key={id}>
               <Link
-                to={`/services#${id}`}
+                to={to}
                 className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-ink/10 bg-white p-8 transition duration-300 hover:-translate-y-1 hover:border-ink hover:shadow-[0_24px_50px_rgba(13,13,15,0.12)]"
               >
                 <span className="absolute right-7 top-6 text-5xl font-extrabold tracking-tighter text-ink/[0.06]">0{i + 1}</span>
@@ -429,10 +433,10 @@ export default function Home() {
           </div>
 
           <ul className="grid overflow-hidden rounded-3xl border border-ink/10 sm:grid-cols-2 lg:grid-cols-5">
-            {industries.map(({ icon: Icon, label, text }) => (
+            {industries.map(({ icon: Icon, to, label, text }) => (
               <li key={label} className="border-b border-ink/10 last:border-b-0 sm:border-r lg:border-b-0 lg:last:border-r-0">
                 <Link
-                  to={`/industries#${label.split(" ")[0].toLowerCase()}`}
+                  to={to}
                   className="group flex h-full min-h-72 flex-col justify-between p-7 transition-colors duration-300 hover:bg-ink"
                 >
                   <Icon size={34} strokeWidth={1.3} className="text-brand" />
