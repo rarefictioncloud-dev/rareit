@@ -18,24 +18,38 @@ import {
 import Logo from "./Logo";
 
 const serviceItems = [
-  { icon: Workflow, label: "Process Automation", to: "/services/process-automation" },
-  { icon: Palette, label: "Web Designing", to: "/services/web-designing" },
-  { icon: Code2, label: "Custom Software", to: "/services/custom-software" },
-  { icon: Smartphone, label: "Mobile Apps", to: "/services/mobile-apps" },
+  { icon: Workflow, label: "Process Automation", desc: "Save hours on repeat tasks", to: "/services/process-automation" },
+  { icon: Palette, label: "Web Designing", desc: "Fast, modern business websites", to: "/services/web-designing" },
+  { icon: Code2, label: "Custom Software", desc: "ERP, CRM and internal tools", to: "/services/custom-software" },
+  { icon: Smartphone, label: "Mobile Apps", desc: "Apps for your customers and team", to: "/services/mobile-apps" },
 ];
 
 const industryItems = [
-  { icon: HeartPulse, label: "Healthcare", to: "/industries#healthcare" },
-  { icon: Factory, label: "Manufacturing", to: "/industries#manufacturing" },
-  { icon: ShoppingCart, label: "Retail & E-commerce", to: "/industries#retail" },
-  { icon: Landmark, label: "Finance", to: "/industries#finance" },
-  { icon: GraduationCap, label: "Education", to: "/industries#education" },
+  { icon: HeartPulse, label: "Healthcare", desc: "Clinics and care teams", to: "/industries/healthcare" },
+  { icon: Factory, label: "Manufacturing", desc: "Production and inventory", to: "/industries/manufacturing" },
+  { icon: ShoppingCart, label: "Retail & E-commerce", desc: "Stores and online selling", to: "/industries/retail" },
+  { icon: Landmark, label: "Finance", desc: "Billing and approvals", to: "/industries/finance" },
+  { icon: GraduationCap, label: "Education", desc: "Schools and institutes", to: "/industries/education" },
 ];
 
 const links = [
   { to: "/", label: "Home", end: true },
-  { to: "/services/process-automation", label: "Services", items: serviceItems },
-  { to: "/industries", label: "Industries", items: industryItems },
+  {
+    to: "/services/process-automation",
+    label: "Services",
+    match: "/services",
+    heading: "What we build",
+    footer: { label: "Not sure what you need? Talk to us", to: "/contact" },
+    items: serviceItems,
+  },
+  {
+    to: "/industries",
+    label: "Industries",
+    match: "/industries",
+    heading: "Who we build for",
+    footer: { label: "View all industries", to: "/industries" },
+    items: industryItems,
+  },
   { to: "/about", label: "About" },
   { to: "/careers", label: "Careers" },
   { to: "/contact", label: "Contact" },
@@ -74,18 +88,19 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-9 lg:flex">
-          {links.map(({ to, label, end, items }) => (
+          {links.map(({ to, label, end, match, items, heading, footer }) => (
             <li key={to} className="group relative">
               <NavLink
                 to={to}
                 end={end}
-                className={({ isActive }) =>
-                  `relative flex h-[76px] items-center gap-1 text-[13px] font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:origin-left after:rounded-full after:bg-brand after:transition-transform after:duration-300 ${
-                    isActive
+                className={({ isActive }) => {
+                  const active = match ? pathname.startsWith(match) : isActive;
+                  return `relative flex h-[76px] items-center gap-1 text-[13px] font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:origin-left after:rounded-full after:bg-brand after:transition-transform after:duration-300 ${
+                    active
                       ? "text-brand after:scale-x-100"
                       : "text-ink after:scale-x-0 hover:text-brand group-hover:after:scale-x-100"
-                  }`
-                }
+                  }`;
+                }}
               >
                 {label}
                 {items && (
@@ -98,22 +113,43 @@ export default function Navbar() {
 
               {/* Dropdown panel */}
               {items && (
-                <div className="invisible absolute left-1/2 top-full -translate-x-1/2 pt-1 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-                  <ul className="w-64 rounded-2xl border border-line bg-white p-2 shadow-[0_20px_50px_rgba(13,13,15,0.12)]">
-                    {items.map(({ icon: Icon, label: itemLabel, to: itemTo }) => (
-                      <li key={itemLabel}>
-                        <Link
-                          to={itemTo}
-                          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium text-ink transition hover:bg-brand/5 hover:text-brand"
-                        >
-                          <span className="grid size-8 place-items-center rounded-lg bg-brand/10 text-brand">
-                            <Icon size={16} strokeWidth={1.8} />
-                          </span>
-                          {itemLabel}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="invisible absolute left-1/2 top-full -translate-x-1/2 translate-y-2 pt-2 opacity-0 transition-all duration-200 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="relative w-[360px] rounded-3xl border border-line bg-white p-3 shadow-[0_24px_60px_rgba(13,13,15,0.14)]">
+                    <span
+                      aria-hidden="true"
+                      className="absolute -top-1.5 left-1/2 size-3 -translate-x-1/2 rotate-45 border-l border-t border-line bg-white"
+                    />
+                    <p className="px-3 pb-1 pt-2 text-xs font-bold text-muted">{heading}</p>
+                    <ul>
+                      {items.map(({ icon: Icon, label: itemLabel, desc, to: itemTo }) => (
+                        <li key={itemLabel}>
+                          <Link
+                            to={itemTo}
+                            className="group/item flex items-center gap-4 rounded-2xl p-3 transition hover:bg-neutral-50"
+                          >
+                            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-ink text-white transition-colors group-hover/item:bg-brand">
+                              <Icon size={20} strokeWidth={1.8} />
+                            </span>
+                            <span className="flex-1">
+                              <span className="block text-sm font-bold text-ink">{itemLabel}</span>
+                              <span className="block text-xs text-muted">{desc}</span>
+                            </span>
+                            <ArrowRight
+                              size={16}
+                              className="-translate-x-1 text-brand opacity-0 transition group-hover/item:translate-x-0 group-hover/item:opacity-100"
+                            />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      to={footer.to}
+                      className="mt-2 flex items-center justify-between rounded-2xl bg-ink px-4 py-3 text-xs font-bold text-white transition hover:bg-brand"
+                    >
+                      {footer.label}
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
                 </div>
               )}
             </li>
@@ -123,9 +159,12 @@ export default function Navbar() {
         {/* Desktop CTA */}
         <Link
           to="/contact"
-          className="hidden items-center gap-2 rounded-full bg-ink px-6 py-3 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(13,13,15,0.18)] transition hover:-translate-y-0.5 hover:bg-brand lg:inline-flex"
+          className="group hidden items-center gap-3 rounded-full bg-ink py-1.5 pl-6 pr-1.5 text-[13px] font-semibold text-white shadow-[0_8px_20px_rgba(13,13,15,0.18)] transition hover:-translate-y-0.5 hover:bg-brand-dark lg:inline-flex"
         >
-          Let’s Talk <ArrowRight size={14} />
+          Let’s Talk
+          <span className="grid size-8 place-items-center rounded-full bg-brand text-white transition group-hover:bg-white group-hover:text-brand">
+            <ArrowRight size={14} />
+          </span>
         </Link>
 
         {/* Mobile toggle */}
@@ -144,7 +183,7 @@ export default function Navbar() {
       {open && (
         <div className="max-h-[calc(100vh-76px)] overflow-y-auto border-t border-line bg-white px-6 pb-6 pt-2 lg:hidden">
           <ul>
-            {links.map(({ to, label, end, items }) => (
+            {links.map(({ to, label, end, items, footer }) => (
               <li key={to} className="border-b border-line/70">
                 {items ? (
                   <>
@@ -162,22 +201,31 @@ export default function Navbar() {
                     </button>
                     {expanded === label && (
                       <ul className="pb-3">
-                        <li>
-                          <Link to={to} className="block py-2 pl-3 text-[13px] font-semibold text-brand">
-                            View all {label.toLowerCase()}
-                          </Link>
-                        </li>
-                        {items.map(({ icon: Icon, label: itemLabel, to: itemTo }) => (
+                        {items.map(({ icon: Icon, label: itemLabel, desc, to: itemTo }) => (
                           <li key={itemLabel}>
                             <Link
                               to={itemTo}
-                              className="flex items-center gap-3 py-2 pl-3 text-[13px] text-muted"
+                              className="flex items-center gap-3 rounded-2xl p-2 transition hover:bg-neutral-50"
                             >
-                              <Icon size={15} className="text-brand" />
-                              {itemLabel}
+                              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-ink text-white">
+                                <Icon size={18} strokeWidth={1.8} />
+                              </span>
+                              <span>
+                                <span className="block text-sm font-bold text-ink">{itemLabel}</span>
+                                <span className="block text-xs text-muted">{desc}</span>
+                              </span>
                             </Link>
                           </li>
                         ))}
+                        <li>
+                          <Link
+                            to={footer.to}
+                            className="mt-1 flex items-center gap-2 p-2 text-[13px] font-semibold text-brand"
+                          >
+                            {footer.label}
+                            <ArrowRight size={14} />
+                          </Link>
+                        </li>
                       </ul>
                     )}
                   </>
@@ -198,9 +246,12 @@ export default function Navbar() {
 
           <Link
             to="/contact"
-            className="mt-6 flex items-center justify-center gap-2 rounded-full bg-brand px-6 py-4 text-sm font-semibold text-white"
+            className="group mt-6 flex items-center justify-between rounded-full bg-brand py-2 pl-6 pr-2 text-sm font-semibold text-white"
           >
-            Let’s Talk <ArrowRight size={16} />
+            Let’s Talk
+            <span className="grid size-10 place-items-center rounded-full bg-white text-brand">
+              <ArrowRight size={16} />
+            </span>
           </Link>
         </div>
       )}
