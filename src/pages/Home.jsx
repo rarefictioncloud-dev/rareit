@@ -167,12 +167,12 @@ const contact = [
 ];
 
 /* ---------- STYLE HELPERS ---------- */
-const wrap = "mx-auto w-[min(1760px,100%-32px)] sm:w-[min(1760px,100%-48px)] lg:w-[min(1760px,100%-64px)]";
-const sectionY = "py-14 sm:py-20 lg:py-24";
-const h2Cls = "text-balance font-extrabold leading-[1.05] tracking-tighter text-[clamp(32px,4.8vw,64px)]";
+const wrap = "mx-auto w-[min(1760px,100%-40px)] sm:w-[min(1760px,100%-48px)] lg:w-[min(1760px,100%-64px)]";
+const sectionY = "py-16 sm:py-20 lg:py-24";
+const h2Cls = "text-balance font-extrabold leading-[1.04] tracking-tighter text-[clamp(34px,4.8vw,64px)]";
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 // Lets a horizontal scroller run edge-to-edge on phones, then snap back to the grid on desktop
-const bleed = "-mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0";
+const bleed = "-mx-5 px-5 scroll-pl-5 sm:-mx-6 sm:px-6 sm:scroll-pl-6 lg:mx-0 lg:px-0";
 const hideScroll = "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 const gridTexture =
@@ -190,7 +190,7 @@ const css = `
 const PrimaryBtn = ({ to, children, dark = false, block = false }) => (
   <Link
     to={to}
-    className={`group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-6 pr-2 text-[15px] font-semibold text-white shadow-[0_12px_30px_-12px_rgba(212,15,20,0.8)] transition hover:bg-brand-dark active:scale-[0.98] sm:pl-7 sm:text-sm ${
+    className={`group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-6 pr-2 text-[15px] font-semibold text-white shadow-[0_14px_32px_-12px_rgba(212,15,20,0.85)] transition hover:bg-brand-dark active:scale-[0.98] sm:pl-7 sm:text-sm ${
       block ? "w-full justify-between sm:w-auto sm:justify-start" : ""
     } ${focusRing}`}
   >
@@ -243,9 +243,12 @@ export default function Home() {
     setSent(true);
   };
 
-  const progress = (Math.min(active, heroFlow.length - 1) / (heroFlow.length - 1)) * 100;
+  const filled = Math.min(active + 1, heroFlow.length);
+  const stepLabel = active >= heroFlow.length ? "All steps done" : `Step ${active + 1} of ${heroFlow.length}`;
   const current = industries[ind];
   const CurrentIcon = current.icon;
+  const [featured, ...rest] = services;
+  const FeaturedIcon = featured.icon;
 
   return (
     <div className="overflow-x-hidden bg-white font-sans text-ink antialiased">
@@ -254,12 +257,11 @@ export default function Home() {
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(13,13,15,0.12)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_75%_35%,black,transparent_70%)]" />
-        <div className="pointer-events-none absolute -right-32 top-10 size-72 rounded-full bg-brand/15 blur-[90px] lg:hidden" />
+        <div className="pointer-events-none absolute -right-28 top-24 size-72 rounded-full bg-brand/20 blur-[90px] lg:hidden" />
 
-        <div className={`${wrap} relative grid items-center gap-10 pb-14 pt-8 sm:gap-12 sm:pt-14 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pb-24 lg:pt-20`}>
+        <div className={`${wrap} relative grid items-center gap-12 pb-16 pt-10 sm:gap-12 sm:pt-14 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pb-24 lg:pt-20`}>
           <div>
-   
-            <h1 className="mt-5 text-[clamp(56px,14vw,150px)] font-extrabold leading-[0.9] tracking-tighter sm:mt-6">
+            <h1 className="text-[clamp(52px,15.5vw,150px)] font-extrabold leading-[0.9] tracking-tighter">
               Build.
               <br />
               Innovate.
@@ -284,13 +286,14 @@ export default function Home() {
 
           {/* live workflow visual */}
           <div className="relative mx-auto w-full max-w-[600px] pb-2 lg:mr-0 lg:pb-6">
-            <div className="relative overflow-hidden rounded-[28px] bg-ink p-4 text-white shadow-[0_40px_90px_rgba(13,13,15,0.28)] sm:rounded-[36px] sm:p-9">
+            <div className="relative overflow-hidden rounded-[28px] bg-ink p-5 text-white shadow-[0_40px_90px_-20px_rgba(13,13,15,0.45)] sm:rounded-[36px] sm:p-9">
               <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_70%)]`} />
+              <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-brand/40 blur-[70px]" />
               <div className="relative">
-                <div className="flex items-start justify-between gap-3 px-1 pt-1 sm:px-0 sm:pt-0">
+                <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold text-white/60">Example workflow</p>
-                    <h3 className="text-lg font-extrabold leading-tight tracking-tight sm:text-xl">Order to delivery, automated</h3>
+                    <h3 className="mt-0.5 text-xl font-extrabold leading-tight tracking-tight">Order to delivery, automated</h3>
                   </div>
                   <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-[11px] font-semibold">
                     <span className="relative flex size-2">
@@ -301,39 +304,51 @@ export default function Home() {
                   </span>
                 </div>
 
-                <ol className="relative mt-5 space-y-2.5 sm:mt-7 sm:space-y-3">
-                  <span aria-hidden="true" className="absolute bottom-[34px] left-[33px] top-[34px] w-0.5 bg-white/15 sm:bottom-[38px] sm:left-[37px] sm:top-[38px]">
-                    <span className="block w-full bg-brand transition-[height] duration-700 motion-reduce:transition-none" style={{ height: `${progress}%` }} />
-                  </span>
+                {/* segmented progress */}
+                <div className="mt-5 flex items-center gap-3" aria-hidden="true">
+                  <div className="flex flex-1 gap-1.5">
+                    {heroFlow.map((s, i) => (
+                      <span
+                        key={s.t}
+                        className={`h-1 flex-1 rounded-full transition-colors duration-500 motion-reduce:transition-none ${i < filled ? "bg-brand" : "bg-white/15"}`}
+                      />
+                    ))}
+                  </div>
+                  <span className="shrink-0 text-[11px] font-semibold text-white/60">{stepLabel}</span>
+                </div>
+
+                <ol className="mt-5 space-y-2.5 sm:space-y-3">
                   {heroFlow.map(({ icon: Icon, t, d }, i) => {
                     const done = i < active;
                     const running = i === active;
                     return (
                       <li
                         key={t}
-                        className={`relative flex items-center gap-3.5 rounded-2xl border p-3 transition-colors duration-500 motion-reduce:transition-none sm:gap-4 sm:p-4 ${
+                        className={`relative flex items-center gap-3.5 rounded-2xl border p-3.5 transition-colors duration-500 motion-reduce:transition-none sm:gap-4 sm:p-4 ${
                           running ? "border-brand/70 bg-neutral-800" : "border-white/10 bg-neutral-900"
                         }`}
                       >
                         <span
-                          className={`relative grid size-10 shrink-0 place-items-center rounded-full transition-colors duration-500 sm:size-11 ${
-                            done || running ? "bg-brand text-white" : "bg-white text-ink"
+                          className={`relative grid size-11 shrink-0 place-items-center rounded-xl transition-colors duration-500 ${
+                            done || running ? "bg-brand text-white" : "bg-white/10 text-white/80"
                           }`}
                         >
                           {running && (
-                            <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand/60 motion-reduce:animate-none" />
+                            <span className="absolute inline-flex size-full animate-ping rounded-xl bg-brand/50 motion-reduce:animate-none" />
                           )}
-                          <Icon size={17} strokeWidth={1.8} className="relative" />
+                          <Icon size={18} strokeWidth={1.8} className="relative" />
                         </span>
                         <div className="min-w-0">
-                          <p className="text-sm font-bold">{t}</p>
-                          <p className="truncate text-xs text-white/60">{d}</p>
+                          <p className="text-[15px] font-bold leading-tight">{t}</p>
+                          <p className="mt-0.5 truncate text-xs text-white/60">{d}</p>
                         </div>
-                        <Check
-                          size={18}
-                          strokeWidth={3}
-                          className={`ml-auto shrink-0 text-brand transition-opacity duration-500 ${done ? "opacity-100" : "opacity-0"}`}
-                        />
+                        <span
+                          className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full transition-all duration-500 ${
+                            done ? "scale-100 bg-brand opacity-100" : "scale-75 opacity-0"
+                          }`}
+                        >
+                          <Check size={13} strokeWidth={3.5} />
+                        </span>
                       </li>
                     );
                   })}
@@ -373,17 +388,19 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* ===== PILLARS STRIP ===== */}
+      {/* ===== PILLARS ===== */}
       <section className="bg-ink text-white">
-        <ul className={`${wrap} grid grid-cols-2 lg:grid-cols-4`}>
+        <ul className={`${wrap} grid grid-cols-2 gap-3 py-5 sm:gap-4 lg:grid-cols-4 lg:gap-0 lg:py-0`}>
           {pillars.map(({ icon: Icon, title, text }, i) => (
             <li
               key={title}
-              className={`flex flex-col gap-3 border-white/10 p-5 sm:flex-row sm:gap-4 sm:px-6 sm:py-9 lg:border-b-0 ${i < 2 ? "border-b" : ""} ${
-                i % 2 === 1 ? "border-l" : ""
-              } ${i > 0 ? "lg:border-l" : "lg:border-l-0 lg:pl-0"}`}
+              className={`flex flex-col gap-3 rounded-2xl bg-white/[0.06] p-4 sm:flex-row sm:gap-4 sm:p-6 lg:rounded-none lg:bg-transparent lg:px-6 lg:py-9 ${
+                i > 0 ? "lg:border-l lg:border-white/10" : "lg:pl-0"
+              }`}
             >
-              <Icon size={26} strokeWidth={1.5} className="shrink-0 text-brand sm:mt-0.5" />
+              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/15 lg:size-auto lg:bg-transparent lg:pt-0.5">
+                <Icon size={22} strokeWidth={1.6} className="text-brand" />
+              </span>
               <div>
                 <h3 className="text-[15px] font-bold leading-tight">{title}</h3>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-white/60">{text}</p>
@@ -394,7 +411,7 @@ export default function Home() {
       </section>
 
       {/* ===== SERVICES ===== */}
-      <section id="services" className={`${wrap} ${sectionY} grid scroll-mt-20 gap-8 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
+      <section id="services" className={`${wrap} ${sectionY} grid scroll-mt-20 gap-9 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
         <div className="lg:sticky lg:top-28 lg:self-start">
           <h2 className={h2Cls}>
             Built for your business. <span className="text-brand">Not retrofitted to it.</span>
@@ -405,32 +422,82 @@ export default function Home() {
           </p>
         </div>
 
-        <ul className="flex flex-col gap-3 lg:gap-0 lg:border-t-2 lg:border-ink">
+        {/* phones and tablets: bento */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:hidden">
+          <Link
+            to={featured.to}
+            className={`group relative col-span-2 flex flex-col gap-10 overflow-hidden rounded-[28px] bg-ink p-6 text-white transition active:scale-[0.99] sm:p-8 ${focusRing}`}
+          >
+            <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
+            <div className="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full bg-brand/40 blur-[80px]" />
+            <div className="relative flex items-start justify-between">
+              <span className="grid size-12 place-items-center rounded-2xl bg-brand">
+                <FeaturedIcon size={22} strokeWidth={1.7} />
+              </span>
+              <span className="grid size-10 place-items-center rounded-full border border-white/25">
+                <ArrowUpRight size={18} />
+              </span>
+            </div>
+            <div className="relative">
+              <h3 className="text-3xl font-extrabold tracking-tight">{featured.title}</h3>
+              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/65">{featured.text}</p>
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {featured.points.map((p) => (
+                  <li key={p} className="rounded-full border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/80">
+                    {p}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Link>
+
+          {rest.map(({ to, icon: Icon, title, text }) => (
+            <Link
+              key={title}
+              to={to}
+              className={`group flex min-h-[200px] flex-col justify-between gap-6 rounded-[24px] border border-ink/10 bg-neutral-50 p-5 transition active:scale-[0.98] active:bg-neutral-100 sm:p-6 ${focusRing}`}
+            >
+              <div className="flex items-start justify-between">
+                <span className="grid size-11 place-items-center rounded-xl bg-ink text-white">
+                  <Icon size={20} strokeWidth={1.7} />
+                </span>
+                <ArrowUpRight size={18} className="text-ink/40" />
+              </div>
+              <div>
+                <h3 className="text-lg font-extrabold leading-tight tracking-tight sm:text-xl">{title}</h3>
+                <p className="mt-1.5 line-clamp-3 text-[13px] leading-relaxed text-muted">{text}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* desktop: large rows */}
+        <ul className="hidden border-t-2 border-ink lg:block">
           {services.map(({ to, icon: Icon, title, text, points }) => (
-            <li key={title} className="lg:border-b lg:border-ink/15">
+            <li key={title} className="border-b border-ink/15">
               <Link
                 to={to}
-                className={`group relative grid gap-4 rounded-3xl border border-ink/10 bg-neutral-50 p-5 transition active:scale-[0.99] active:bg-neutral-100 sm:p-7 lg:grid-cols-[auto_1fr_auto] lg:items-start lg:gap-8 lg:rounded-none lg:border-0 lg:bg-transparent lg:px-6 lg:py-9 lg:transition-colors lg:duration-300 lg:hover:bg-ink lg:hover:text-white lg:active:scale-100 ${focusRing}`}
+                className={`group grid grid-cols-[auto_1fr_auto] items-start gap-8 px-6 py-9 transition-colors duration-300 hover:bg-ink hover:text-white ${focusRing}`}
               >
-                <span className="grid size-12 place-items-center rounded-2xl bg-ink text-white transition lg:size-14 lg:group-hover:bg-brand">
+                <span className="grid size-14 place-items-center rounded-2xl bg-ink text-white transition group-hover:bg-brand">
                   <Icon size={24} strokeWidth={1.6} />
                 </span>
                 <div className="min-w-0">
-                  <h3 className="text-2xl font-extrabold tracking-tight lg:text-3xl">{title}</h3>
-                  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-muted transition lg:group-hover:text-white/70">{text}</p>
+                  <h3 className="text-3xl font-extrabold tracking-tight">{title}</h3>
+                  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-muted transition group-hover:text-white/70">{text}</p>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {points.map((p) => (
                       <li
                         key={p}
-                        className="rounded-full border border-ink/15 bg-white px-3 py-1.5 text-[11px] font-semibold text-ink/70 transition lg:bg-transparent lg:py-1 lg:group-hover:border-white/30 lg:group-hover:text-white/80"
+                        className="rounded-full border border-ink/15 px-3 py-1 text-[11px] font-semibold text-ink/70 transition group-hover:border-white/30 group-hover:text-white/80"
                       >
                         {p}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <span className="absolute right-5 top-5 grid size-10 place-items-center rounded-full border border-ink/15 bg-white transition sm:right-7 sm:top-7 lg:static lg:size-12 lg:bg-transparent lg:group-hover:border-brand lg:group-hover:bg-brand">
-                  <ArrowUpRight size={18} className="transition lg:group-hover:rotate-12" />
+                <span className="grid size-12 place-items-center rounded-full border border-ink/20 transition group-hover:border-brand group-hover:bg-brand">
+                  <ArrowUpRight size={18} className="transition group-hover:rotate-12" />
                 </span>
               </Link>
             </li>
@@ -444,7 +511,7 @@ export default function Home() {
         <div className="pointer-events-none absolute -left-24 top-1/2 size-72 rounded-full bg-brand/20 blur-[100px] lg:hidden" />
         <div className={`${wrap} relative`}>
           <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-10">
-            <h2 className="text-balance text-[clamp(32px,5vw,72px)] font-extrabold leading-[1.05] tracking-tighter">
+            <h2 className="text-balance text-[clamp(34px,5vw,72px)] font-extrabold leading-[1.04] tracking-tighter">
               What makes Rare IT solutions <span className="text-brand">smarter?</span>
             </h2>
             <p className="max-w-md text-[15px] leading-relaxed text-white/65">
@@ -454,7 +521,7 @@ export default function Home() {
           </div>
 
           {/* automation flow */}
-          <div className="mt-8 rounded-3xl border border-white/15 bg-white/[0.03] p-4 sm:mt-14 sm:p-6">
+          <div className="mt-9 rounded-3xl border border-white/15 bg-white/[0.04] p-4 sm:mt-14 sm:p-6">
             <p className="mb-3 text-sm font-semibold text-white/60 sm:mb-4">One order, no manual steps</p>
             <ol className={`flex items-center gap-2 overflow-x-auto sm:flex-wrap sm:gap-3 sm:overflow-visible ${hideScroll}`}>
               {flow.map((s, i) => (
@@ -475,17 +542,17 @@ export default function Home() {
             {smarts.map(({ icon: Icon, title, text }) => (
               <li
                 key={title}
-                className="w-[82%] shrink-0 snap-start rounded-3xl border border-white/10 bg-neutral-900 p-6 transition sm:w-[46%] sm:p-7 lg:w-auto lg:rounded-none lg:border-0 lg:bg-ink lg:p-8 lg:hover:bg-neutral-900"
+                className="w-[80%] shrink-0 snap-start rounded-[24px] border border-white/10 bg-neutral-900 p-6 transition sm:w-[46%] sm:p-7 lg:w-auto lg:rounded-none lg:border-0 lg:bg-ink lg:p-8 lg:hover:bg-neutral-900"
               >
-                <span className="grid size-12 place-items-center rounded-2xl bg-brand/15 lg:bg-transparent lg:p-0">
-                  <Icon size={28} strokeWidth={1.5} className="text-brand" />
+                <span className="grid size-12 place-items-center rounded-2xl bg-brand/15 lg:size-auto lg:bg-transparent">
+                  <Icon size={26} strokeWidth={1.5} className="text-brand lg:size-[30px]" />
                 </span>
                 <h3 className="mt-6 text-xl font-bold leading-tight lg:mt-8">{title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-white/65">{text}</p>
               </li>
             ))}
           </ul>
-          <p className="mt-1 text-center text-xs text-white/40 lg:hidden">Swipe to see more</p>
+          <p className="mt-2 text-center text-xs text-white/40 lg:hidden">Swipe to see more</p>
 
           <div className="mt-8 sm:mt-10">
             <PrimaryBtn to="/contact" block>
@@ -543,7 +610,7 @@ export default function Home() {
             role="tabpanel"
             id="ind-panel"
             aria-labelledby={`ind-tab-${ind}`}
-            className="relative flex min-h-[290px] flex-col justify-between gap-8 overflow-hidden rounded-[28px] bg-brand p-6 text-white sm:min-h-[320px] sm:p-10 lg:min-h-[400px]"
+            className="relative flex min-h-[300px] flex-col justify-between gap-8 overflow-hidden rounded-[28px] bg-brand p-6 text-white sm:min-h-[320px] sm:p-10 lg:min-h-[400px]"
           >
             <span className="pointer-events-none absolute -bottom-24 -right-20 size-64 rounded-full bg-ink/90 sm:-bottom-32 sm:-right-24 sm:size-96" />
             <CurrentIcon size={48} strokeWidth={1.2} className="relative" />
@@ -567,15 +634,17 @@ export default function Home() {
           <h2 className={`mb-10 max-w-2xl sm:mb-14 ${h2Cls}`}>
             A disciplined process, <span className="text-brand">built for trust.</span>
           </h2>
-          <ol className="relative grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <ol className="relative grid gap-5 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 lg:gap-6">
             <span aria-hidden="true" className="absolute left-0 right-0 top-7 hidden h-0.5 bg-ink lg:block" />
-            <span aria-hidden="true" className="absolute bottom-8 left-7 top-8 w-0.5 -translate-x-1/2 bg-ink/15 sm:hidden" />
             {steps.map(({ icon: Icon, title, text }, i) => (
-              <li key={title} className="relative grid grid-cols-[auto_1fr] gap-x-5 sm:block">
-                <span className="relative grid size-14 place-items-center rounded-full bg-brand text-white ring-8 ring-neutral-50">
+              <li key={title} className="relative pl-[68px] sm:block sm:pl-0">
+                {i < steps.length - 1 && (
+                  <span aria-hidden="true" className="absolute -bottom-5 left-6 top-14 w-px bg-ink/20 sm:hidden" />
+                )}
+                <span className="absolute left-0 top-0 grid size-12 place-items-center rounded-full bg-brand text-white ring-4 ring-neutral-50 sm:static sm:size-14 sm:ring-8">
                   <Icon size={22} strokeWidth={1.7} />
                 </span>
-                <div className="pt-1 sm:pt-0">
+                <div className="rounded-2xl border border-ink/10 bg-white p-5 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0">
                   <span className="block text-sm font-bold text-brand sm:mt-6">Step {i + 1}</span>
                   <h3 className="mt-0.5 text-2xl font-extrabold tracking-tight sm:mt-1">{title}</h3>
                   <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">{text}</p>
@@ -587,10 +656,10 @@ export default function Home() {
       </section>
 
       {/* ===== TOOLS ===== */}
-      <section className="overflow-hidden py-14 sm:py-20">
-        <div className={`${wrap} grid items-center gap-7 lg:grid-cols-[0.9fr_1.4fr] lg:gap-10`}>
+      <section className="overflow-hidden py-16 sm:py-20">
+        <div className={`${wrap} grid items-center gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:gap-10`}>
           <div>
-            <h2 className="text-balance text-[clamp(28px,3.8vw,48px)] font-extrabold leading-[1.08] tracking-tighter">
+            <h2 className="text-balance text-[clamp(30px,3.8vw,48px)] font-extrabold leading-[1.08] tracking-tighter">
               Works with the tools <span className="text-brand">you already use.</span>
             </h2>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted sm:mt-4">
@@ -611,8 +680,8 @@ export default function Home() {
           </ul>
 
           {/* mobile: slow auto-scrolling strip */}
-          <div className="relative -mx-4 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] sm:-mx-6 lg:hidden">
-            <ul className="rit-marquee flex w-max gap-2.5 px-4">
+          <div className="relative -mx-5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] sm:-mx-6 lg:hidden">
+            <ul className="rit-marquee flex w-max gap-2.5 px-5">
               {[...tools, ...tools].map((t, i) => (
                 <li
                   key={`${t}-${i}`}
@@ -628,9 +697,10 @@ export default function Home() {
       </section>
 
       {/* ===== ABOUT ===== */}
-      <section className="bg-ink text-white">
-        <div className={`${wrap} grid gap-7 ${sectionY} lg:grid-cols-2 lg:gap-20`}>
-          <h2 className="text-[clamp(42px,5.6vw,84px)] font-extrabold leading-[0.97] tracking-tighter">
+      <section className="relative overflow-hidden bg-ink text-white">
+        <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-brand/25 blur-[100px] lg:hidden" />
+        <div className={`${wrap} relative grid gap-8 ${sectionY} lg:grid-cols-2 lg:gap-20`}>
+          <h2 className="text-[clamp(44px,5.6vw,84px)] font-extrabold leading-[0.97] tracking-tighter">
             Technology
             <br />
             with <span className="text-brand">Purpose.</span>
@@ -681,12 +751,12 @@ export default function Home() {
       </section>
 
       {/* ===== LET'S CONNECT ===== */}
-      <section id="contact" className={`${wrap} scroll-mt-20 pb-14 sm:pb-20 lg:pb-24`}>
+      <section id="contact" className={`${wrap} scroll-mt-20 pb-16 sm:pb-20 lg:pb-24`}>
         <div className="grid overflow-hidden rounded-[28px] border-2 border-ink sm:rounded-[36px] lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative overflow-hidden bg-brand p-6 text-white sm:p-14">
             <span className="pointer-events-none absolute -bottom-28 -right-28 hidden size-80 rounded-full bg-ink lg:block" />
             <div className="relative">
-              <h3 className="text-balance text-[clamp(30px,4vw,52px)] font-extrabold leading-[1.05] tracking-tight">
+              <h3 className="text-balance text-[clamp(32px,4vw,52px)] font-extrabold leading-[1.04] tracking-tight">
                 Let’s Build Something Great Together.
               </h3>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/90 sm:mt-5">
@@ -699,7 +769,7 @@ export default function Home() {
                     <li key={label}>
                       <a
                         href={href}
-                        className="flex items-center gap-3 rounded-2xl bg-white/15 px-4 py-3.5 text-[15px] transition active:bg-white/25 lg:bg-transparent lg:p-0 lg:text-sm lg:hover:underline lg:underline-offset-4"
+                        className="flex items-center gap-3 rounded-2xl bg-white/15 px-4 py-3.5 text-[15px] transition active:bg-white/25 lg:bg-transparent lg:p-0 lg:text-sm lg:underline-offset-4 lg:hover:underline"
                       >
                         <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-brand">
                           <Icon size={16} />
