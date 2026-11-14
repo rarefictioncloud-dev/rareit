@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -25,6 +25,10 @@ import {
   Sparkles,
   Users,
   Eye,
+  Plus,
+  Mail,
+  Phone,
+  MapPin,
 } from "lucide-react";
 
 /* ---------- DATA ---------- */
@@ -73,13 +77,20 @@ const services = [
   },
 ];
 
+const heroFlow = [
+  { icon: ShoppingCart, t: "New order", d: "Received from your store" },
+  { icon: Database, t: "Check stock", d: "Matched with inventory" },
+  { icon: Landmark, t: "Send invoice", d: "Created and emailed" },
+  { icon: Users, t: "Notify team", d: "Right people, right time" },
+];
+
 const flow = ["New order", "Check stock", "Send invoice", "Notify team"];
 
 const smarts = [
   {
     icon: Bot,
     title: "Industry-aware automation",
-    text: "Workflows tuned to your sector's data, rules and terminology, so results are precise and easy to audit.",
+    text: "Workflows tuned to your sector’s data, rules and terminology, so results are precise and easy to audit.",
   },
   {
     icon: LayoutDashboard,
@@ -127,19 +138,50 @@ const tools = [
   "SAP",
 ];
 
+const faqs = [
+  {
+    q: "How do we start a project with Rare IT?",
+    a: "Send us a short note about what you want to achieve. We reply to set up a call, learn about your goals and users, and then share a clear plan and scope for you to review before any work begins.",
+  },
+  {
+    q: "Can you work with the tools we already use?",
+    a: "Yes. We connect new software to the tools you already rely on, such as CRMs, spreadsheets, payment gateways, messaging apps and SAP, so your team does not have to change how it works overnight.",
+  },
+  {
+    q: "Do you support the product after launch?",
+    a: "Yes. We stay with you after go-live with monitoring, fixes, updates and new features as your business grows.",
+  },
+  {
+    q: "Which kinds of businesses do you work with?",
+    a: "We work with growing businesses in healthcare, manufacturing, retail and e-commerce, finance and education, as well as teams in other sectors that need software built around their processes.",
+  },
+];
+
+const contact = [
+  { icon: Mail, label: "info@rareit.in", href: "mailto:info@rareit.in" },
+  { icon: Phone, label: "+91 79976 58999", href: "tel:+917997658999" },
+  {
+    icon: MapPin,
+    label: "Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madhapur, Hyderabad 500081",
+  },
+];
+
 /* ---------- SMALL PIECES ---------- */
-const wrap = "mx-auto w-[min(1760px,100%-64px)]";
+const wrap = "mx-auto w-[min(1760px,100%-32px)] sm:w-[min(1760px,100%-48px)] lg:w-[min(1760px,100%-64px)]";
+const sectionY = "py-16 sm:py-20 lg:py-24";
+const h2Cls = "font-extrabold leading-[1.02] tracking-tighter text-[clamp(32px,4.8vw,64px)]";
+const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
 const gridTexture =
   "[background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:56px_56px]";
 
 const fieldCls =
-  "w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-sm outline-none transition placeholder:text-ink/40 focus:border-brand";
+  "w-full rounded-xl border border-ink/15 bg-white px-4 py-3.5 text-base outline-none transition placeholder:text-ink/40 focus:border-brand focus:ring-4 focus:ring-brand/10 sm:text-sm";
 
 const PrimaryBtn = ({ to, children, dark = false }) => (
   <Link
     to={to}
-    className="group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white transition hover:bg-brand-dark"
+    className={`group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-6 pr-2 text-sm font-semibold text-white transition hover:bg-brand-dark sm:pl-7 ${focusRing}`}
   >
     {children}
     <span
@@ -156,6 +198,16 @@ const PrimaryBtn = ({ to, children, dark = false }) => (
 export default function Home() {
   const [sent, setSent] = useState(false);
   const [ind, setInd] = useState(0);
+  // Starts "all done" so the pre-rendered HTML shows a complete workflow
+  const [active, setActive] = useState(heroFlow.length);
+
+  // Animate the hero workflow on the client only, and respect reduced motion
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setActive(0);
+    const id = setInterval(() => setActive((a) => (a + 1) % (heroFlow.length + 2)), 1300);
+    return () => clearInterval(id);
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -163,72 +215,98 @@ export default function Home() {
     setSent(true);
   };
 
+  const progress = (Math.min(active, heroFlow.length - 1) / (heroFlow.length - 1)) * 100;
+  const current = industries[ind];
+  const CurrentIcon = current.icon;
+
   return (
-    <div className="overflow-x-hidden bg-white font-sans text-ink">
+    <div className="overflow-x-hidden bg-white font-sans text-ink antialiased">
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(13,13,15,0.12)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_75%_35%,black,transparent_70%)]" />
 
-        <div className={`${wrap} relative grid items-center gap-14 pb-14 pt-14 lg:grid-cols-[1.1fr_1fr] lg:pb-20 lg:pt-20`}>
+        <div className={`${wrap} relative grid items-center gap-12 pb-12 pt-10 sm:pt-14 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pb-20 lg:pt-20`}>
           <div>
-     
-            <h1 className="text-[clamp(56px,9vw,150px)] font-extrabold leading-[0.88] tracking-tighter">
+            <h1 className="text-[clamp(52px,11vw,150px)] font-extrabold leading-[0.9] tracking-tighter">
               Build.
               <br />
               Innovate.
               <br />
               <span className="text-brand">Grow.</span>
             </h1>
-            <p className="mt-8 max-w-[520px] text-lg leading-relaxed text-muted">
+            <p className="mt-6 max-w-[520px] text-base leading-relaxed text-muted sm:mt-8 sm:text-lg">
               A next-gen IT partner helping businesses transform ideas into powerful digital solutions.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-6">
+            <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-5 sm:mt-10">
               <PrimaryBtn to="/contact">Start a project</PrimaryBtn>
-              <a href="#services" className="border-b-2 border-ink pb-1 text-sm font-semibold transition hover:border-brand hover:text-brand">
+              <a
+                href="#services"
+                className={`border-b-2 border-ink pb-1 text-sm font-semibold transition hover:border-brand hover:text-brand ${focusRing}`}
+              >
                 Explore our services
               </a>
             </div>
+            <p className="mt-8 flex items-center gap-2 text-sm text-muted">
+              <MapPin size={16} className="shrink-0 text-brand" />
+              Based in Hyderabad, working with businesses across India.
+            </p>
           </div>
 
           {/* live workflow visual */}
-          <div className="relative mx-auto w-full max-w-[600px] pb-8 lg:mr-0">
-            <div className="relative overflow-hidden rounded-[36px] bg-ink p-7 text-white shadow-[0_40px_90px_rgba(13,13,15,0.25)] sm:p-9">
+          <div className="relative mx-auto w-full max-w-[600px] pb-6 lg:mr-0">
+            <div className="relative overflow-hidden rounded-[28px] bg-ink p-5 text-white shadow-[0_40px_90px_rgba(13,13,15,0.25)] sm:rounded-[36px] sm:p-9">
               <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_70%)]`} />
               <div className="relative">
-                <div className="flex items-center justify-between">
+                <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-xs font-semibold text-white/60">Example workflow</p>
-                    <h3 className="text-xl font-extrabold tracking-tight">Order to delivery, automated</h3>
+                    <h3 className="text-lg font-extrabold tracking-tight sm:text-xl">Order to delivery, automated</h3>
                   </div>
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-[11px] font-semibold">
+                  <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-[11px] font-semibold">
                     <span className="relative flex size-2">
-                      <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand" />
+                      <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand motion-reduce:animate-none" />
                       <span className="relative inline-flex size-2 rounded-full bg-brand" />
                     </span>
                     Live
                   </span>
                 </div>
 
-                <ol className="relative mt-7 space-y-3">
-                  <span aria-hidden="true" className="absolute bottom-8 left-[37px] top-8 w-0.5 bg-brand" />
-                  {[
-                    { icon: ShoppingCart, t: "New order", d: "Received from your store" },
-                    { icon: Database, t: "Check stock", d: "Matched with inventory" },
-                    { icon: Landmark, t: "Send invoice", d: "Created and emailed" },
-                    { icon: Users, t: "Notify team", d: "Right people, right time" },
-                  ].map(({ icon: Icon, t, d }, i, arr) => (
-                    <li key={t} className="relative flex items-center gap-4 rounded-2xl border border-white/10 bg-neutral-900 p-4">
-                      <span className={`relative grid size-11 shrink-0 place-items-center rounded-full ${i === arr.length - 1 ? "bg-brand" : "bg-white text-ink"}`}>
-                        {i === arr.length - 1 && <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand" />}
-                        <Icon size={18} strokeWidth={1.8} className="relative" />
-                      </span>
-                      <div>
-                        <p className="text-sm font-bold">{t}</p>
-                        <p className="text-xs text-white/60">{d}</p>
-                      </div>
-                      <Check size={18} strokeWidth={3} className="ml-auto text-brand" />
-                    </li>
-                  ))}
+                <ol className="relative mt-6 space-y-3 sm:mt-7">
+                  <span aria-hidden="true" className="absolute bottom-[38px] left-[37px] top-[38px] w-0.5 bg-white/15">
+                    <span className="block w-full bg-brand transition-[height] duration-700 motion-reduce:transition-none" style={{ height: `${progress}%` }} />
+                  </span>
+                  {heroFlow.map(({ icon: Icon, t, d }, i) => {
+                    const done = i < active;
+                    const running = i === active;
+                    return (
+                      <li
+                        key={t}
+                        className={`relative flex items-center gap-4 rounded-2xl border p-4 transition-colors duration-500 motion-reduce:transition-none ${
+                          running ? "border-brand/70 bg-neutral-800" : "border-white/10 bg-neutral-900"
+                        }`}
+                      >
+                        <span
+                          className={`relative grid size-11 shrink-0 place-items-center rounded-full transition-colors duration-500 ${
+                            done || running ? "bg-brand text-white" : "bg-white text-ink"
+                          }`}
+                        >
+                          {running && (
+                            <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand/60 motion-reduce:animate-none" />
+                          )}
+                          <Icon size={18} strokeWidth={1.8} className="relative" />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-bold">{t}</p>
+                          <p className="truncate text-xs text-white/60">{d}</p>
+                        </div>
+                        <Check
+                          size={18}
+                          strokeWidth={3}
+                          className={`ml-auto shrink-0 text-brand transition-opacity duration-500 ${done ? "opacity-100" : "opacity-0"}`}
+                        />
+                      </li>
+                    );
+                  })}
                 </ol>
               </div>
             </div>
@@ -249,16 +327,21 @@ export default function Home() {
         </div>
 
         {/* quick service links */}
-        <ul className={`${wrap} relative grid border-t-2 border-ink sm:grid-cols-2 lg:grid-cols-5`}>
+        <ul className={`${wrap} relative grid grid-cols-2 border-t-2 border-ink sm:grid-cols-3 lg:grid-cols-5`}>
           {services.map(({ to, icon: Icon, title }, i) => (
-            <li key={title} className={i > 0 ? "lg:border-l lg:border-ink/15" : ""}>
+            <li
+              key={title}
+              className={`border-b border-ink/10 lg:border-b-0 ${i % 2 === 1 ? "border-l border-ink/10 sm:border-l-0" : ""} ${
+                i === services.length - 1 ? "col-span-2 sm:col-span-1" : ""
+              } ${i > 0 ? "lg:border-l lg:border-ink/15" : ""}`}
+            >
               <Link
                 to={to}
-                className="group flex items-center gap-4 px-5 py-7 transition-colors duration-300 hover:bg-brand hover:text-white"
+                className={`group flex flex-col items-start gap-3 px-4 py-5 transition-colors duration-300 hover:bg-brand hover:text-white sm:flex-row sm:items-center sm:gap-4 sm:px-5 sm:py-7 ${focusRing}`}
               >
-                <Icon size={26} strokeWidth={1.5} className="text-brand transition group-hover:text-white" />
-                <span className="text-[15px] font-bold">{title}</span>
-                <ArrowUpRight size={18} className="ml-auto opacity-40 transition group-hover:opacity-100" />
+                <Icon size={24} strokeWidth={1.5} className="shrink-0 text-brand transition group-hover:text-white" />
+                <span className="text-sm font-bold leading-tight sm:text-[15px]">{title}</span>
+                <ArrowUpRight size={18} className="ml-auto hidden opacity-40 transition group-hover:opacity-100 sm:block" />
               </Link>
             </li>
           ))}
@@ -271,9 +354,9 @@ export default function Home() {
           {pillars.map(({ icon: Icon, title, text }, i) => (
             <li
               key={title}
-              className={`flex items-start gap-4 py-9 sm:px-6 ${i > 0 ? "lg:border-l lg:border-white/15" : "lg:pl-0"} ${
-                i % 2 === 1 ? "sm:border-l sm:border-white/15 lg:border-l" : ""
-              }`}
+              className={`flex items-start gap-4 border-b border-white/10 py-6 last:border-b-0 sm:px-6 sm:py-9 sm:[&:nth-last-child(-n+2)]:border-b-0 lg:border-b-0 ${
+                i > 0 ? "lg:border-l lg:border-white/15" : "lg:pl-0"
+              } ${i % 2 === 1 ? "sm:border-l sm:border-white/15" : ""}`}
             >
               <Icon size={26} strokeWidth={1.5} className="mt-0.5 shrink-0 text-brand" />
               <div>
@@ -286,12 +369,12 @@ export default function Home() {
       </section>
 
       {/* ===== SERVICES (large rows) ===== */}
-      <section id="services" className={`${wrap} grid gap-12 py-24 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
+      <section id="services" className={`${wrap} ${sectionY} grid scroll-mt-20 gap-10 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
         <div className="lg:sticky lg:top-28 lg:self-start">
-          <h2 className="text-[clamp(38px,4.8vw,64px)] font-extrabold leading-[0.98] tracking-tighter">
+          <h2 className={h2Cls}>
             Built for your business. <span className="text-brand">Not retrofitted to it.</span>
           </h2>
-          <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-muted">
+          <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-muted sm:mt-6">
             Every Rare IT solution is designed from scratch around how your teams work, with software, websites and apps
             that fit from day one.
           </p>
@@ -302,23 +385,26 @@ export default function Home() {
             <li key={title} className="border-b border-ink/15">
               <Link
                 to={to}
-                className="group grid gap-5 px-2 py-9 transition-colors duration-300 hover:bg-ink hover:text-white sm:grid-cols-[auto_1fr_auto] sm:items-start sm:gap-8 sm:px-6"
+                className={`group grid grid-cols-[auto_1fr] gap-4 px-1 py-7 transition-colors duration-300 hover:bg-ink hover:text-white sm:grid-cols-[auto_1fr_auto] sm:items-start sm:gap-8 sm:px-6 sm:py-9 ${focusRing}`}
               >
-                <span className="grid size-14 place-items-center rounded-2xl bg-ink text-white transition group-hover:bg-brand">
-                  <Icon size={26} strokeWidth={1.6} />
+                <span className="grid size-12 place-items-center rounded-2xl bg-ink text-white transition group-hover:bg-brand sm:size-14">
+                  <Icon size={24} strokeWidth={1.6} />
                 </span>
-                <div>
-                  <h3 className="text-2xl font-extrabold tracking-tight sm:text-3xl">{title}</h3>
+                <div className="min-w-0">
+                  <h3 className="text-xl font-extrabold tracking-tight sm:text-3xl">{title}</h3>
                   <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-muted transition group-hover:text-white/70">{text}</p>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {points.map((p) => (
-                      <li key={p} className="rounded-full border border-ink/15 px-3 py-1 text-[11px] font-semibold text-ink/70 transition group-hover:border-white/30 group-hover:text-white/80">
+                      <li
+                        key={p}
+                        className="rounded-full border border-ink/15 px-3 py-1 text-[11px] font-semibold text-ink/70 transition group-hover:border-white/30 group-hover:text-white/80"
+                      >
                         {p}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <span className="grid size-12 place-items-center rounded-full border border-ink/20 transition group-hover:border-brand group-hover:bg-brand">
+                <span className="hidden size-12 place-items-center rounded-full border border-ink/20 transition group-hover:border-brand group-hover:bg-brand sm:grid">
                   <ArrowUpRight size={20} className="transition group-hover:rotate-12" />
                 </span>
               </Link>
@@ -328,11 +414,11 @@ export default function Home() {
       </section>
 
       {/* ===== SMARTER (black band) ===== */}
-      <section className="relative overflow-hidden bg-ink py-24 text-white">
+      <section className={`relative overflow-hidden bg-ink text-white ${sectionY}`}>
         <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_0%,black,transparent_65%)]`} />
         <div className={`${wrap} relative`}>
-          <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:items-end">
-            <h2 className="text-[clamp(38px,5vw,72px)] font-extrabold leading-[0.98] tracking-tighter">
+          <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-10">
+            <h2 className="font-extrabold leading-[1.02] tracking-tighter text-[clamp(32px,5vw,72px)]">
               What makes Rare IT solutions <span className="text-brand">smarter?</span>
             </h2>
             <p className="max-w-md text-[15px] leading-relaxed text-white/65">
@@ -342,23 +428,25 @@ export default function Home() {
           </div>
 
           {/* automation flow */}
-          <div className="mt-14 flex flex-wrap items-center gap-3 rounded-3xl border border-white/15 p-5 sm:p-6">
-            <span className="mr-2 text-sm font-semibold text-white/60">One order, no manual steps</span>
-            {flow.map((s, i) => (
-              <span key={s} className="inline-flex items-center gap-3">
-                <span className={`rounded-full px-4 py-2 text-xs font-bold ${i === flow.length - 1 ? "bg-brand text-white" : "bg-white text-ink"}`}>
-                  {s}
-                </span>
-                {i < flow.length - 1 && <ArrowRight size={14} className="text-brand" />}
-              </span>
-            ))}
+          <div className="mt-10 rounded-3xl border border-white/15 p-4 sm:mt-14 sm:p-6">
+            <p className="mb-4 text-sm font-semibold text-white/60">One order, no manual steps</p>
+            <ol className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+              {flow.map((s, i) => (
+                <li key={s} className="inline-flex items-center gap-3">
+                  <span className={`rounded-full px-4 py-2 text-xs font-bold ${i === flow.length - 1 ? "bg-brand text-white" : "bg-white text-ink"}`}>
+                    {s}
+                  </span>
+                  {i < flow.length - 1 && <ArrowRight size={14} className="rotate-90 text-brand sm:rotate-0" aria-hidden="true" />}
+                </li>
+              ))}
+            </ol>
           </div>
 
           <ul className="mt-6 grid gap-px overflow-hidden rounded-3xl bg-white/15 sm:grid-cols-2 lg:grid-cols-4">
             {smarts.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="bg-ink p-8 transition hover:bg-neutral-900">
+              <li key={title} className="bg-ink p-6 transition hover:bg-neutral-900 sm:p-8">
                 <Icon size={30} strokeWidth={1.5} className="text-brand" />
-                <h3 className="mt-8 text-xl font-bold leading-tight">{title}</h3>
+                <h3 className="mt-6 text-xl font-bold leading-tight sm:mt-8">{title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-white/65">{text}</p>
               </li>
             ))}
@@ -370,68 +458,91 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== INDUSTRIES (expanding panels) ===== */}
-      <section className={`${wrap} py-24`}>
-        <div className="mb-12 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-          <h2 className="max-w-3xl text-[clamp(38px,4.8vw,64px)] font-extrabold leading-[0.98] tracking-tighter">
+      {/* ===== INDUSTRIES (tabs: list + detail panel) ===== */}
+      <section className={`${wrap} ${sectionY}`}>
+        <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end">
+          <h2 className={`max-w-3xl ${h2Cls}`}>
             Built for your industry. <span className="text-brand">Not retrofitted to it.</span>
           </h2>
-          <Link to="/industries" className="inline-flex items-center gap-2 border-b-2 border-brand pb-1 text-sm font-semibold">
+          <Link
+            to="/industries"
+            className={`inline-flex items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold md:self-auto ${focusRing}`}
+          >
             View all industries <ArrowRight size={14} />
           </Link>
         </div>
 
-        <ul className="flex flex-col gap-3 lg:h-[460px] lg:flex-row">
-          {industries.map(({ icon: Icon, to, label, text }, i) => {
-            const open = ind === i;
-            return (
-              <li
-                key={label}
-                onMouseEnter={() => setInd(i)}
-                className={`relative overflow-hidden rounded-3xl border transition-all duration-500 ${
-                  open ? "border-brand bg-brand text-white lg:flex-[3]" : "border-ink/15 bg-white text-ink lg:flex-1"
-                }`}
-              >
-                <Link
-                  to={to}
-                  onFocus={() => setInd(i)}
-                  className="flex h-full min-h-28 flex-col justify-between p-7"
+        <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr] lg:gap-6">
+          <div
+            role="tablist"
+            aria-label="Industries"
+            className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:px-0 lg:flex-col lg:overflow-visible [&::-webkit-scrollbar]:hidden"
+          >
+            {industries.map(({ icon: Icon, label }, i) => {
+              const on = ind === i;
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  role="tab"
+                  id={`ind-tab-${i}`}
+                  aria-selected={on}
+                  aria-controls="ind-panel"
+                  onClick={() => setInd(i)}
+                  onMouseEnter={() => setInd(i)}
+                  className={`flex shrink-0 items-center gap-3 rounded-2xl border px-5 py-4 text-left text-[15px] font-bold transition lg:py-5 lg:text-lg ${focusRing} ${
+                    on ? "border-ink bg-ink text-white" : "border-ink/10 bg-neutral-50 text-ink hover:border-ink/30"
+                  }`}
                 >
-                  <Icon size={open ? 44 : 34} strokeWidth={1.3} className={open ? "text-white" : "text-brand"} />
-                  <div>
-                    <h3 className="text-xl font-bold leading-tight lg:text-2xl">{label}</h3>
-                    <div className={`grid transition-all duration-500 ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 lg:opacity-0"}`}>
-                      <div className="overflow-hidden">
-                        <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/90">{text}</p>
-                        <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold">
-                          Explore <ArrowUpRight size={16} />
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+                  <Icon size={20} strokeWidth={1.6} className={on ? "text-brand" : "text-ink/50"} />
+                  <span className="whitespace-nowrap">{label}</span>
+                  <ArrowRight size={16} className={`ml-auto hidden transition lg:block ${on ? "opacity-100" : "opacity-0"}`} />
+                </button>
+              );
+            })}
+          </div>
+
+          <div
+            role="tabpanel"
+            id="ind-panel"
+            aria-labelledby={`ind-tab-${ind}`}
+            className="relative flex min-h-[320px] flex-col justify-between gap-10 overflow-hidden rounded-[28px] bg-brand p-7 text-white sm:p-10 lg:min-h-[400px]"
+          >
+            <span className="pointer-events-none absolute -bottom-32 -right-24 size-96 rounded-full bg-ink/90" />
+            <CurrentIcon size={52} strokeWidth={1.2} className="relative" />
+            <div className="relative">
+              <h3 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{current.label}</h3>
+              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/90 sm:text-base">{current.text}</p>
+              <Link
+                to={current.to}
+                className={`mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:bg-neutral-100 ${focusRing}`}
+              >
+                Explore {current.label} <ArrowUpRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ===== PROCESS ===== */}
-      <section className="border-y border-ink/15 bg-neutral-50 py-24">
+      <section className={`border-y border-ink/15 bg-neutral-50 ${sectionY}`}>
         <div className={wrap}>
-          <h2 className="mb-14 max-w-2xl text-[clamp(38px,4.8vw,64px)] font-extrabold leading-[0.98] tracking-tighter">
+          <h2 className={`mb-12 max-w-2xl sm:mb-14 ${h2Cls}`}>
             A disciplined process, <span className="text-brand">built for trust.</span>
           </h2>
           <ol className="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             <span aria-hidden="true" className="absolute left-0 right-0 top-7 hidden h-0.5 bg-ink lg:block" />
+            <span aria-hidden="true" className="absolute bottom-6 left-7 top-6 w-0.5 -translate-x-1/2 bg-ink/15 sm:hidden" />
             {steps.map(({ icon: Icon, title, text }, i) => (
-              <li key={title} className="relative">
+              <li key={title} className="relative grid grid-cols-[auto_1fr] gap-x-5 sm:block">
                 <span className="relative grid size-14 place-items-center rounded-full bg-brand text-white ring-8 ring-neutral-50">
                   <Icon size={22} strokeWidth={1.7} />
                 </span>
-                <span className="mt-6 block text-sm font-bold text-brand">Step {i + 1}</span>
-                <h3 className="mt-1 text-2xl font-extrabold tracking-tight">{title}</h3>
-                <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">{text}</p>
+                <div>
+                  <span className="block text-sm font-bold text-brand sm:mt-6">Step {i + 1}</span>
+                  <h3 className="mt-1 text-2xl font-extrabold tracking-tight">{title}</h3>
+                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">{text}</p>
+                </div>
               </li>
             ))}
           </ol>
@@ -439,21 +550,21 @@ export default function Home() {
       </section>
 
       {/* ===== TOOLS ===== */}
-      <section className="py-20">
-        <div className={`${wrap} grid items-center gap-10 lg:grid-cols-[0.9fr_1.4fr]`}>
+      <section className="py-16 sm:py-20">
+        <div className={`${wrap} grid items-center gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:gap-10`}>
           <div>
-            <h2 className="text-[clamp(32px,3.8vw,48px)] font-extrabold leading-[1.02] tracking-tighter">
+            <h2 className="text-[clamp(28px,3.8vw,48px)] font-extrabold leading-[1.05] tracking-tighter">
               Works with the tools <span className="text-brand">you already use.</span>
             </h2>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted">
               Examples of tools we can connect. We fit into your setup, not the other way round.
             </p>
           </div>
-          <ul className="flex flex-wrap gap-3">
+          <ul className="flex flex-wrap gap-2.5 sm:gap-3">
             {tools.map((t) => (
               <li
                 key={t}
-                className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-bold transition hover:border-brand hover:bg-brand hover:text-white"
+                className="rounded-full border border-ink/20 px-4 py-2 text-sm font-bold transition hover:border-brand hover:bg-brand hover:text-white sm:px-5 sm:py-2.5"
               >
                 {t}
               </li>
@@ -464,8 +575,8 @@ export default function Home() {
 
       {/* ===== ABOUT ===== */}
       <section className="bg-ink text-white">
-        <div className={`${wrap} grid gap-10 py-24 lg:grid-cols-2 lg:gap-20`}>
-          <h2 className="text-[clamp(42px,5.6vw,84px)] font-extrabold leading-[0.95] tracking-tighter">
+        <div className={`${wrap} grid gap-8 ${sectionY} lg:grid-cols-2 lg:gap-20`}>
+          <h2 className="text-[clamp(40px,5.6vw,84px)] font-extrabold leading-[0.97] tracking-tighter">
             Technology
             <br />
             with <span className="text-brand">Purpose.</span>
@@ -479,7 +590,7 @@ export default function Home() {
             <ul className="mb-9 space-y-3 text-sm font-semibold">
               {["Senior engineers on every project", "Transparent communication, no surprises", "Built to scale with your business"].map((t) => (
                 <li key={t} className="flex items-center gap-3">
-                  <span className="grid size-5 place-items-center rounded-full bg-brand text-white">
+                  <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand text-white">
                     <Check size={12} strokeWidth={3} />
                   </span>
                   {t}
@@ -491,25 +602,63 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== FAQ ===== */}
+      <section className={`${wrap} ${sectionY} grid gap-10 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
+        <h2 className={h2Cls}>
+          Questions, <span className="text-brand">answered.</span>
+        </h2>
+        <div className="border-t-2 border-ink">
+          {faqs.map(({ q, a }) => (
+            <details key={q} className="group border-b border-ink/15">
+              <summary
+                className={`flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-left text-base font-bold marker:hidden sm:py-6 sm:text-lg [&::-webkit-details-marker]:hidden ${focusRing}`}
+              >
+                {q}
+                <span className="grid size-9 shrink-0 place-items-center rounded-full border border-ink/20 transition group-open:rotate-45 group-open:border-brand group-open:bg-brand group-open:text-white">
+                  <Plus size={18} />
+                </span>
+              </summary>
+              <p className="max-w-2xl pb-6 text-[15px] leading-relaxed text-muted">{a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
       {/* ===== LET'S CONNECT ===== */}
-      <section className={`${wrap} py-24`}>
-        <div className="grid overflow-hidden rounded-[36px] border-2 border-ink lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative overflow-hidden bg-brand p-10 text-white sm:p-14">
+      <section id="contact" className={`${wrap} pb-16 sm:pb-20 lg:pb-24`}>
+        <div className="grid overflow-hidden rounded-[28px] border-2 border-ink sm:rounded-[36px] lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative overflow-hidden bg-brand p-7 text-white sm:p-14">
             <span className="pointer-events-none absolute -bottom-28 -right-28 size-80 rounded-full bg-ink" />
             <div className="relative">
-              <h3 className="text-[clamp(32px,4vw,52px)] font-extrabold leading-[1] tracking-tight">
+              <h3 className="text-[clamp(30px,4vw,52px)] font-extrabold leading-[1.02] tracking-tight">
                 Let’s Build Something Great Together.
               </h3>
               <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/90">
                 Partner with Rare IT for innovative, scalable and future-ready solutions. Tell us about your project and
                 we’ll get back to you.
               </p>
+              <ul className="mt-8 space-y-4 text-sm font-semibold">
+                {contact.map(({ icon: Icon, label, href }) => (
+                  <li key={label} className="flex items-start gap-3">
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-brand">
+                      <Icon size={16} />
+                    </span>
+                    {href ? (
+                      <a href={href} className="mt-1.5 break-all underline-offset-4 hover:underline">
+                        {label}
+                      </a>
+                    ) : (
+                      <address className="mt-1.5 max-w-[260px] font-semibold not-italic leading-snug">{label}</address>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          <div className="bg-white p-8 sm:p-12">
+          <div className="bg-white p-6 sm:p-12">
             {sent ? (
-              <div className="grid h-full place-items-center text-center">
+              <div role="status" className="grid h-full min-h-64 place-items-center text-center">
                 <div>
                   <span className="mx-auto grid size-14 place-items-center rounded-full bg-brand text-white">
                     <Check size={26} strokeWidth={3} />
@@ -520,12 +669,18 @@ export default function Home() {
               </div>
             ) : (
               <form onSubmit={onSubmit} className="grid gap-4 sm:grid-cols-2">
-                <input required name="first" placeholder="First name" className={fieldCls} />
-                <input required name="last" placeholder="Last name" className={fieldCls} />
-                <input required type="email" name="email" placeholder="Business email address" className={`${fieldCls} sm:col-span-2`} />
-                <input name="company" placeholder="Company name" className={fieldCls} />
-                <input type="tel" name="phone" placeholder="Phone number" className={fieldCls} />
-                <select name="service" defaultValue="" className={`${fieldCls} sm:col-span-2`}>
+                <label className="sr-only" htmlFor="first">First name</label>
+                <input id="first" required name="first" autoComplete="given-name" placeholder="First name" className={fieldCls} />
+                <label className="sr-only" htmlFor="last">Last name</label>
+                <input id="last" required name="last" autoComplete="family-name" placeholder="Last name" className={fieldCls} />
+                <label className="sr-only" htmlFor="email">Business email address</label>
+                <input id="email" required type="email" name="email" autoComplete="email" placeholder="Business email address" className={`${fieldCls} sm:col-span-2`} />
+                <label className="sr-only" htmlFor="company">Company name</label>
+                <input id="company" name="company" autoComplete="organization" placeholder="Company name" className={fieldCls} />
+                <label className="sr-only" htmlFor="phone">Phone number</label>
+                <input id="phone" type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone number" className={fieldCls} />
+                <label className="sr-only" htmlFor="service">Service you are interested in</label>
+                <select id="service" name="service" defaultValue="" className={`${fieldCls} sm:col-span-2`}>
                   <option value="" disabled>I’m interested in…</option>
                   <option>Process Automation</option>
                   <option>Web Designing</option>
@@ -534,10 +689,11 @@ export default function Home() {
                   <option>SAP</option>
                   <option>Something else</option>
                 </select>
-                <textarea name="message" rows={3} placeholder="Tell us a little about your project" className={`${fieldCls} resize-none sm:col-span-2`} />
+                <label className="sr-only" htmlFor="message">About your project</label>
+                <textarea id="message" name="message" rows={4} placeholder="Tell us a little about your project" className={`${fieldCls} resize-none sm:col-span-2`} />
                 <button
                   type="submit"
-                  className="group inline-flex items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white transition hover:bg-brand-dark sm:col-span-2 sm:justify-self-start"
+                  className={`group inline-flex w-full items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white transition hover:bg-brand-dark sm:col-span-2 sm:w-auto sm:justify-self-start ${focusRing}`}
                 >
                   Get in Touch
                   <span className="grid size-10 place-items-center rounded-full bg-white text-brand">

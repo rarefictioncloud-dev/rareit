@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://rareit.in/</loc>
-    <lastmod>2026-11-13</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <lastmod>2026-11-14</lastmod>
   </url>
-  <!-- Add one <url> per page/route, e.g. /services, /about, /contact -->
+  <url>
+    <loc>https://rareit.in/services/process-automation</loc>
+    <lastmod>2026-11-14</lastmod>
+  </url>
+  <url>
+    <loc>https://rareit.in/services/web-design-hyderabad</loc>
+    <lastmod>2026-11-14</lastmod>
+  </url>
+  <url>
+    <loc>https://rareit.in/services/mobile-app-development</loc>
+    <lastmod>2026-11-14</lastmod>
+  </url>
+  <url>
+    <loc>https://rareit.in/services/erp-crm-software</loc>
+    <lastmod>2026-11-14</lastmod>
+  </url>
+  <url>
+    <loc>https://rareit.in/about</loc>
+    <lastmod>2026-11-14</lastmod>
+  </url>
+  <url>
+    <loc>https://rareit.in/contact</loc>
+    <lastmod>2026-11-14</lastmod>
+  </url>
 </urlset>
