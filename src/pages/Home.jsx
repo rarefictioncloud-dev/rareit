@@ -258,12 +258,7 @@ export default function Home() {
 
         <div className={`${wrap} relative grid items-center gap-10 pb-14 pt-8 sm:gap-12 sm:pt-14 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pb-24 lg:pt-20`}>
           <div>
-            <p className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/80 py-1.5 pl-2 pr-3.5 text-xs font-semibold text-ink/70 shadow-sm backdrop-blur">
-              <span className="grid size-5 place-items-center rounded-full bg-brand text-white">
-                <MapPin size={11} />
-              </span>
-              IT company in Hyderabad
-            </p>
+   
             <h1 className="mt-5 text-[clamp(56px,14vw,150px)] font-extrabold leading-[0.9] tracking-tighter sm:mt-6">
               Build.
               <br />
