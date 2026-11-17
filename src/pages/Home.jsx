@@ -31,6 +31,23 @@ import {
   MapPin,
 } from "lucide-react";
 
+/* =====================================================================
+   REQUIRED THEME (tailwind.config.js  ->  theme.extend)
+   colors: {
+     brand: { DEFAULT: "#C8102E", dark: "#A00D25" },
+     ink: "#0B1530",      // deep navy (replaces the old near-black)
+     muted: "#5B6475",
+     mist: "#F4F6FA",     // light section background
+     line: "#E4E8F0",     // hairline borders
+   },
+   fontFamily: {
+     sans: ["Inter", "system-ui", "sans-serif"],
+     display: ['"Space Grotesk"', "Inter", "sans-serif"],
+   }
+   Fonts (index.html <head>):
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+   ===================================================================== */
+
 /* ---------- DATA ---------- */
 const pillars = [
   { icon: Sparkles, title: "Built to order", text: "Every solution is designed around your business." },
@@ -167,19 +184,19 @@ const contact = [
 ];
 
 /* ---------- STYLE HELPERS ---------- */
-const wrap = "mx-auto w-[min(1760px,100%-40px)] sm:w-[min(1760px,100%-48px)] lg:w-[min(1760px,100%-64px)]";
-const sectionY = "py-16 sm:py-20 lg:py-24";
-const h2Cls = "text-balance font-extrabold leading-[1.04] tracking-tighter text-[clamp(34px,4.8vw,64px)]";
+const wrap = "mx-auto w-[min(1280px,100%-40px)] sm:w-[min(1280px,100%-64px)]";
+const sectionY = "py-16 sm:py-20 lg:py-28";
+const h2Cls = "text-balance font-display font-bold leading-[1.08] tracking-tight text-[clamp(30px,4vw,52px)]";
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 // Lets a horizontal scroller run edge-to-edge on phones, then snap back to the grid on desktop
-const bleed = "-mx-5 px-5 scroll-pl-5 sm:-mx-6 sm:px-6 sm:scroll-pl-6 lg:mx-0 lg:px-0";
+const bleed = "-mx-5 px-5 scroll-pl-5 sm:-mx-8 sm:px-8 sm:scroll-pl-8 lg:mx-0 lg:px-0";
 const hideScroll = "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
 
 const gridTexture =
-  "[background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:56px_56px]";
+  "[background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:56px_56px]";
 
 const fieldCls =
-  "w-full rounded-2xl border border-ink/15 bg-white px-4 py-4 text-base outline-none transition placeholder:text-ink/40 focus:border-brand focus:ring-4 focus:ring-brand/10 sm:rounded-xl sm:py-3.5 sm:text-sm";
+  "w-full rounded-lg border border-line bg-white px-4 py-4 text-base text-ink outline-none transition placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/10 sm:py-3.5 sm:text-sm";
 
 const css = `
 @keyframes rit-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -187,21 +204,15 @@ const css = `
 @media (prefers-reduced-motion: reduce) { .rit-marquee { animation: none; } }
 `;
 
-const PrimaryBtn = ({ to, children, dark = false, block = false }) => (
+const PrimaryBtn = ({ to, children, block = false }) => (
   <Link
     to={to}
-    className={`group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-6 pr-2 text-[15px] font-semibold text-white shadow-[0_14px_32px_-12px_rgba(212,15,20,0.85)] transition hover:bg-brand-dark active:scale-[0.98] sm:pl-7 sm:text-sm ${
+    className={`group inline-flex items-center gap-3 rounded-md bg-brand py-3.5 pl-6 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:text-sm ${
       block ? "w-full justify-between sm:w-auto sm:justify-start" : ""
     } ${focusRing}`}
   >
     {children}
-    <span
-      className={`grid size-11 place-items-center rounded-full transition group-hover:translate-x-0.5 sm:size-10 ${
-        dark ? "bg-ink text-white" : "bg-white text-brand"
-      }`}
-    >
-      <ArrowRight size={16} />
-    </span>
+    <ArrowRight size={16} className="transition group-hover:translate-x-1" />
   </Link>
 );
 
@@ -244,7 +255,7 @@ export default function Home() {
   };
 
   const filled = Math.min(active + 1, heroFlow.length);
-  const stepLabel = active >= heroFlow.length ? "There you go!" : `Step ${active + 1} of ${heroFlow.length}`;
+  const stepLabel = active >= heroFlow.length ? "All steps complete" : `Step ${active + 1} of ${heroFlow.length}`;
   const current = industries[ind];
   const CurrentIcon = current.icon;
   const [featured, ...rest] = services;
@@ -255,29 +266,25 @@ export default function Home() {
       <style>{css}</style>
 
       {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(13,13,15,0.12)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(ellipse_at_75%_35%,black,transparent_70%)]" />
-        <div className="pointer-events-none absolute -right-28 top-24 size-72 rounded-full bg-brand/20 blur-[90px] lg:hidden" />
+      <section className="relative overflow-hidden bg-ink text-white">
+        <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_20%,black,transparent_70%)]`} />
+        <div className="pointer-events-none absolute -right-40 -top-40 size-[560px] rounded-full border-[90px] border-white/[0.04]" />
 
-        <div className={`${wrap} relative grid items-center gap-12 pb-16 pt-10 sm:gap-12 sm:pt-14 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:pb-24 lg:pt-20`}>
+        <div className={`${wrap} relative grid items-center gap-14 pb-20 pt-14 sm:pt-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pb-28 lg:pt-28`}>
           <div>
-            <h1 className="text-[clamp(52px,15.5vw,150px)] font-extrabold leading-[0.9] tracking-tighter">
-              Build.
-              <br />
-              Innovate.
-              <br />
-              <span className="text-brand">Grow.</span>
+            <h1 className="font-display text-[clamp(40px,5.6vw,76px)] font-bold leading-[1.04] tracking-tight">
+              Engineering the digital future of your business.
             </h1>
-            <p className="mt-6 max-w-[520px] text-[17px] leading-relaxed text-muted sm:mt-8 sm:text-lg">
-              A next-gen IT partner helping businesses transform ideas into powerful digital solutions.
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/70 sm:mt-8 sm:text-xl">
+              A next-gen IT partner helping businesses transform ideas into powerful digital solutions. Build, innovate and grow with software that fits the way you work.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center sm:gap-6">
+            <div className="mt-9 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:items-center sm:gap-4">
               <PrimaryBtn to="/contact" block>
                 Start a project
               </PrimaryBtn>
               <a
                 href="#services"
-                className={`flex items-center justify-center rounded-full border border-ink/15 bg-white py-3.5 text-[15px] font-semibold transition active:scale-[0.98] sm:inline-flex sm:rounded-none sm:border-0 sm:border-b-2 sm:border-ink sm:bg-transparent sm:py-0 sm:pb-1 sm:text-sm sm:hover:border-brand sm:hover:text-brand ${focusRing}`}
+                className={`flex items-center justify-center rounded-md border border-white/30 px-7 py-3.5 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10 active:scale-[0.98] sm:text-sm ${focusRing}`}
               >
                 Explore our services
               </a>
@@ -285,125 +292,101 @@ export default function Home() {
           </div>
 
           {/* live workflow visual */}
-          <div className="relative mx-auto w-full max-w-[600px] pb-2 lg:mr-0 lg:pb-6">
-            <div className="relative overflow-hidden rounded-[28px] bg-ink p-5 text-white shadow-[0_40px_90px_-20px_rgba(13,13,15,0.45)] sm:rounded-[36px] sm:p-9">
-              <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_70%)]`} />
-              <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-brand/40 blur-[70px]" />
-              <div className="relative">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold text-white/60">Example workflow</p>
-                    <h3 className="mt-0.5 text-xl font-extrabold leading-tight tracking-tight">Order to delivery, automated</h3>
-                  </div>
-                  <span className="inline-flex shrink-0 items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-[11px] font-semibold">
-                    <span className="relative flex size-2">
-                      <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand motion-reduce:animate-none" />
-                      <span className="relative inline-flex size-2 rounded-full bg-brand" />
-                    </span>
-                    Live
+          <div className="relative mx-auto w-full max-w-[560px] lg:mr-0">
+            <div className="rounded-2xl bg-white p-5 text-ink shadow-[0_40px_90px_-30px_rgba(0,0,0,0.6)] sm:p-8">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-medium text-muted">Example workflow</p>
+                  <h3 className="mt-0.5 font-display text-xl font-semibold leading-tight">Order to delivery, automated</h3>
+                </div>
+                <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#E3F5EA] px-3 py-1 text-[11px] font-semibold text-[#0B6B3A]">
+                  <span className="relative flex size-2">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#1E9E5A] motion-reduce:animate-none" />
+                    <span className="relative inline-flex size-2 rounded-full bg-[#1E9E5A]" />
                   </span>
-                </div>
+                  Live
+                </span>
+              </div>
 
-                {/* segmented progress */}
-                <div className="mt-5 flex items-center gap-3" aria-hidden="true">
-                  <div className="flex flex-1 gap-1.5">
-                    {heroFlow.map((s, i) => (
+              {/* segmented progress */}
+              <div className="mt-5 flex items-center gap-3" aria-hidden="true">
+                <div className="flex flex-1 gap-1.5">
+                  {heroFlow.map((s, i) => (
+                    <span
+                      key={s.t}
+                      className={`h-1.5 flex-1 rounded-full transition-colors duration-500 motion-reduce:transition-none ${i < filled ? "bg-brand" : "bg-line"}`}
+                    />
+                  ))}
+                </div>
+                <span className="shrink-0 text-[11px] font-semibold text-muted">{stepLabel}</span>
+              </div>
+
+              <ol className="mt-5 space-y-2.5">
+                {heroFlow.map(({ icon: Icon, t, d }, i) => {
+                  const done = i < active;
+                  const running = i === active;
+                  return (
+                    <li
+                      key={t}
+                      className={`flex items-center gap-4 rounded-xl border p-3.5 transition-colors duration-500 motion-reduce:transition-none sm:p-4 ${
+                        running ? "border-brand bg-brand/5" : "border-line bg-white"
+                      }`}
+                    >
                       <span
-                        key={s.t}
-                        className={`h-1 flex-1 rounded-full transition-colors duration-500 motion-reduce:transition-none ${i < filled ? "bg-brand" : "bg-white/15"}`}
-                      />
-                    ))}
-                  </div>
-                  <span className="shrink-0 text-[11px] font-semibold text-white/60">{stepLabel}</span>
-                </div>
-
-                <ol className="mt-5 space-y-2.5 sm:space-y-3">
-                  {heroFlow.map(({ icon: Icon, t, d }, i) => {
-                    const done = i < active;
-                    const running = i === active;
-                    return (
-                      <li
-                        key={t}
-                        className={`relative flex items-center gap-3.5 rounded-2xl border p-3.5 transition-colors duration-500 motion-reduce:transition-none sm:gap-4 sm:p-4 ${
-                          running ? "border-brand/70 bg-neutral-800" : "border-white/10 bg-neutral-900"
+                        className={`relative grid size-11 shrink-0 place-items-center rounded-lg transition-colors duration-500 ${
+                          done || running ? "bg-brand text-white" : "bg-mist text-ink/70"
                         }`}
                       >
-                        <span
-                          className={`relative grid size-11 shrink-0 place-items-center rounded-xl transition-colors duration-500 ${
-                            done || running ? "bg-brand text-white" : "bg-white/10 text-white/80"
-                          }`}
-                        >
-                          {running && (
-                            <span className="absolute inline-flex size-full animate-ping rounded-xl bg-brand/50 motion-reduce:animate-none" />
-                          )}
-                          <Icon size={18} strokeWidth={1.8} className="relative" />
-                        </span>
-                        <div className="min-w-0">
-                          <p className="text-[15px] font-bold leading-tight">{t}</p>
-                          <p className="mt-0.5 truncate text-xs text-white/60">{d}</p>
-                        </div>
-                        <span
-                          className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full transition-all duration-500 ${
-                            done ? "scale-100 bg-brand opacity-100" : "scale-75 opacity-0"
-                          }`}
-                        >
-                          <Check size={13} strokeWidth={3.5} />
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ol>
-              </div>
+                        {running && (
+                          <span className="absolute inline-flex size-full animate-ping rounded-lg bg-brand/40 motion-reduce:animate-none" />
+                        )}
+                        <Icon size={18} strokeWidth={1.8} className="relative" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[15px] font-semibold leading-tight">{t}</p>
+                        <p className="mt-0.5 truncate text-xs text-muted">{d}</p>
+                      </div>
+                      <span
+                        className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full bg-brand text-white transition-all duration-500 ${
+                          done ? "scale-100 opacity-100" : "scale-75 opacity-0"
+                        }`}
+                      >
+                        <Check size={13} strokeWidth={3.5} />
+                      </span>
+                    </li>
+                  );
+                })}
+              </ol>
             </div>
 
-            <div className="absolute -left-4 bottom-0 hidden items-center gap-3 rounded-2xl border-2 border-ink bg-white px-4 py-3 shadow-[0_20px_40px_rgba(13,13,15,0.15)] sm:flex lg:-left-10">
-              <span className="grid size-9 place-items-center rounded-full bg-brand text-white">
+            <div className="absolute -left-4 -bottom-5 hidden items-center gap-3 rounded-xl bg-white px-4 py-3 text-ink shadow-[0_20px_40px_rgba(0,0,0,0.3)] sm:flex lg:-left-10">
+              <span className="grid size-9 place-items-center rounded-lg bg-brand text-white">
                 <Plug size={16} />
               </span>
               <div>
-                <span className="block text-[10px] text-muted">Works with your tools</span>
+                <span className="block text-[11px] text-muted">Works with your tools</span>
                 <strong className="text-xs">No manual steps</strong>
               </div>
             </div>
-            <div className="absolute -right-3 top-16 hidden items-center gap-2 rounded-full bg-brand px-4 py-2 text-xs font-bold text-white shadow-[0_16px_30px_rgba(13,13,15,0.2)] sm:flex lg:-right-6">
+            <div className="absolute -right-3 -top-4 hidden items-center gap-2 rounded-full bg-brand px-4 py-2 text-xs font-semibold text-white shadow-[0_16px_30px_rgba(0,0,0,0.3)] sm:flex lg:-right-6">
               <ShieldCheck size={14} /> Secure by design
             </div>
           </div>
         </div>
-
-        {/* quick service links (desktop only, phones go straight to the services below) */}
-        <ul className={`${wrap} relative hidden border-t-2 border-ink lg:grid lg:grid-cols-5`}>
-          {services.map(({ to, icon: Icon, title }, i) => (
-            <li key={title} className={i > 0 ? "border-l border-ink/15" : ""}>
-              <Link
-                to={to}
-                className={`group flex items-center gap-4 px-5 py-7 transition-colors duration-300 hover:bg-brand hover:text-white ${focusRing}`}
-              >
-                <Icon size={24} strokeWidth={1.5} className="shrink-0 text-brand transition group-hover:text-white" />
-                <span className="text-[15px] font-bold leading-tight">{title}</span>
-                <ArrowUpRight size={18} className="ml-auto opacity-40 transition group-hover:opacity-100" />
-              </Link>
-            </li>
-          ))}
-        </ul>
       </section>
 
       {/* ===== PILLARS ===== */}
-      <section className="bg-ink text-white">
-        <ul className={`${wrap} grid grid-cols-2 gap-3 py-5 sm:gap-4 lg:grid-cols-4 lg:gap-0 lg:py-0`}>
+      <section className="border-b border-line bg-mist">
+        <ul className={`${wrap} grid grid-cols-1 gap-6 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-0 lg:py-0`}>
           {pillars.map(({ icon: Icon, title, text }, i) => (
             <li
               key={title}
-              className={`flex flex-col gap-3 rounded-2xl bg-white/[0.06] p-4 sm:flex-row sm:gap-4 sm:p-6 lg:rounded-none lg:bg-transparent lg:px-6 lg:py-9 ${
-                i > 0 ? "lg:border-l lg:border-white/10" : "lg:pl-0"
-              }`}
+              className={`flex gap-4 lg:px-8 lg:py-10 ${i > 0 ? "lg:border-l lg:border-line" : "lg:pl-0"}`}
             >
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/15 lg:size-auto lg:bg-transparent lg:pt-0.5">
-                <Icon size={22} strokeWidth={1.6} className="text-brand" />
-              </span>
+              <Icon size={24} strokeWidth={1.6} className="mt-0.5 shrink-0 text-brand" />
               <div>
-                <h3 className="text-[15px] font-bold leading-tight">{title}</h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-white/60">{text}</p>
+                <h3 className="text-[15px] font-semibold leading-tight">{title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{text}</p>
               </div>
             </li>
           ))}
@@ -411,39 +394,42 @@ export default function Home() {
       </section>
 
       {/* ===== SERVICES ===== */}
-      <section id="services" className={`${wrap} ${sectionY} grid scroll-mt-20 gap-9 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
-        <div className="lg:sticky lg:top-28 lg:self-start">
-          <h2 className={h2Cls}>
-            Built for your business. <span className="text-brand">Not retrofitted to it.</span>
-          </h2>
-          <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-muted sm:mt-6">
-            Every Rare IT solution is designed from scratch around how your teams work, with software, websites and apps
-            that fit from day one.
-          </p>
+      <section id="services" className={`${wrap} ${sectionY} scroll-mt-20`}>
+        <div className="mb-12 flex flex-col justify-between gap-6 sm:mb-14 md:flex-row md:items-end">
+          <div className="max-w-2xl">
+            <h2 className={h2Cls}>Built for your business, not retrofitted to it.</h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">
+              Every Rare IT solution is designed from scratch around how your teams work, with software, websites and apps that fit from day one.
+            </p>
+          </div>
+          <Link
+            to="/services"
+            className={`inline-flex items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold text-brand md:self-auto ${focusRing}`}
+          >
+            View all services <ArrowRight size={14} />
+          </Link>
         </div>
 
-        {/* phones and tablets: bento */}
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:hidden">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             to={featured.to}
-            className={`group relative col-span-2 flex flex-col gap-10 overflow-hidden rounded-[28px] bg-ink p-6 text-white transition active:scale-[0.99] sm:p-8 ${focusRing}`}
+            className={`group relative flex flex-col justify-between gap-12 overflow-hidden rounded-2xl bg-ink p-7 text-white transition active:scale-[0.99] sm:col-span-2 sm:p-10 ${focusRing}`}
           >
             <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
-            <div className="pointer-events-none absolute -right-16 -top-20 size-56 rounded-full bg-brand/40 blur-[80px]" />
             <div className="relative flex items-start justify-between">
-              <span className="grid size-12 place-items-center rounded-2xl bg-brand">
-                <FeaturedIcon size={22} strokeWidth={1.7} />
+              <span className="grid size-14 place-items-center rounded-xl bg-brand">
+                <FeaturedIcon size={26} strokeWidth={1.6} />
               </span>
-              <span className="grid size-10 place-items-center rounded-full border border-white/25">
+              <span className="grid size-11 place-items-center rounded-full border border-white/25 transition group-hover:border-brand group-hover:bg-brand">
                 <ArrowUpRight size={18} />
               </span>
             </div>
             <div className="relative">
-              <h3 className="text-3xl font-extrabold tracking-tight">{featured.title}</h3>
-              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/65">{featured.text}</p>
-              <ul className="mt-5 flex flex-wrap gap-2">
+              <h3 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{featured.title}</h3>
+              <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-white/70">{featured.text}</p>
+              <ul className="mt-6 flex flex-wrap gap-2">
                 {featured.points.map((p) => (
-                  <li key={p} className="rounded-full border border-white/20 px-3 py-1.5 text-[11px] font-semibold text-white/80">
+                  <li key={p} className="rounded-full border border-white/25 px-3.5 py-1.5 text-xs font-medium text-white/85">
                     {p}
                   </li>
                 ))}
@@ -451,85 +437,63 @@ export default function Home() {
             </div>
           </Link>
 
-          {rest.map(({ to, icon: Icon, title, text }) => (
+          {rest.map(({ to, icon: Icon, title, text, points }, i) => (
             <Link
               key={title}
               to={to}
-              className={`group flex min-h-[200px] flex-col justify-between gap-6 rounded-[24px] border border-ink/10 bg-neutral-50 p-5 transition active:scale-[0.98] active:bg-neutral-100 sm:p-6 ${focusRing}`}
+              className={`group flex flex-col gap-6 rounded-2xl border border-line bg-white p-7 transition hover:border-brand hover:shadow-[0_20px_40px_-24px_rgba(11,21,48,0.35)] active:scale-[0.99] ${
+                i === 0 ? "" : ""
+              } ${focusRing}`}
             >
               <div className="flex items-start justify-between">
-                <span className="grid size-11 place-items-center rounded-xl bg-ink text-white">
-                  <Icon size={20} strokeWidth={1.7} />
+                <span className="grid size-12 place-items-center rounded-xl bg-mist text-ink transition group-hover:bg-brand group-hover:text-white">
+                  <Icon size={22} strokeWidth={1.6} />
                 </span>
-                <ArrowUpRight size={18} className="text-ink/40" />
+                <ArrowUpRight size={18} className="text-ink/30 transition group-hover:text-brand" />
               </div>
               <div>
-                <h3 className="text-lg font-extrabold leading-tight tracking-tight sm:text-xl">{title}</h3>
-                <p className="mt-1.5 line-clamp-3 text-[13px] leading-relaxed text-muted">{text}</p>
+                <h3 className="font-display text-xl font-semibold tracking-tight">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
               </div>
+              <ul className="mt-auto flex flex-wrap gap-2">
+                {points.map((p) => (
+                  <li key={p} className="rounded-full bg-mist px-3 py-1 text-xs font-medium text-ink/75">
+                    {p}
+                  </li>
+                ))}
+              </ul>
             </Link>
           ))}
         </div>
-
-        {/* desktop: large rows */}
-        <ul className="hidden border-t-2 border-ink lg:block">
-          {services.map(({ to, icon: Icon, title, text, points }) => (
-            <li key={title} className="border-b border-ink/15">
-              <Link
-                to={to}
-                className={`group grid grid-cols-[auto_1fr_auto] items-start gap-8 px-6 py-9 transition-colors duration-300 hover:bg-ink hover:text-white ${focusRing}`}
-              >
-                <span className="grid size-14 place-items-center rounded-2xl bg-ink text-white transition group-hover:bg-brand">
-                  <Icon size={24} strokeWidth={1.6} />
-                </span>
-                <div className="min-w-0">
-                  <h3 className="text-3xl font-extrabold tracking-tight">{title}</h3>
-                  <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-muted transition group-hover:text-white/70">{text}</p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {points.map((p) => (
-                      <li
-                        key={p}
-                        className="rounded-full border border-ink/15 px-3 py-1 text-[11px] font-semibold text-ink/70 transition group-hover:border-white/30 group-hover:text-white/80"
-                      >
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <span className="grid size-12 place-items-center rounded-full border border-ink/20 transition group-hover:border-brand group-hover:bg-brand">
-                  <ArrowUpRight size={18} className="transition group-hover:rotate-12" />
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
       </section>
 
-      {/* ===== SMARTER (black band) ===== */}
+      {/* ===== SMARTER (navy band) ===== */}
       <section className={`relative overflow-hidden bg-ink text-white ${sectionY}`}>
         <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_0%,black,transparent_65%)]`} />
-        <div className="pointer-events-none absolute -left-24 top-1/2 size-72 rounded-full bg-brand/20 blur-[100px] lg:hidden" />
         <div className={`${wrap} relative`}>
-          <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-10">
-            <h2 className="text-balance text-[clamp(34px,5vw,72px)] font-extrabold leading-[1.04] tracking-tighter">
-              What makes Rare IT solutions <span className="text-brand">smarter?</span>
+          <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-12">
+            <h2 className="text-balance font-display text-[clamp(30px,4.4vw,58px)] font-bold leading-[1.06] tracking-tight">
+              What makes Rare IT solutions smarter?
             </h2>
-            <p className="max-w-md text-[15px] leading-relaxed text-white/65">
-              Automation, clean design and solid engineering work together, so your business runs faster with less manual
-              effort.
+            <p className="max-w-md text-base leading-relaxed text-white/70">
+              Automation, clean design and solid engineering work together, so your business runs faster with less manual effort.
             </p>
           </div>
 
           {/* automation flow */}
-          <div className="mt-9 rounded-3xl border border-white/15 bg-white/[0.04] p-4 sm:mt-14 sm:p-6">
-            <p className="mb-3 text-sm font-semibold text-white/60 sm:mb-4">One order, no manual steps</p>
+          <div className="mt-10 rounded-2xl border border-white/15 bg-white/[0.04] p-5 sm:mt-14 sm:p-7">
+            <p className="mb-4 text-sm font-medium text-white/65">One order, no manual steps</p>
             <ol className={`flex items-center gap-2 overflow-x-auto sm:flex-wrap sm:gap-3 sm:overflow-visible ${hideScroll}`}>
               {flow.map((s, i) => (
                 <li key={s} className="inline-flex shrink-0 items-center gap-2 sm:gap-3">
-                  <span className={`whitespace-nowrap rounded-full px-4 py-2.5 text-xs font-bold ${i === flow.length - 1 ? "bg-brand text-white" : "bg-white text-ink"}`}>
+                  <span
+                    className={`whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-semibold ${
+                      i === flow.length - 1 ? "bg-brand text-white" : "bg-white text-ink"
+                    }`}
+                  >
                     {s}
                   </span>
-                  {i < flow.length - 1 && <ArrowRight size={14} className="shrink-0 text-brand" aria-hidden="true" />}
+                  {i < flow.length - 1 && <ArrowRight size={14} className="shrink-0 text-white/50" aria-hidden="true" />}
                 </li>
               ))}
             </ol>
@@ -537,24 +501,24 @@ export default function Home() {
 
           {/* swipeable on phones, grid on desktop */}
           <ul
-            className={`mt-4 flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 sm:mt-6 ${bleed} ${hideScroll} lg:grid lg:snap-none lg:grid-cols-4 lg:gap-px lg:overflow-hidden lg:rounded-3xl lg:bg-white/15 lg:pb-0`}
+            className={`mt-5 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 ${bleed} ${hideScroll} lg:grid lg:snap-none lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:pb-0`}
           >
             {smarts.map(({ icon: Icon, title, text }) => (
               <li
                 key={title}
-                className="w-[80%] shrink-0 snap-start rounded-[24px] border border-white/10 bg-neutral-900 p-6 transition sm:w-[46%] sm:p-7 lg:w-auto lg:rounded-none lg:border-0 lg:bg-ink lg:p-8 lg:hover:bg-neutral-900"
+                className="w-[82%] shrink-0 snap-start rounded-2xl border border-white/10 bg-white/[0.05] p-6 transition sm:w-[46%] lg:w-auto lg:p-7 lg:hover:border-white/30 lg:hover:bg-white/[0.08]"
               >
-                <span className="grid size-12 place-items-center rounded-2xl bg-brand/15 lg:size-auto lg:bg-transparent">
-                  <Icon size={26} strokeWidth={1.5} className="text-brand lg:size-[30px]" />
+                <span className="grid size-12 place-items-center rounded-xl bg-brand">
+                  <Icon size={22} strokeWidth={1.6} />
                 </span>
-                <h3 className="mt-6 text-xl font-bold leading-tight lg:mt-8">{title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/65">{text}</p>
+                <h3 className="mt-6 font-display text-lg font-semibold leading-tight">{title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/70">{text}</p>
               </li>
             ))}
           </ul>
-          <p className="mt-2 text-center text-xs text-white/40 lg:hidden">Swipe to see more</p>
+          <p className="mt-2 text-center text-xs text-white/50 lg:hidden">Swipe to see more</p>
 
-          <div className="mt-8 sm:mt-10">
+          <div className="mt-10">
             <PrimaryBtn to="/contact" block>
               See it in action
             </PrimaryBtn>
@@ -564,19 +528,17 @@ export default function Home() {
 
       {/* ===== INDUSTRIES (tabs: list + detail panel) ===== */}
       <section className={`${wrap} ${sectionY}`}>
-        <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end">
-          <h2 className={`max-w-3xl ${h2Cls}`}>
-            Built for your industry. <span className="text-brand">Not retrofitted to it.</span>
-          </h2>
+        <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end">
+          <h2 className={`max-w-3xl ${h2Cls}`}>Deep domain expertise, where it matters.</h2>
           <Link
             to="/industries"
-            className={`inline-flex items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold md:self-auto ${focusRing}`}
+            className={`inline-flex items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold text-brand md:self-auto ${focusRing}`}
           >
             View all industries <ArrowRight size={14} />
           </Link>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr] lg:gap-6">
+        <div className="grid gap-5 lg:grid-cols-[0.85fr_1.15fr] lg:gap-6">
           <div
             role="tablist"
             aria-label="Industries"
@@ -594,11 +556,11 @@ export default function Home() {
                   aria-controls="ind-panel"
                   onClick={() => setInd(i)}
                   onMouseEnter={() => setInd(i)}
-                  className={`flex shrink-0 snap-start items-center gap-2.5 rounded-full border px-4 py-3 text-left text-sm font-bold transition active:scale-[0.97] lg:gap-3 lg:rounded-2xl lg:px-5 lg:py-5 lg:text-lg ${focusRing} ${
-                    on ? "border-ink bg-ink text-white" : "border-ink/10 bg-neutral-50 text-ink hover:border-ink/30"
+                  className={`flex shrink-0 snap-start items-center gap-3 rounded-lg border px-4 py-3.5 text-left text-sm font-semibold transition active:scale-[0.98] lg:px-6 lg:py-5 lg:text-base ${focusRing} ${
+                    on ? "border-ink bg-ink text-white" : "border-line bg-mist text-ink hover:border-ink/30"
                   }`}
                 >
-                  <Icon size={18} strokeWidth={1.7} className={on ? "text-brand" : "text-ink/50"} />
+                  <Icon size={20} strokeWidth={1.7} className={on ? "text-white" : "text-brand"} />
                   <span className="whitespace-nowrap">{label}</span>
                   <ArrowRight size={16} className={`ml-auto hidden transition lg:block ${on ? "opacity-100" : "opacity-0"}`} />
                 </button>
@@ -610,16 +572,16 @@ export default function Home() {
             role="tabpanel"
             id="ind-panel"
             aria-labelledby={`ind-tab-${ind}`}
-            className="relative flex min-h-[300px] flex-col justify-between gap-8 overflow-hidden rounded-[28px] bg-brand p-6 text-white sm:min-h-[320px] sm:p-10 lg:min-h-[400px]"
+            className="relative flex min-h-[300px] flex-col justify-between gap-8 overflow-hidden rounded-2xl bg-brand p-7 text-white sm:p-10 lg:min-h-[400px]"
           >
-            <span className="pointer-events-none absolute -bottom-24 -right-20 size-64 rounded-full bg-ink/90 sm:-bottom-32 sm:-right-24 sm:size-96" />
+            <span className="pointer-events-none absolute -bottom-28 -right-20 size-72 rounded-full border-[56px] border-white/10 sm:size-96" />
             <CurrentIcon size={48} strokeWidth={1.2} className="relative" />
             <div className="relative">
-              <h3 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{current.label}</h3>
-              <p className="mt-3 max-w-[300px] text-[15px] leading-relaxed text-white/90 sm:max-w-md sm:text-base">{current.text}</p>
+              <h3 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{current.label}</h3>
+              <p className="mt-3 max-w-md text-base leading-relaxed text-white/90">{current.text}</p>
               <Link
                 to={current.to}
-                className={`mt-6 inline-flex items-center gap-2 rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-ink transition hover:bg-neutral-100 active:scale-[0.98] ${focusRing}`}
+                className={`mt-7 inline-flex items-center gap-2 rounded-md bg-white px-6 py-3.5 text-sm font-semibold text-ink transition hover:bg-mist active:scale-[0.98] ${focusRing}`}
               >
                 Explore {current.label} <ArrowUpRight size={16} />
               </Link>
@@ -629,25 +591,20 @@ export default function Home() {
       </section>
 
       {/* ===== PROCESS ===== */}
-      <section className={`border-y border-ink/15 bg-neutral-50 ${sectionY}`}>
+      <section className={`border-y border-line bg-mist ${sectionY}`}>
         <div className={wrap}>
-          <h2 className={`mb-10 max-w-2xl sm:mb-14 ${h2Cls}`}>
-            A disciplined process, <span className="text-brand">built for trust.</span>
-          </h2>
-          <ol className="relative grid gap-5 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4 lg:gap-6">
-            <span aria-hidden="true" className="absolute left-0 right-0 top-7 hidden h-0.5 bg-ink lg:block" />
+          <h2 className={`mb-12 max-w-2xl sm:mb-16 ${h2Cls}`}>A disciplined process, built for trust.</h2>
+          <ol className="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            <span aria-hidden="true" className="absolute left-0 right-0 top-7 hidden h-px bg-ink/20 lg:block" />
             {steps.map(({ icon: Icon, title, text }, i) => (
-              <li key={title} className="relative pl-[68px] sm:block sm:pl-0">
-                {i < steps.length - 1 && (
-                  <span aria-hidden="true" className="absolute -bottom-5 left-6 top-14 w-px bg-ink/20 sm:hidden" />
-                )}
-                <span className="absolute left-0 top-0 grid size-12 place-items-center rounded-full bg-brand text-white ring-4 ring-neutral-50 sm:static sm:size-14 sm:ring-8">
-                  <Icon size={22} strokeWidth={1.7} />
+              <li key={title} className="relative">
+                <span className="relative grid size-14 place-items-center rounded-full bg-ink text-white ring-8 ring-mist">
+                  <Icon size={22} strokeWidth={1.6} />
                 </span>
-                <div className="rounded-2xl border border-ink/10 bg-white p-5 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0">
-                  <span className="block text-sm font-bold text-brand sm:mt-6">Step {i + 1}</span>
-                  <h3 className="mt-0.5 text-2xl font-extrabold tracking-tight sm:mt-1">{title}</h3>
-                  <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted">{text}</p>
+                <div className="mt-6 rounded-xl border border-line bg-white p-6">
+                  <span className="text-sm font-semibold text-brand">Step {i + 1}</span>
+                  <h3 className="mt-1 font-display text-2xl font-semibold tracking-tight">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
                 </div>
               </li>
             ))}
@@ -657,10 +614,10 @@ export default function Home() {
 
       {/* ===== TOOLS ===== */}
       <section className="overflow-hidden py-16 sm:py-20">
-        <div className={`${wrap} grid items-center gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:gap-10`}>
+        <div className={`${wrap} grid items-center gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:gap-12`}>
           <div>
-            <h2 className="text-balance text-[clamp(30px,3.8vw,48px)] font-extrabold leading-[1.08] tracking-tighter">
-              Works with the tools <span className="text-brand">you already use.</span>
+            <h2 className="text-balance font-display text-[clamp(28px,3.4vw,42px)] font-bold leading-[1.1] tracking-tight">
+              Works with the tools you already use.
             </h2>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted sm:mt-4">
               Examples of tools we can connect. We fit into your setup, not the other way round.
@@ -672,7 +629,7 @@ export default function Home() {
             {tools.map((t) => (
               <li
                 key={t}
-                className="rounded-full border border-ink/20 px-5 py-2.5 text-sm font-bold transition hover:border-brand hover:bg-brand hover:text-white"
+                className="rounded-md border border-line bg-white px-5 py-3 text-sm font-semibold transition hover:border-brand hover:text-brand"
               >
                 {t}
               </li>
@@ -680,13 +637,13 @@ export default function Home() {
           </ul>
 
           {/* mobile: slow auto-scrolling strip */}
-          <div className="relative -mx-5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] sm:-mx-6 lg:hidden">
+          <div className="relative -mx-5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] sm:-mx-8 lg:hidden">
             <ul className="rit-marquee flex w-max gap-2.5 px-5">
               {[...tools, ...tools].map((t, i) => (
                 <li
                   key={`${t}-${i}`}
                   aria-hidden={i >= tools.length}
-                  className="whitespace-nowrap rounded-full border border-ink/15 bg-white px-5 py-3 text-sm font-bold"
+                  className="whitespace-nowrap rounded-md border border-line bg-white px-5 py-3 text-sm font-semibold"
                 >
                   {t}
                 </li>
@@ -698,20 +655,18 @@ export default function Home() {
 
       {/* ===== ABOUT ===== */}
       <section className="relative overflow-hidden bg-ink text-white">
-        <div className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-brand/25 blur-[100px] lg:hidden" />
-        <div className={`${wrap} relative grid gap-8 ${sectionY} lg:grid-cols-2 lg:gap-20`}>
-          <h2 className="text-[clamp(44px,5.6vw,84px)] font-extrabold leading-[0.97] tracking-tighter">
-            Technology
-            <br />
-            with <span className="text-brand">Purpose.</span>
+        <div className="pointer-events-none absolute -right-32 -top-32 size-[420px] rounded-full border-[70px] border-white/[0.04]" />
+        <div className={`${wrap} relative grid gap-10 ${sectionY} lg:grid-cols-2 lg:gap-20`}>
+          <h2 className="font-display text-[clamp(40px,5.2vw,72px)] font-bold leading-[1.02] tracking-tight">
+            Technology with purpose.
           </h2>
           <div className="lg:pt-3">
-            <p className="mb-6 max-w-lg text-[15px] leading-relaxed text-white/70">
+            <p className="mb-7 max-w-lg text-base leading-relaxed text-white/70">
               Rare IT is a focused team that believes technology should create meaningful change. We hold ourselves to the
               standards of long-established firms, with the speed and attention of a team that treats every client as a
               partner.
             </p>
-            <ul className="mb-8 space-y-3 text-sm font-semibold sm:mb-9">
+            <ul className="mb-9 space-y-3.5 text-sm font-medium">
               {["Senior engineers on every project", "Transparent communication, no surprises", "Built to scale with your business"].map((t) => (
                 <li key={t} className="flex items-center gap-3">
                   <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand text-white">
@@ -722,54 +677,52 @@ export default function Home() {
               ))}
             </ul>
             <PrimaryBtn to="/about" block>
-              Our Story
+              Our story
             </PrimaryBtn>
           </div>
         </div>
       </section>
 
       {/* ===== FAQ ===== */}
-      <section className={`${wrap} ${sectionY} grid gap-8 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
-        <h2 className={h2Cls}>
-          Questions, <span className="text-brand">answered.</span>
-        </h2>
-        <div className="border-t-2 border-ink">
+      <section className={`${wrap} ${sectionY} grid gap-10 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
+        <h2 className={h2Cls}>Questions, answered.</h2>
+        <div className="border-t border-ink">
           {faqs.map(({ q, a }) => (
-            <details key={q} className="group border-b border-ink/15">
+            <details key={q} className="group border-b border-line">
               <summary
-                className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-5 py-4 text-left text-base font-bold leading-snug marker:hidden sm:py-6 sm:text-lg [&::-webkit-details-marker]:hidden ${focusRing}`}
+                className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-5 py-5 text-left text-base font-semibold leading-snug marker:hidden sm:py-6 sm:text-lg [&::-webkit-details-marker]:hidden ${focusRing}`}
               >
                 {q}
-                <span className="grid size-10 shrink-0 place-items-center rounded-full border border-ink/20 transition group-open:rotate-45 group-open:border-brand group-open:bg-brand group-open:text-white sm:size-9">
+                <span className="grid size-10 shrink-0 place-items-center rounded-full border border-line transition group-open:rotate-45 group-open:border-brand group-open:bg-brand group-open:text-white sm:size-9">
                   <Plus size={18} />
                 </span>
               </summary>
-              <p className="max-w-2xl pb-5 text-[15px] leading-relaxed text-muted sm:pb-6">{a}</p>
+              <p className="max-w-2xl pb-6 text-[15px] leading-relaxed text-muted">{a}</p>
             </details>
           ))}
         </div>
       </section>
 
       {/* ===== LET'S CONNECT ===== */}
-      <section id="contact" className={`${wrap} scroll-mt-20 pb-16 sm:pb-20 lg:pb-24`}>
-        <div className="grid overflow-hidden rounded-[28px] border-2 border-ink sm:rounded-[36px] lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative overflow-hidden bg-brand p-6 text-white sm:p-14">
-            <span className="pointer-events-none absolute -bottom-28 -right-28 hidden size-80 rounded-full bg-ink lg:block" />
+      <section id="contact" className={`${wrap} scroll-mt-20 pb-16 sm:pb-20 lg:pb-28`}>
+        <div className="grid overflow-hidden rounded-2xl border border-line shadow-[0_30px_70px_-40px_rgba(11,21,48,0.4)] lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative overflow-hidden bg-brand p-7 text-white sm:p-14">
+            <span className="pointer-events-none absolute -bottom-32 -right-24 hidden size-80 rounded-full border-[56px] border-white/10 lg:block" />
             <div className="relative">
-              <h3 className="text-balance text-[clamp(32px,4vw,52px)] font-extrabold leading-[1.04] tracking-tight">
-                Let’s Build Something Great Together.
+              <h3 className="text-balance font-display text-[clamp(30px,3.6vw,46px)] font-bold leading-[1.08] tracking-tight">
+                Let’s build something great together.
               </h3>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/90 sm:mt-5">
                 Partner with Rare IT for innovative, scalable and future-ready solutions. Tell us about your project and
                 we’ll get back to you.
               </p>
-              <ul className="mt-6 space-y-3 text-sm font-semibold sm:mt-8 lg:space-y-4">
+              <ul className="mt-8 space-y-3 text-sm font-medium lg:space-y-4">
                 {contact.map(({ icon: Icon, label, href }) =>
                   href ? (
                     <li key={label}>
                       <a
                         href={href}
-                        className="flex items-center gap-3 rounded-2xl bg-white/15 px-4 py-3.5 text-[15px] transition active:bg-white/25 lg:bg-transparent lg:p-0 lg:text-sm lg:underline-offset-4 lg:hover:underline"
+                        className="flex items-center gap-3 rounded-lg bg-white/15 px-4 py-3.5 text-[15px] transition active:bg-white/25 lg:bg-transparent lg:p-0 lg:text-sm lg:underline-offset-4 lg:hover:underline"
                       >
                         <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-brand">
                           <Icon size={16} />
@@ -778,11 +731,11 @@ export default function Home() {
                       </a>
                     </li>
                   ) : (
-                    <li key={label} className="flex items-start gap-3 rounded-2xl bg-white/10 px-4 py-3.5 lg:bg-transparent lg:p-0">
+                    <li key={label} className="flex items-start gap-3 rounded-lg bg-white/10 px-4 py-3.5 lg:bg-transparent lg:p-0">
                       <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white text-brand">
                         <Icon size={16} />
                       </span>
-                      <address className="max-w-[280px] pt-1.5 font-semibold not-italic leading-snug">{label}</address>
+                      <address className="max-w-[280px] pt-1.5 not-italic leading-snug">{label}</address>
                     </li>
                   )
                 )}
@@ -790,14 +743,14 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-white p-5 sm:p-12">
+          <div className="bg-white p-6 sm:p-12">
             {sent ? (
               <div role="status" className="grid h-full min-h-64 place-items-center text-center">
                 <div>
                   <span className="mx-auto grid size-14 place-items-center rounded-full bg-brand text-white">
                     <Check size={26} strokeWidth={3} />
                   </span>
-                  <h4 className="mt-5 text-2xl font-extrabold tracking-tight">Thank you!</h4>
+                  <h4 className="mt-5 font-display text-2xl font-semibold tracking-tight">Thank you!</h4>
                   <p className="mt-2 text-sm text-muted">We’ve received your details and will be in touch soon.</p>
                 </div>
               </div>
@@ -827,16 +780,14 @@ export default function Home() {
                 <textarea id="message" name="message" rows={4} placeholder="Tell us a little about your project" className={`${fieldCls} resize-none sm:col-span-2`} />
                 <button
                   type="submit"
-                  className={`group mt-1 inline-flex w-full items-center justify-between gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:w-auto sm:justify-self-start sm:text-sm ${focusRing}`}
+                  className={`group mt-1 inline-flex w-full items-center justify-between gap-3 rounded-md bg-brand py-3.5 pl-6 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:w-auto sm:justify-self-start sm:text-sm ${focusRing}`}
                 >
-                  Get in Touch
-                  <span className="grid size-11 place-items-center rounded-full bg-white text-brand sm:size-10">
-                    <ArrowRight size={16} />
-                  </span>
+                  Get in touch
+                  <ArrowRight size={16} className="transition group-hover:translate-x-1" />
                 </button>
               </form>
             )}
-            <p className="mt-5 text-xs text-muted sm:mt-6">SAP is a trademark of SAP SE. Rare IT is an independent IT company.</p>
+            <p className="mt-6 text-xs text-muted">SAP is a trademark of SAP SE. Rare IT is an independent IT company.</p>
           </div>
         </div>
       </section>
@@ -849,17 +800,17 @@ export default function Home() {
         }`}
         style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
       >
-        <div className="mx-auto flex max-w-md items-center gap-2 rounded-full border border-white/10 bg-ink/95 p-1.5 shadow-[0_20px_50px_-10px_rgba(13,13,15,0.6)] backdrop-blur">
+        <div className="mx-auto flex max-w-md items-center gap-2 rounded-xl border border-white/10 bg-ink/95 p-1.5 shadow-[0_20px_50px_-10px_rgba(11,21,48,0.6)] backdrop-blur">
           <Link
             to="/contact"
-            className={`flex flex-1 items-center justify-center gap-2 rounded-full bg-brand py-3.5 text-sm font-semibold text-white active:scale-[0.98] ${focusRing}`}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-lg bg-brand py-3.5 text-sm font-semibold text-white active:scale-[0.98] ${focusRing}`}
           >
             Start a project <ArrowRight size={16} />
           </Link>
           <a
             href="tel:+917997658999"
             aria-label="Call Rare IT"
-            className={`grid size-12 shrink-0 place-items-center rounded-full bg-white text-ink active:scale-95 ${focusRing}`}
+            className={`grid size-12 shrink-0 place-items-center rounded-lg bg-white text-ink active:scale-95 ${focusRing}`}
           >
             <Phone size={18} />
           </a>
