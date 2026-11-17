@@ -224,9 +224,7 @@ export default function PA() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-6">
               <PrimaryBtn to="/contact">Automate a process</PrimaryBtn>
-              <Link to="/services" className="border-b-2 border-brand pb-0.5 text-sm font-bold hover:text-brand">
-                All services
-              </Link>
+           
             </div>
           </div>
 

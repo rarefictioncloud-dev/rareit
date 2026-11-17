@@ -244,7 +244,7 @@ export default function Home() {
   };
 
   const filled = Math.min(active + 1, heroFlow.length);
-  const stepLabel = active >= heroFlow.length ? "All steps done" : `Step ${active + 1} of ${heroFlow.length}`;
+  const stepLabel = active >= heroFlow.length ? "There you go!" : `Step ${active + 1} of ${heroFlow.length}`;
   const current = industries[ind];
   const CurrentIcon = current.icon;
   const [featured, ...rest] = services;

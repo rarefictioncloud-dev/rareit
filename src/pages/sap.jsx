@@ -209,9 +209,7 @@ export default function SAP() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-6">
             <PrimaryBtn to="/contact">Talk to us about SAP</PrimaryBtn>
-            <Link to="/our-work" className="border-b-2 border-brand pb-0.5 text-sm font-bold hover:text-brand">
-              See our work
-            </Link>
+   
           </div>
         </div>
         <HeroMockup />
