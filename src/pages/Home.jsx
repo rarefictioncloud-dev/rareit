@@ -42,10 +42,14 @@ import {
    },
    fontFamily: {
      sans: ["Inter", "system-ui", "sans-serif"],
-     display: ['"Space Grotesk"', "Inter", "sans-serif"],
+     display: ['"Fraunces"', "Georgia", "serif"],   // refined serif for headings
    }
    Fonts (index.html <head>):
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600;700&display=swap">
+
+   (Prefer the previous sans look? Set display to Space Grotesk again.)
    ===================================================================== */
 
 /* ---------- DATA ---------- */
@@ -54,6 +58,12 @@ const pillars = [
   { icon: Users, title: "Senior-led teams", text: "Experienced people on every project." },
   { icon: Eye, title: "Transparent delivery", text: "Clear updates, no surprises." },
   { icon: LifeBuoy, title: "Long-term support", text: "We stay with you after launch." },
+];
+
+const heroTrust = [
+  { icon: MapPin, label: "Based in Hyderabad" },
+  { icon: ShieldCheck, label: "Secure by design" },
+  { icon: LifeBuoy, label: "Support after launch" },
 ];
 
 const services = [
@@ -181,8 +191,8 @@ const contact = [
 
 /* ---------- STYLE HELPERS ---------- */
 const wrap = "mx-auto w-[min(1280px,100%-40px)] sm:w-[min(1280px,100%-64px)]";
-const sectionY = "py-14 sm:py-20 lg:py-28";
-const h2Cls = "text-balance font-display font-bold leading-[1.08] tracking-tight text-[clamp(28px,4vw,52px)]";
+const sectionY = "py-16 sm:py-20 lg:py-28";
+const h2Cls = "text-balance font-display font-medium leading-[1.1] tracking-[-0.015em] text-[clamp(30px,4vw,52px)]";
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 // Lets a horizontal scroller run edge-to-edge on phones, then snap back to the grid on desktop
 const bleed = "-mx-5 px-5 scroll-pl-5 sm:-mx-8 sm:px-8 sm:scroll-pl-8 lg:mx-0 lg:px-0";
@@ -199,10 +209,13 @@ const css = `
 .rit-marquee { animation: rit-marquee 34s linear infinite; }
 .rit-marquee-rev { animation-direction: reverse; animation-duration: 40s; }
 @keyframes rit-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-.rit-rise { opacity: 0; animation: rit-rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+.rit-rise { opacity: 0; animation: rit-rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes rit-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rit-draw { transform-origin: left; animation: rit-draw .9s cubic-bezier(.2,.7,.2,1) .1s both; }
 @media (prefers-reduced-motion: reduce) {
   .rit-marquee { animation: none; }
   .rit-rise { opacity: 1; animation: none; }
+  .rit-draw { animation: none; }
 }
 `;
 
@@ -308,93 +321,113 @@ export default function Home() {
 
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden bg-ink text-white">
-        <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_20%,black,transparent_70%)]`} />
-        <div className="pointer-events-none absolute -right-40 -top-40 size-[420px] rounded-full border-[70px] border-white/[0.04] sm:size-[560px] sm:border-[90px]" />
+        <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_85%_15%,black,transparent_65%)]`} />
+        <div className="pointer-events-none absolute -right-48 -top-48 size-[460px] rounded-full border border-white/10 sm:size-[620px]" />
+        <div className="pointer-events-none absolute -right-28 -top-28 size-[460px] rounded-full border border-white/[0.06] sm:size-[620px]" />
+        <div className="pointer-events-none absolute -bottom-40 -left-40 size-[380px] rounded-full border-[60px] border-brand/15 sm:size-[520px]" />
 
-        <div className={`${wrap} relative grid items-center gap-10 pb-14 pt-10 sm:gap-14 sm:pb-20 sm:pt-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pb-28 lg:pt-28`}>
-          <div>
-            <h1
-              className="rit-rise font-display text-[clamp(38px,10.4vw,64px)] font-bold leading-[1.03] tracking-tight lg:text-[clamp(44px,5.4vw,76px)]"
-              style={{ animationDelay: "40ms" }}
-            >
-              Engineering the digital future of your business.
-            </h1>
-            <p
-              className="rit-rise mt-5 max-w-xl text-[17px] leading-relaxed text-white/75 sm:mt-8 sm:text-xl"
-              style={{ animationDelay: "160ms" }}
-            >
-              A next-gen IT partner helping businesses transform ideas into powerful digital solutions. Build, innovate and grow with software that fits the way you work.
-            </p>
-            <div
-              className="rit-rise mt-8 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:items-center sm:gap-4"
-              style={{ animationDelay: "280ms" }}
-            >
-              <PrimaryBtn to="/contact" block>
-                Start a project
-              </PrimaryBtn>
-              <a
-                href="#services"
-                className={`flex items-center justify-center rounded-xl border border-white/30 px-7 py-4 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10 active:scale-[0.98] sm:rounded-md sm:py-3.5 sm:text-sm ${focusRing}`}
+        <div className={`${wrap} relative grid gap-12 pb-14 pt-8 sm:gap-14 sm:pb-20 sm:pt-16 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:pb-28 lg:pt-24`}>
+          {/* first screen on phones: message + trust, pinned to the fold */}
+          <div className="flex min-h-[calc(100svh-5.5rem)] flex-col justify-between gap-12 lg:block lg:min-h-0">
+            <div className="pt-4 lg:pt-0">
+              <span aria-hidden="true" className="rit-draw mb-7 block h-[3px] w-16 bg-brand sm:mb-9" />
+              <h1
+                className="rit-rise font-display text-[clamp(40px,11.2vw,66px)] font-medium leading-[1.04] tracking-[-0.02em] lg:text-[clamp(46px,5.2vw,78px)]"
+                style={{ animationDelay: "60ms" }}
               >
-                Explore our services
-              </a>
+                Engineering the digital future of your business.
+              </h1>
+              <p
+                className="rit-rise mt-6 max-w-xl text-[17px] leading-relaxed text-white/75 sm:mt-8 sm:text-xl"
+                style={{ animationDelay: "200ms" }}
+              >
+                A next-gen IT partner helping businesses turn ideas into powerful digital solutions, from automation and custom software to websites, apps and SAP.
+              </p>
+              <div
+                className="rit-rise mt-9 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:items-center sm:gap-4"
+                style={{ animationDelay: "340ms" }}
+              >
+                <PrimaryBtn to="/contact" block>
+                  Start a project
+                </PrimaryBtn>
+                <a
+                  href="#services"
+                  className={`flex items-center justify-center rounded-xl border border-white/30 px-7 py-4 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10 active:scale-[0.98] sm:rounded-md sm:py-3.5 sm:text-sm ${focusRing}`}
+                >
+                  Explore our services
+                </a>
+              </div>
             </div>
+
+            <ul
+              className="rit-rise grid grid-cols-3 gap-3 border-t border-white/15 pt-6 lg:mt-14 lg:max-w-xl"
+              style={{ animationDelay: "480ms" }}
+            >
+              {heroTrust.map(({ icon: Icon, label }) => (
+                <li key={label} className="flex flex-col gap-2.5 text-white/85 sm:flex-row sm:items-center sm:gap-3">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-white/20 bg-white/5">
+                    <Icon size={16} strokeWidth={1.7} className="text-white" />
+                  </span>
+                  <span className="text-[13px] font-medium leading-snug sm:text-sm">{label}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* live workflow visual */}
-          <div className="rit-rise relative mx-auto w-full max-w-[560px] lg:mr-0" style={{ animationDelay: "420ms" }}>
-            <div className="rounded-2xl bg-white p-4 text-ink shadow-[0_40px_90px_-30px_rgba(0,0,0,0.6)] sm:p-8">
+          {/* live workflow visual (dark glass) */}
+          <div className="rit-rise relative mx-auto w-full max-w-[560px] lg:mr-0" style={{ animationDelay: "560ms" }}>
+            <div className="rounded-3xl border border-white/15 bg-white/[0.06] p-4 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.7)] backdrop-blur-sm sm:p-8 lg:rounded-2xl">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs font-medium text-muted">Example workflow</p>
-                  <h3 className="mt-0.5 font-display text-lg font-semibold leading-tight sm:text-xl">Order to delivery, automated</h3>
+                  <p className="text-xs font-medium text-white/60">Example workflow</p>
+                  <h3 className="mt-1 font-display text-[22px] font-medium leading-tight sm:text-2xl">Order to delivery, automated</h3>
                 </div>
-                <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#E3F5EA] px-3 py-1 text-[11px] font-semibold text-[#0B6B3A]">
+                <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-emerald-400/15 px-3 py-1 text-[11px] font-semibold text-emerald-300">
                   <span className="relative flex size-2">
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#1E9E5A] motion-reduce:animate-none" />
-                    <span className="relative inline-flex size-2 rounded-full bg-[#1E9E5A]" />
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 motion-reduce:animate-none" />
+                    <span className="relative inline-flex size-2 rounded-full bg-emerald-400" />
                   </span>
                   Live
                 </span>
               </div>
 
               {/* segmented progress */}
-              <div className="mt-4 flex items-center gap-3 sm:mt-5" aria-hidden="true">
+              <div className="mt-5 flex items-center gap-3" aria-hidden="true">
                 <div className="flex flex-1 gap-1.5">
                   {heroFlow.map((s, i) => (
                     <span
                       key={s.t}
-                      className={`h-1.5 flex-1 rounded-full transition-colors duration-500 motion-reduce:transition-none ${i < filled ? "bg-brand" : "bg-line"}`}
+                      className={`h-1.5 flex-1 rounded-full transition-colors duration-500 motion-reduce:transition-none ${i < filled ? "bg-brand" : "bg-white/15"}`}
                     />
                   ))}
                 </div>
-                <span className="shrink-0 text-[11px] font-semibold text-muted">{stepLabel}</span>
+                <span className="shrink-0 text-[11px] font-semibold text-white/60">{stepLabel}</span>
               </div>
 
-              <ol className="mt-4 space-y-2 sm:mt-5 sm:space-y-2.5">
+              <ol className="mt-5 space-y-2.5">
                 {heroFlow.map(({ icon: Icon, t, d }, i) => {
                   const done = i < active;
                   const running = i === active;
                   return (
                     <li
                       key={t}
-                      className={`flex items-center gap-3.5 rounded-xl border p-3 transition-colors duration-500 motion-reduce:transition-none sm:gap-4 sm:p-4 ${
-                        running ? "border-brand bg-brand/5" : "border-line bg-white"
+                      className={`flex items-center gap-3.5 rounded-2xl border p-3 transition-colors duration-500 motion-reduce:transition-none sm:gap-4 sm:p-4 ${
+                        running ? "border-brand/80 bg-white/10" : "border-white/10 bg-white/[0.03]"
                       }`}
                     >
                       <span
-                        className={`relative grid size-10 shrink-0 place-items-center rounded-lg transition-colors duration-500 sm:size-11 ${
-                          done || running ? "bg-brand text-white" : "bg-mist text-ink/70"
+                        className={`relative grid size-11 shrink-0 place-items-center rounded-xl transition-colors duration-500 ${
+                          done || running ? "bg-brand text-white" : "bg-white/10 text-white/75"
                         }`}
                       >
                         {running && (
-                          <span className="absolute inline-flex size-full animate-ping rounded-lg bg-brand/40 motion-reduce:animate-none" />
+                          <span className="absolute inline-flex size-full animate-ping rounded-xl bg-brand/40 motion-reduce:animate-none" />
                         )}
                         <Icon size={18} strokeWidth={1.8} className="relative" />
                       </span>
                       <div className="min-w-0">
                         <p className="text-[15px] font-semibold leading-tight">{t}</p>
-                        <p className="mt-0.5 truncate text-xs text-muted">{d}</p>
+                        <p className="mt-0.5 truncate text-xs text-white/60">{d}</p>
                       </div>
                       <span
                         className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full bg-brand text-white transition-all duration-500 ${
@@ -407,16 +440,6 @@ export default function Home() {
                   );
                 })}
               </ol>
-            </div>
-
-            {/* phones: trust chips sit under the card */}
-            <div className="mt-4 flex flex-wrap gap-2 sm:hidden">
-              <span className="inline-flex items-center gap-2 rounded-full bg-brand px-3.5 py-2 text-xs font-semibold text-white">
-                <ShieldCheck size={14} /> Secure by design
-              </span>
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 px-3.5 py-2 text-xs font-semibold text-white">
-                <Plug size={14} /> No manual steps
-              </span>
             </div>
 
             {/* tablet and up: floating chips */}
@@ -443,7 +466,7 @@ export default function Home() {
             <li key={short} className="shrink-0">
               <Link
                 to={to}
-                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-mist px-4 py-2.5 text-sm font-semibold transition active:scale-[0.97] active:border-brand ${focusRing}`}
+                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-4 py-2.5 text-sm font-semibold transition active:scale-[0.97] active:border-brand ${focusRing}`}
               >
                 <Icon size={16} strokeWidth={1.8} className="text-brand" />
                 {short}
@@ -453,22 +476,20 @@ export default function Home() {
         </ul>
       </nav>
 
-      {/* ===== PILLARS ===== */}
-      <section className="bg-mist lg:border-b lg:border-line">
-        <ul className={`${wrap} grid grid-cols-2 gap-3 py-8 sm:gap-4 sm:py-10 lg:grid-cols-4 lg:gap-0 lg:py-0`}>
+      {/* ===== INTRO STATEMENT + PILLARS ===== */}
+      <section className={`${wrap} ${sectionY}`}>
+        <p className="max-w-4xl text-balance font-display text-[clamp(26px,3.6vw,46px)] font-medium leading-[1.22] tracking-[-0.01em]">
+          We design and build software around how your business actually works, then stay with you as it grows.
+        </p>
+        <ul className="mt-10 divide-y divide-line border-y border-line sm:mt-14 lg:grid lg:grid-cols-4 lg:divide-x lg:divide-y-0">
           {pillars.map(({ icon: Icon, title, text }, i) => (
-            <li
-              key={title}
-              className={`flex flex-col gap-3 rounded-2xl border border-line bg-white p-4 sm:p-5 lg:flex-row lg:gap-4 lg:rounded-none lg:border-0 lg:border-l lg:bg-transparent lg:px-8 lg:py-10 ${
-                i === 0 ? "lg:border-l-0 lg:pl-0" : ""
-              }`}
-            >
-              <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/10 lg:mt-0.5 lg:size-auto lg:bg-transparent">
-                <Icon size={22} strokeWidth={1.6} className="text-brand" />
+            <li key={title} className={`flex items-start gap-4 py-5 lg:flex-col lg:gap-5 lg:px-8 lg:py-9 ${i === 0 ? "lg:pl-0" : ""}`}>
+              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-brand/10">
+                <Icon size={20} strokeWidth={1.6} className="text-brand" />
               </span>
               <div>
-                <h3 className="text-[15px] font-semibold leading-tight">{title}</h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-muted sm:text-sm">{text}</p>
+                <h3 className="text-base font-semibold leading-tight">{title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted">{text}</p>
               </div>
             </li>
           ))}
@@ -476,133 +497,135 @@ export default function Home() {
       </section>
 
       {/* ===== SERVICES ===== */}
-      <section id="services" className={`${wrap} ${sectionY} scroll-mt-20`}>
-        <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end md:gap-6">
-          <div className="max-w-2xl">
-            <h2 className={h2Cls}>Built for your business, not retrofitted to it.</h2>
-            <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-muted sm:text-base">
-              Every Rare IT solution is designed from scratch around how your teams work, with software, websites and apps that fit from day one.
-            </p>
-          </div>
-          <Link
-            to="/services"
-            className={`hidden items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold text-brand md:inline-flex md:self-auto ${focusRing}`}
-          >
-            View all services <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        {/* phones: swipeable cards */}
-        <div className="md:hidden">
-          <ul
-            ref={svcRef}
-            onScroll={onSvcScroll}
-            className={`flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 ${bleed} ${hideScroll}`}
-          >
-            {services.map(({ to, icon: Icon, title, text, points }, i) => {
-              const dark = i === 0;
-              return (
-                <li key={title} className="w-[84%] shrink-0 snap-start">
-                  <Link
-                    to={to}
-                    className={`relative flex min-h-[340px] flex-col justify-between gap-8 overflow-hidden rounded-3xl p-6 transition active:scale-[0.98] ${
-                      dark ? "bg-ink text-white" : "border border-line bg-white text-ink shadow-[0_18px_40px_-28px_rgba(11,21,48,0.45)]"
-                    } ${focusRing}`}
-                  >
-                    {dark && (
-                      <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
-                    )}
-                    <div className="relative flex items-start justify-between">
-                      <span className={`grid size-14 place-items-center rounded-2xl ${dark ? "bg-brand text-white" : "bg-ink text-white"}`}>
-                        <Icon size={24} strokeWidth={1.6} />
-                      </span>
-                      <span className={`grid size-10 place-items-center rounded-full border ${dark ? "border-white/25" : "border-line"}`}>
-                        <ArrowUpRight size={18} />
-                      </span>
-                    </div>
-                    <div className="relative">
-                      <h3 className="font-display text-2xl font-semibold tracking-tight">{title}</h3>
-                      <p className={`mt-2.5 text-[14px] leading-relaxed ${dark ? "text-white/75" : "text-muted"}`}>{text}</p>
-                      <ul className="mt-5 flex flex-wrap gap-2">
-                        {points.map((p) => (
-                          <li
-                            key={p}
-                            className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                              dark ? "border border-white/25 text-white/85" : "bg-mist text-ink/75"
-                            }`}
-                          >
-                            {p}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-          <Dots count={services.length} index={svcIndex} />
-          <Link
-            to="/services"
-            className={`mt-6 flex items-center justify-center gap-2 rounded-xl border border-line py-4 text-[15px] font-semibold active:scale-[0.98] ${focusRing}`}
-          >
-            View all services <ArrowRight size={15} className="text-brand" />
-          </Link>
-        </div>
-
-        {/* tablet and desktop: grid */}
-        <div className="hidden gap-5 md:grid md:grid-cols-2 lg:grid-cols-3">
-          <Link
-            to={featured.to}
-            className={`group relative flex flex-col justify-between gap-12 overflow-hidden rounded-2xl bg-ink p-10 text-white transition active:scale-[0.99] md:col-span-2 ${focusRing}`}
-          >
-            <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
-            <div className="relative flex items-start justify-between">
-              <span className="grid size-14 place-items-center rounded-xl bg-brand">
-                <FeaturedIcon size={26} strokeWidth={1.6} />
-              </span>
-              <span className="grid size-11 place-items-center rounded-full border border-white/25 transition group-hover:border-brand group-hover:bg-brand">
-                <ArrowUpRight size={18} />
-              </span>
+      <section id="services" className="scroll-mt-20 bg-mist">
+        <div className={`${wrap} ${sectionY}`}>
+          <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end md:gap-6">
+            <div className="max-w-2xl">
+              <h2 className={h2Cls}>Built for your business, not retrofitted to it.</h2>
+              <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-muted sm:text-base">
+                Every Rare IT solution is designed from scratch around how your teams work, with software, websites and apps that fit from day one.
+              </p>
             </div>
-            <div className="relative">
-              <h3 className="font-display text-4xl font-semibold tracking-tight">{featured.title}</h3>
-              <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-white/70">{featured.text}</p>
-              <ul className="mt-6 flex flex-wrap gap-2">
-                {featured.points.map((p) => (
-                  <li key={p} className="rounded-full border border-white/25 px-3.5 py-1.5 text-xs font-medium text-white/85">
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Link>
-
-          {rest.map(({ to, icon: Icon, title, text, points }) => (
             <Link
-              key={title}
-              to={to}
-              className={`group flex flex-col gap-6 rounded-2xl border border-line bg-white p-7 transition hover:border-brand hover:shadow-[0_20px_40px_-24px_rgba(11,21,48,0.35)] active:scale-[0.99] ${focusRing}`}
+              to="/services"
+              className={`hidden items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold text-brand md:inline-flex md:self-auto ${focusRing}`}
             >
-              <div className="flex items-start justify-between">
-                <span className="grid size-12 place-items-center rounded-xl bg-mist text-ink transition group-hover:bg-brand group-hover:text-white">
-                  <Icon size={22} strokeWidth={1.6} />
-                </span>
-                <ArrowUpRight size={18} className="text-ink/30 transition group-hover:text-brand" />
-              </div>
-              <div>
-                <h3 className="font-display text-xl font-semibold tracking-tight">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
-              </div>
-              <ul className="mt-auto flex flex-wrap gap-2">
-                {points.map((p) => (
-                  <li key={p} className="rounded-full bg-mist px-3 py-1 text-xs font-medium text-ink/75">
-                    {p}
-                  </li>
-                ))}
-              </ul>
+              View all services <ArrowRight size={14} />
             </Link>
-          ))}
+          </div>
+
+          {/* phones: swipeable cards */}
+          <div className="md:hidden">
+            <ul
+              ref={svcRef}
+              onScroll={onSvcScroll}
+              className={`flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 ${bleed} ${hideScroll}`}
+            >
+              {services.map(({ to, icon: Icon, title, text, points }, i) => {
+                const dark = i === 0;
+                return (
+                  <li key={title} className="w-[84%] shrink-0 snap-start">
+                    <Link
+                      to={to}
+                      className={`relative flex min-h-[350px] flex-col justify-between gap-8 overflow-hidden rounded-3xl p-6 transition active:scale-[0.98] ${
+                        dark ? "bg-ink text-white" : "border border-line bg-white text-ink shadow-[0_18px_40px_-28px_rgba(11,21,48,0.45)]"
+                      } ${focusRing}`}
+                    >
+                      {dark && (
+                        <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
+                      )}
+                      <div className="relative flex items-start justify-between">
+                        <span className={`grid size-14 place-items-center rounded-2xl ${dark ? "bg-brand text-white" : "bg-ink text-white"}`}>
+                          <Icon size={24} strokeWidth={1.6} />
+                        </span>
+                        <span className={`grid size-10 place-items-center rounded-full border ${dark ? "border-white/25" : "border-line"}`}>
+                          <ArrowUpRight size={18} />
+                        </span>
+                      </div>
+                      <div className="relative">
+                        <h3 className="font-display text-[26px] font-medium tracking-tight">{title}</h3>
+                        <p className={`mt-2.5 text-[14px] leading-relaxed ${dark ? "text-white/75" : "text-muted"}`}>{text}</p>
+                        <ul className="mt-5 flex flex-wrap gap-2">
+                          {points.map((p) => (
+                            <li
+                              key={p}
+                              className={`rounded-full px-3 py-1.5 text-xs font-medium ${
+                                dark ? "border border-white/25 text-white/85" : "bg-mist text-ink/75"
+                              }`}
+                            >
+                              {p}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <Dots count={services.length} index={svcIndex} />
+            <Link
+              to="/services"
+              className={`mt-6 flex items-center justify-center gap-2 rounded-xl border border-ink/15 bg-white py-4 text-[15px] font-semibold active:scale-[0.98] ${focusRing}`}
+            >
+              View all services <ArrowRight size={15} className="text-brand" />
+            </Link>
+          </div>
+
+          {/* tablet and desktop: grid */}
+          <div className="hidden gap-5 md:grid md:grid-cols-2 lg:grid-cols-3">
+            <Link
+              to={featured.to}
+              className={`group relative flex flex-col justify-between gap-12 overflow-hidden rounded-2xl bg-ink p-10 text-white transition active:scale-[0.99] md:col-span-2 ${focusRing}`}
+            >
+              <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
+              <div className="relative flex items-start justify-between">
+                <span className="grid size-14 place-items-center rounded-xl bg-brand">
+                  <FeaturedIcon size={26} strokeWidth={1.6} />
+                </span>
+                <span className="grid size-11 place-items-center rounded-full border border-white/25 transition group-hover:border-brand group-hover:bg-brand">
+                  <ArrowUpRight size={18} />
+                </span>
+              </div>
+              <div className="relative">
+                <h3 className="font-display text-4xl font-medium tracking-tight">{featured.title}</h3>
+                <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-white/70">{featured.text}</p>
+                <ul className="mt-6 flex flex-wrap gap-2">
+                  {featured.points.map((p) => (
+                    <li key={p} className="rounded-full border border-white/25 px-3.5 py-1.5 text-xs font-medium text-white/85">
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Link>
+
+            {rest.map(({ to, icon: Icon, title, text, points }) => (
+              <Link
+                key={title}
+                to={to}
+                className={`group flex flex-col gap-6 rounded-2xl border border-line bg-white p-7 transition hover:border-brand hover:shadow-[0_20px_40px_-24px_rgba(11,21,48,0.35)] active:scale-[0.99] ${focusRing}`}
+              >
+                <div className="flex items-start justify-between">
+                  <span className="grid size-12 place-items-center rounded-xl bg-mist text-ink transition group-hover:bg-brand group-hover:text-white">
+                    <Icon size={22} strokeWidth={1.6} />
+                  </span>
+                  <ArrowUpRight size={18} className="text-ink/30 transition group-hover:text-brand" />
+                </div>
+                <div>
+                  <h3 className="font-display text-2xl font-medium tracking-tight">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
+                </div>
+                <ul className="mt-auto flex flex-wrap gap-2">
+                  {points.map((p) => (
+                    <li key={p} className="rounded-full bg-mist px-3 py-1 text-xs font-medium text-ink/75">
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -611,7 +634,7 @@ export default function Home() {
         <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_0%,black,transparent_65%)]`} />
         <div className={`${wrap} relative`}>
           <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-12">
-            <h2 className="text-balance font-display text-[clamp(28px,4.4vw,58px)] font-bold leading-[1.06] tracking-tight">
+            <h2 className="text-balance font-display text-[clamp(30px,4.4vw,58px)] font-medium leading-[1.08] tracking-[-0.015em]">
               What makes Rare IT solutions smarter?
             </h2>
             <p className="max-w-md text-[15px] leading-relaxed text-white/70 sm:text-base">
@@ -652,7 +675,7 @@ export default function Home() {
                 <span className="grid size-12 place-items-center rounded-xl bg-brand">
                   <Icon size={22} strokeWidth={1.6} />
                 </span>
-                <h3 className="mt-6 font-display text-lg font-semibold leading-tight">{title}</h3>
+                <h3 className="mt-6 font-display text-xl font-medium leading-tight">{title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-white/70">{text}</p>
               </li>
             ))}
@@ -718,7 +741,7 @@ export default function Home() {
             <span className="pointer-events-none absolute -bottom-28 -right-20 size-72 rounded-full border-[56px] border-white/10 sm:size-96" />
             <CurrentIcon size={44} strokeWidth={1.2} className="relative" />
             <div className="relative">
-              <h3 className="font-display text-3xl font-semibold tracking-tight sm:text-4xl">{current.label}</h3>
+              <h3 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">{current.label}</h3>
               <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/90 sm:text-base">{current.text}</p>
               <Link
                 to={current.to}
@@ -748,7 +771,7 @@ export default function Home() {
                 </span>
                 <div className="rounded-2xl border border-line bg-white p-5 sm:mt-6 sm:rounded-xl sm:p-6">
                   <span className="text-sm font-semibold text-brand">Step {i + 1}</span>
-                  <h3 className="mt-1 font-display text-2xl font-semibold tracking-tight">{title}</h3>
+                  <h3 className="mt-1 font-display text-2xl font-medium tracking-tight">{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
                 </div>
               </li>
@@ -761,7 +784,7 @@ export default function Home() {
       <section className="overflow-hidden py-14 sm:py-20">
         <div className={`${wrap} grid items-center gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:gap-12`}>
           <div>
-            <h2 className="text-balance font-display text-[clamp(26px,3.4vw,42px)] font-bold leading-[1.1] tracking-tight">
+            <h2 className="text-balance font-display text-[clamp(26px,3.4vw,42px)] font-medium leading-[1.12] tracking-[-0.01em]">
               Works with the tools you already use.
             </h2>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted sm:mt-4">
@@ -802,9 +825,10 @@ export default function Home() {
 
       {/* ===== ABOUT ===== */}
       <section className="relative overflow-hidden bg-ink text-white">
-        <div className="pointer-events-none absolute -right-32 -top-32 size-[420px] rounded-full border-[70px] border-white/[0.04]" />
+        <div className="pointer-events-none absolute -right-32 -top-32 size-[420px] rounded-full border border-white/10" />
+        <div className="pointer-events-none absolute -right-16 -top-16 size-[420px] rounded-full border border-white/[0.06]" />
         <div className={`${wrap} relative grid gap-8 ${sectionY} lg:grid-cols-2 lg:gap-20`}>
-          <h2 className="font-display text-[clamp(38px,5.2vw,72px)] font-bold leading-[1.02] tracking-tight">
+          <h2 className="font-display text-[clamp(40px,5.2vw,72px)] font-medium leading-[1.03] tracking-[-0.02em]">
             Technology with purpose.
           </h2>
           <div className="lg:pt-3">
@@ -859,7 +883,7 @@ export default function Home() {
           <div className="relative overflow-hidden bg-brand p-6 text-white sm:p-14">
             <span className="pointer-events-none absolute -bottom-32 -right-24 hidden size-80 rounded-full border-[56px] border-white/10 lg:block" />
             <div className="relative">
-              <h3 className="text-balance font-display text-[clamp(28px,3.6vw,46px)] font-bold leading-[1.08] tracking-tight">
+              <h3 className="text-balance font-display text-[clamp(28px,3.6vw,46px)] font-medium leading-[1.1] tracking-[-0.015em]">
                 Let’s build something great together.
               </h3>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/90 sm:mt-5">
@@ -903,7 +927,7 @@ export default function Home() {
                   <span className="mx-auto grid size-14 place-items-center rounded-full bg-brand text-white">
                     <Check size={26} strokeWidth={3} />
                   </span>
-                  <h4 className="mt-5 font-display text-2xl font-semibold tracking-tight">Thank you!</h4>
+                  <h4 className="mt-5 font-display text-2xl font-medium tracking-tight">Thank you!</h4>
                   <p className="mt-2 text-sm text-muted">We’ve received your details and will be in touch soon.</p>
                 </div>
               </div>
