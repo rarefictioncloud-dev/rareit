@@ -1,39 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight,
-  ArrowDown,
-  ArrowUpRight,
-  Check,
-  Workflow,
-  Palette,
-  Code2,
-  Smartphone,
-  Database,
-  HeartPulse,
-  Factory,
-  ShoppingCart,
-  Landmark,
-  GraduationCap,
-  Search,
-  PenTool,
-  Rocket,
-  LifeBuoy,
-  Bot,
-  LayoutDashboard,
-  Plug,
-  ShieldCheck,
-  Sparkles,
-  Users,
-  Eye,
-  Plus,
-  Mail,
-  Phone,
-  MapPin,
+  ArrowRight, ArrowUpRight, Check, Workflow, Palette, Code2, Smartphone, Database,
+  HeartPulse, Factory, ShoppingCart, Landmark, GraduationCap, Truck, Search, PenTool,
+  Rocket, LifeBuoy, Bot, LayoutDashboard, Plug, ShieldCheck, Plus, Mail, Phone, MapPin,
+  Wrench, Pause, Play,
 } from "lucide-react";
 
 /* =====================================================================
-   REQUIRED THEME (tailwind.config.js  ->  theme.extend)
+   THEME (tailwind.config.js -> theme.extend)
    colors: {
      brand: { DEFAULT: "#C8102E", dark: "#A00D25" },
      ink: "#0B1530", muted: "#5B6475", mist: "#F4F6FA", line: "#E4E8F0",
@@ -45,101 +20,67 @@ import {
    ===================================================================== */
 
 /* ---------- DATA ---------- */
-const pillars = [
-  { icon: Sparkles, title: "Built to order", text: "Every solution is designed around your business." },
-  { icon: Users, title: "Senior-led teams", text: "Experienced people on every project." },
-  { icon: Eye, title: "Transparent delivery", text: "Clear updates, no surprises." },
-  { icon: LifeBuoy, title: "Long-term support", text: "We stay with you after launch." },
-];
+const SLIDE_MS = 6500;
 
-const heroTrust = ["Built around your process", "Clear, collaborative delivery", "Support beyond launch"];
-
-const heroTiles = [
-  { k: "Orders", v: "Received" },
-  { k: "Inventory", v: "Matched" },
-  { k: "Invoices", v: "Prepared" },
-];
-
-const services = [
+const slides = [
   {
-    to: "/services/process-automation",
-    icon: Workflow,
-    title: "Process Automation",
-    short: "Automation",
-    text: "Automate repetitive workflows, approvals and reporting across your tools, so your team can focus on work that matters.",
-    points: ["Workflow automation", "Tool integrations", "Smart reporting"],
+    tab: "Software",
+    title: "Engineering the digital future of your business.",
+    text: "A next-gen IT partner turning ideas into powerful digital solutions, from automation and custom software to websites, apps and SAP.",
+    cta: { label: "Talk about your project", to: "/contact" },
+    card: { label: "Workflow concept", title: "From order to invoice", rows: [
+      [ShoppingCart, "New order", "Order received"],
+      [Database, "Check stock", "Inventory matched"],
+      [Plug, "Create invoice", "Finance notified"],
+    ] },
   },
   {
-    to: "/services/web-designing",
-    icon: Palette,
-    title: "Web Designing",
-    short: "Web design",
-    text: "Fast, responsive, brand-led websites and portals that build trust at first glance.",
-    points: ["UI/UX design", "Responsive builds", "SEO-ready"],
+    tab: "Automation",
+    title: "Automate the busywork. Keep your people for the work that matters.",
+    text: "Approvals, reporting and hand-offs run on their own across the tools you already use, with people looped in only when judgment is needed.",
+    cta: { label: "Explore automation", to: "/services/process-automation" },
+    card: { label: "Automation concept", title: "Approvals without the chasing", rows: [
+      [Workflow, "Request submitted", "Routed to the right owner"],
+      [ShieldCheck, "Rules checked", "Policy applied automatically"],
+      [LayoutDashboard, "Report updated", "Dashboard refreshed"],
+    ] },
   },
   {
-    to: "/services/custom-software",
-    icon: Code2,
-    title: "Custom Software",
-    short: "Software",
-    text: "ERP, CRM and internal platforms engineered around the way you work.",
-    points: ["Web applications", "API integration", "Modernisation"],
-  },
-  {
-    to: "/services/mobile-apps",
-    icon: Smartphone,
-    title: "Mobile Apps",
-    short: "Mobile apps",
-    text: "Polished iOS and Android apps, designed with real users in mind.",
-    points: ["iOS and Android", "Product design", "Launch and updates"],
-  },
-  {
-    to: "/services/sap",
-    icon: Database,
-    title: "SAP",
-    short: "SAP",
-    text: "Set up, connect and extend SAP so finance, sales and stock run from one system.",
-    points: ["Integrations", "Dashboards", "Training and support"],
-  },
-];
-
-const heroFlow = [
-  { icon: ShoppingCart, t: "New order", d: "Order received" },
-  { icon: Database, t: "Check stock", d: "Inventory matched" },
-  { icon: Plug, t: "Create invoice", d: "Finance notified" },
-];
-
-const flow = ["New order", "Check stock", "Send invoice", "Notify team"];
-
-const smarts = [
-  {
-    icon: Bot,
-    title: "Industry-aware automation",
-    text: "Workflows tuned to your sector’s data, rules and terminology, so results are precise and easy to audit.",
-  },
-  {
-    icon: LayoutDashboard,
-    title: "Adaptive experiences",
-    text: "Interfaces that shape themselves around each role, surfacing what matters and automating the routine.",
-  },
-  {
-    icon: Plug,
-    title: "Connected workflows",
-    text: "Work flows across your existing tools and systems, with people looped in only when judgment is needed.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Governed delivery",
-    text: "Security, access control and audit trails are built in from the very first release.",
+    tab: "SAP",
+    title: "One connected system, from finance to stock.",
+    text: "We set up, connect and extend SAP so finance, sales and inventory run from a single source of truth, with training and support included.",
+    cta: { label: "See our SAP services", to: "/services/sap" },
+    card: { label: "SAP concept", title: "Finance, sales and stock in sync", rows: [
+      [Landmark, "Finance", "Postings reconciled"],
+      [ShoppingCart, "Sales", "Orders flowing in"],
+      [Database, "Inventory", "Levels always current"],
+    ] },
   },
 ];
 
 const industries = [
-  { icon: HeartPulse, to: "/industries/healthcare", label: "Healthcare", text: "Secure, compliant digital care, from patient portals to clinic workflows." },
-  { icon: Factory, to: "/industries/manufacturing", label: "Manufacturing", text: "Connected operations, production tracking and smarter reporting." },
-  { icon: ShoppingCart, to: "/industries/retail", label: "Retail and E-commerce", text: "Seamless storefronts, inventory flows and customer journeys." },
-  { icon: Landmark, to: "/industries/finance", label: "Finance", text: "Trusted, scalable tools for approvals, records and compliance." },
-  { icon: GraduationCap, to: "/industries/education", label: "Education", text: "Learning platforms and admin tools without the paperwork." },
+  { icon: Factory, to: "/industries/manufacturing", title: "Manufacturing", text: "Connected operations, production tracking and smarter reporting." },
+  { icon: Truck, to: "/industries/distribution", title: "Distribution", text: "Keep goods and information moving, from warehouse to doorstep." },
+  { icon: ShoppingCart, to: "/industries/retail", title: "Retail and E-commerce", text: "Seamless storefronts, inventory flows and customer journeys." },
+  { icon: HeartPulse, to: "/industries/healthcare", title: "Healthcare", text: "Secure, compliant digital care, from patient portals to clinic workflows." },
+  { icon: Landmark, to: "/industries/finance", title: "Finance", text: "Trusted, scalable tools for approvals, records and compliance." },
+  { icon: GraduationCap, to: "/industries/education", title: "Education", text: "Learning platforms and admin tools without the paperwork." },
+];
+
+const smarts = [
+  { icon: Bot, title: "Industry-aware automation", text: "Workflows tuned to your sector’s data, rules and terminology, so results are precise and easy to audit." },
+  { icon: LayoutDashboard, title: "Adaptive experiences", text: "Interfaces that shape themselves around each role, surfacing what matters and automating the routine." },
+  { icon: Plug, title: "Connected workflows", text: "Work flows across your existing tools, with people looped in only when judgment is needed." },
+  { icon: ShieldCheck, title: "Governed delivery", text: "Security, access control and audit trails are built in from the very first release." },
+];
+
+const services = [
+  { icon: Workflow, to: "/services/process-automation", title: "Process Automation", text: "Automate repetitive workflows, approvals and reporting across your tools.", cta: "Explore automation" },
+  { icon: Code2, to: "/services/custom-software", title: "Custom Software", text: "ERP, CRM and internal platforms engineered around the way you work.", cta: "Explore software" },
+  { icon: Palette, to: "/services/web-designing", title: "Web Designing", text: "Fast, responsive, brand-led websites and portals that build trust at first glance.", cta: "Explore web design" },
+  { icon: Smartphone, to: "/services/mobile-apps", title: "Mobile Apps", text: "Polished iOS and Android apps, designed with real users in mind.", cta: "Explore mobile apps" },
+  { icon: Database, to: "/services/sap", title: "SAP", text: "Set up, connect and extend SAP so finance, sales and stock run from one system.", cta: "Explore SAP" },
+  { icon: Wrench, to: "/contact", title: "Support and maintenance", text: "Monitoring, fixes and updates after go-live, so your product keeps getting better.", cta: "Talk to support" },
 ];
 
 const steps = [
@@ -152,141 +93,91 @@ const steps = [
 // Examples of tools we can connect (text only, not a list of partners)
 const toolsA = ["Zoho CRM", "HubSpot", "Gmail", "WhatsApp Business", "Google Sheets"];
 const toolsB = ["Razorpay", "Shopify", "Firebase", "Slack", "SAP"];
-const tools = [...toolsA, ...toolsB];
 
 const faqs = [
-  {
-    q: "How do we start a project with Rare IT?",
-    a: "Send us a short note about what you want to achieve. We reply to set up a call, learn about your goals and users, and then share a clear plan and scope for you to review before any work begins.",
-  },
-  {
-    q: "Can you work with the tools we already use?",
-    a: "Yes. We connect new software to the tools you already rely on, such as CRMs, spreadsheets, payment gateways, messaging apps and SAP, so your team does not have to change how it works overnight.",
-  },
-  {
-    q: "Do you support the product after launch?",
-    a: "Yes. We stay with you after go-live with monitoring, fixes, updates and new features as your business grows.",
-  },
-  {
-    q: "Which kinds of businesses do you work with?",
-    a: "We work with growing businesses in healthcare, manufacturing, retail and e-commerce, finance and education, as well as teams in other sectors that need software built around their processes.",
-  },
+  { q: "How do we start a project with Rare IT?", a: "Send us a short note about what you want to achieve. We reply to set up a call, learn about your goals and users, and then share a clear plan and scope for you to review before any work begins." },
+  { q: "Can you work with the tools we already use?", a: "Yes. We connect new software to the tools you already rely on, such as CRMs, spreadsheets, payment gateways, messaging apps and SAP, so your team does not have to change how it works overnight." },
+  { q: "Do you support the product after launch?", a: "Yes. We stay with you after go-live with monitoring, fixes, updates and new features as your business grows." },
 ];
 
 const contact = [
-  { icon: Phone, label: "+91 79976 58999", sub: "Call us", href: "tel:+917997658999" },
-  { icon: Mail, label: "info@rareit.in", sub: "Email us", href: "mailto:info@rareit.in" },
-  {
-    icon: MapPin,
-    label: "Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madhapur, Hyderabad 500081",
-  },
+  { icon: Phone, label: "+91 79976 58999", href: "tel:+917997658999" },
+  { icon: Mail, label: "info@rareit.in", href: "mailto:info@rareit.in" },
+  { icon: MapPin, label: "Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madhapur, Hyderabad 500081" },
 ];
 
 /* ---------- STYLE HELPERS ---------- */
-const wrap = "mx-auto w-[min(1280px,100%-40px)] sm:w-[min(1280px,100%-64px)]";
-const sectionY = "py-16 sm:py-20 lg:py-28";
-const h2Cls = "text-balance font-display font-medium leading-[1.1] tracking-[-0.015em] text-[clamp(30px,4vw,52px)]";
+const wrap = "mx-auto w-[min(1240px,100%-40px)] sm:w-[min(1240px,100%-64px)]";
+const sectionY = "py-16 sm:py-24";
+const h2Cls = "text-balance font-display font-medium leading-[1.1] tracking-[-0.02em] text-[clamp(30px,4vw,52px)]";
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
-const bleed = "-mx-5 px-5 scroll-pl-5 sm:-mx-8 sm:px-8 sm:scroll-pl-8 lg:mx-0 lg:px-0";
-const hideScroll = "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden";
-
-const gridTexture =
-  "[background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:56px_56px]";
-
-const fieldCls =
-  "w-full rounded-xl border border-line bg-white px-4 py-4 text-base text-ink outline-none transition placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/10 sm:rounded-lg sm:py-3.5 sm:text-sm";
-
-/* Laptop/desktop hero fills the whole first screen.
-   Change 5rem if your navbar is a different height. */
-const HERO_MIN_H = "lg:min-h-[calc(100svh-5rem)]";
+const fieldCls = "w-full rounded-xl border border-line bg-white px-4 py-3.5 text-base text-ink outline-none transition placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/10 sm:text-sm";
 
 const css = `
 @keyframes rit-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.rit-marquee { animation: rit-marquee 34s linear infinite; }
-.rit-marquee-rev { animation-direction: reverse; animation-duration: 40s; }
-@keyframes rit-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-.rit-rise { opacity: 0; animation: rit-rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
-@keyframes rit-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-.rit-bob { animation: rit-bob 1.8s ease-in-out infinite; }
+.rit-marquee { animation: rit-marquee 38s linear infinite; }
+.rit-marquee-rev { animation-direction: reverse; animation-duration: 44s; }
+@keyframes rit-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.rit-fill { transform-origin: left; animation: rit-fill ${SLIDE_MS}ms linear forwards; }
+@keyframes rit-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.rit-in { animation: rit-in .6s cubic-bezier(.2,.7,.2,1) both; }
 @media (prefers-reduced-motion: reduce) {
-  .rit-marquee { animation: none; }
-  .rit-rise { opacity: 1; animation: none; }
-  .rit-bob { animation: none; }
+  .rit-marquee, .rit-fill, .rit-in { animation: none; }
+  .rit-fill { transform: scaleX(1); }
 }
 `;
 
-const PrimaryBtn = ({ to, children, block = false }) => (
-  <Link
-    to={to}
-    className={`group inline-flex items-center gap-3 rounded-full bg-brand py-4 pl-7 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:rounded-md sm:pl-6 sm:py-3.5 sm:text-sm ${
-      block ? "w-full justify-between sm:w-auto sm:justify-start" : ""
-    } ${focusRing}`}
-  >
-    {children}
-    <span className="grid size-8 place-items-center rounded-full bg-white/20 sm:size-auto sm:bg-transparent">
-      <ArrowRight size={16} className="transition group-hover:translate-x-1" />
-    </span>
-  </Link>
-);
+const Btn = ({ to, href, children, variant = "primary" }) => {
+  const v = {
+    primary: "bg-brand text-white hover:bg-brand-dark",
+    ghost: "border border-white/30 text-white hover:border-white hover:bg-white/10",
+    outline: "border border-ink/20 text-ink hover:border-ink",
+  }[variant];
+  const cls = `group inline-flex items-center justify-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold transition active:scale-[0.98] ${v} ${focusRing}`;
+  const arrow = <ArrowRight size={16} className="transition group-hover:translate-x-1" />;
+  return href ? (
+    <a href={href} className={cls}>{children}{arrow}</a>
+  ) : (
+    <Link to={to} className={cls}>{children}{arrow}</Link>
+  );
+};
 
-function useSnapIndex() {
-  const ref = useRef(null);
-  const [index, setIndex] = useState(0);
-  const onScroll = () => {
-    const el = ref.current;
-    if (!el || !el.firstElementChild) return;
-    const step = el.firstElementChild.getBoundingClientRect().width + 16;
-    setIndex(Math.min(el.children.length - 1, Math.max(0, Math.round(el.scrollLeft / step))));
-  };
-  return [ref, index, onScroll];
-}
-
-const Dots = ({ count, index, dark = false }) => (
-  <div className="mt-5 flex items-center justify-center gap-1.5 lg:hidden" aria-hidden="true">
-    {Array.from({ length: count }).map((_, i) => (
-      <span
-        key={i}
-        className={`h-1.5 rounded-full transition-all duration-300 ${
-          i === index ? "w-6 bg-brand" : `w-1.5 ${dark ? "bg-white/30" : "bg-ink/20"}`
-        }`}
-      />
-    ))}
+const SectionHead = ({ title, text, to, link }) => (
+  <div className="mb-10 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end">
+    <div className="max-w-2xl">
+      <h2 className={h2Cls}>{title}</h2>
+      {text && <p className="mt-4 max-w-xl text-base leading-relaxed text-muted">{text}</p>}
+    </div>
+    {link && (
+      <Link to={to} className={`inline-flex items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold text-brand md:self-auto ${focusRing}`}>
+        {link} <ArrowRight size={14} />
+      </Link>
+    )}
   </div>
 );
 
 /* ---------- PAGE ---------- */
 export default function Home() {
+  const [slide, setSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
   const [sent, setSent] = useState(false);
-  const [ind, setInd] = useState(0);
   const [showBar, setShowBar] = useState(false);
-  const [progress, setProgress] = useState(0);
-  // Starts "all done" so the pre-rendered HTML shows a complete workflow
-  const [active, setActive] = useState(heroFlow.length);
-  const [svcRef, svcIndex, onSvcScroll] = useSnapIndex();
-  const [smartRef, smartIndex, onSmartScroll] = useSnapIndex();
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setActive(0);
-    const id = setInterval(() => setActive((a) => (a + 1) % (heroFlow.length + 2)), 1300);
-    return () => clearInterval(id);
-  }, []);
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setTimeout(() => setSlide((s) => (s + 1) % slides.length), SLIDE_MS);
+    return () => clearTimeout(id);
+  }, [slide, paused]);
 
   useEffect(() => {
     const onScroll = () => {
-      const contactEl = document.getElementById("contact");
-      const nearContact = contactEl ? contactEl.getBoundingClientRect().top < window.innerHeight * 0.9 : false;
-      setShowBar(window.scrollY > 560 && !nearContact);
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+      const el = document.getElementById("contact");
+      const near = el ? el.getBoundingClientRect().top < window.innerHeight * 0.9 : false;
+      setShowBar(window.scrollY > 560 && !near);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const onSubmit = (e) => {
@@ -295,608 +186,318 @@ export default function Home() {
     setSent(true);
   };
 
-  const current = industries[ind];
-  const CurrentIcon = current.icon;
-  const [featured, ...rest] = services;
-  const FeaturedIcon = featured.icon;
+  const s = slides[slide];
 
   return (
     <div className="overflow-x-hidden bg-white font-sans text-ink antialiased">
       <style>{css}</style>
 
-      {/* mobile reading-progress bar */}
-      <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-50 h-[3px] lg:hidden">
-        <div
-          className="h-full origin-left bg-brand"
-          style={{ transform: `scaleX(${progress})`, transition: "transform 80ms linear" }}
-        />
-      </div>
-
-      {/* ===== HERO (plain black, no lines) ===== */}
-      <section className={`relative overflow-hidden bg-black text-white lg:flex lg:items-center ${HERO_MIN_H}`}>
-        <div
-          className={`${wrap} relative grid gap-10 pb-12 pt-5 sm:gap-14 sm:pb-20 sm:pt-16 lg:w-[min(1280px,100%-64px)] lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:py-10`}
-        >
-          {/* first screen on phones: message + trust, pinned to the fold */}
-          <div className="flex min-h-[calc(100svh-5.5rem)] flex-col justify-between gap-10 lg:block lg:min-h-0">
-            <div className="flex flex-1 flex-col justify-center pt-2 lg:block lg:pt-0">
-              <h1
-                className="rit-rise font-display text-[clamp(48px,14.5vw,70px)] font-medium leading-[0.98] tracking-[-0.035em] sm:text-[clamp(40px,11.2vw,66px)] sm:leading-[1.04] sm:tracking-[-0.02em] lg:text-[clamp(44px,min(5.4vw,10vh),84px)]"
-                style={{ animationDelay: "60ms" }}
-              >
-                Better software.
-                <br />
-                <span className="text-brand">Less friction.</span>
-              </h1>
-              <p
-                className="rit-rise mt-6 max-w-md text-[17px] leading-[1.6] text-white/70 sm:mt-8 sm:max-w-xl sm:text-xl sm:text-white/75 lg:mt-[clamp(16px,3vh,32px)] lg:text-[clamp(16px,2.4vh,20px)]"
-                style={{ animationDelay: "200ms" }}
-              >
-                We design and build software around the way your business actually works—from connected workflows to custom platforms, websites and apps.
-              </p>
-              <div
-                className="rit-rise mt-8 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:items-center sm:gap-4 lg:mt-[clamp(20px,4vh,44px)]"
-                style={{ animationDelay: "340ms" }}
-              >
-                <PrimaryBtn to="/contact" block>
-                  Talk about your project
-                </PrimaryBtn>
-                <a
-                  href="#services"
-                  className={`flex items-center justify-center gap-2 rounded-full bg-white/[0.07] px-7 py-4 text-[15px] font-semibold text-white transition active:scale-[0.98] active:bg-white/15 sm:rounded-md sm:border sm:border-white/30 sm:bg-transparent sm:py-3.5 sm:text-sm sm:hover:border-white sm:hover:bg-white/10 lg:border-transparent lg:hover:bg-transparent lg:hover:text-brand ${focusRing}`}
-                >
-                  Explore what we do <ArrowDown size={15} className="rit-bob sm:animate-none" />
-                </a>
-              </div>
+      {/* ===== HERO CAROUSEL ===== */}
+      <section
+        className="bg-ink text-white lg:flex lg:min-h-[calc(100svh-5rem)] lg:flex-col"
+        aria-roledescription="carousel"
+        aria-label="Highlights"
+      >
+        <div className={`${wrap} grid flex-1 items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16`}>
+          <div key={`t${slide}`} className="rit-in" aria-live={paused ? "polite" : "off"}>
+            <p className="mb-5 inline-flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-2 text-[13px] font-medium">
+              <span aria-hidden="true" className="size-2 rounded-full bg-brand" />
+              {s.tab}
+            </p>
+            <h1 className="text-balance font-display text-[clamp(38px,9.5vw,60px)] font-medium leading-[1.05] tracking-[-0.025em] lg:text-[clamp(42px,min(4.8vw,9vh),72px)]">
+              {s.title}
+            </h1>
+            <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-white/70 sm:text-lg">{s.text}</p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Btn to={s.cta.to}>{s.cta.label}</Btn>
+              <Btn href="#industries" variant="ghost">Explore what we do</Btn>
             </div>
-
-            <ul
-              className="rit-rise flex flex-col gap-3 rounded-2xl bg-white/[0.06] p-4 text-[13.5px] text-white/80 sm:flex-row sm:flex-wrap sm:gap-x-7 sm:gap-y-2.5 sm:rounded-none sm:bg-transparent sm:p-0 sm:pt-2 sm:text-sm sm:text-white/70 lg:mt-[clamp(20px,5vh,56px)]"
-              style={{ animationDelay: "480ms" }}
-            >
-              {heroTrust.map((label) => (
-                <li key={label} className="flex items-center gap-3 sm:gap-2">
-                  <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand sm:size-auto sm:bg-transparent">
-                    <Check size={12} strokeWidth={3} className="text-white sm:hidden" />
-                    <Check size={15} strokeWidth={2.6} className="hidden text-brand sm:block" />
-                  </span>
-                  {label}
-                </li>
-              ))}
-            </ul>
           </div>
 
-          {/* workflow card */}
-          <div className="rit-rise relative mx-auto w-full max-w-[560px] lg:mr-0" style={{ animationDelay: "560ms" }}>
-            <div className="rounded-[28px] bg-white p-5 text-ink shadow-[0_40px_90px_-30px_rgba(255,255,255,0.12)] sm:p-7 lg:rounded-3xl">
+          <div key={`c${slide}`} className="rit-in mx-auto w-full max-w-[520px] lg:mr-0">
+            <div className="rounded-3xl bg-white p-5 text-ink shadow-[0_40px_90px_-30px_rgba(255,255,255,0.14)] sm:p-7">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink/60">Workflow concept</p>
-                  <h3 className="mt-1.5 text-[22px] font-semibold leading-tight sm:text-2xl">From order to invoice</h3>
+                  <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink/55">{s.card.label}</p>
+                  <h2 className="mt-1.5 text-xl font-semibold leading-tight sm:text-2xl">{s.card.title}</h2>
                 </div>
                 <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
-                  <span className="relative flex size-2">
-                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 motion-reduce:animate-none" />
-                    <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
-                  </span>
-                  Connected
+                  <span className="size-2 rounded-full bg-emerald-500" /> Connected
                 </span>
               </div>
-
-              <ul className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
-                {heroTiles.map(({ k, v }) => (
-                  <li key={k} className="rounded-2xl bg-mist px-3 py-3 sm:px-4 sm:py-3.5">
-                    <p className="text-[11px] text-ink/60 sm:text-xs sm:text-ink/65">{k}</p>
-                    <p className="mt-1 text-[13px] font-semibold sm:mt-1.5 sm:text-base">{v}</p>
+              <ul className="mt-5 space-y-2.5">
+                {s.card.rows.map(([Icon, t, d]) => (
+                  <li key={t} className="flex items-center gap-4 rounded-2xl border border-line p-3.5">
+                    <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand text-white">
+                      <Icon size={18} strokeWidth={1.8} />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[15px] font-semibold leading-tight">{t}</p>
+                      <p className="mt-0.5 truncate text-xs text-ink/60">{d}</p>
+                    </div>
+                    <span className="ml-auto grid size-6 shrink-0 place-items-center rounded-full bg-emerald-50">
+                      <Check size={14} strokeWidth={2.8} className="text-emerald-600" />
+                    </span>
                   </li>
                 ))}
               </ul>
-
-              <ol className="mt-4 space-y-2.5">
-                {heroFlow.map(({ icon: Icon, t, d }, i) => {
-                  const done = i < active;
-                  const running = i === active;
-                  return (
-                    <li
-                      key={t}
-                      className={`flex items-center gap-3.5 rounded-2xl border p-3 transition-colors duration-500 motion-reduce:transition-none sm:gap-4 sm:p-3.5 ${
-                        running ? "border-brand/60 bg-brand/[0.03]" : "border-line"
-                      }`}
-                    >
-                      <span
-                        className={`relative grid size-11 shrink-0 place-items-center rounded-xl transition-colors duration-500 ${
-                          done || running ? "bg-brand text-white" : "bg-mist text-ink"
-                        }`}
-                      >
-                        {running && (
-                          <span className="absolute inline-flex size-full animate-ping rounded-xl bg-brand/30 motion-reduce:animate-none" />
-                        )}
-                        <Icon size={18} strokeWidth={1.8} className="relative" />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-[15px] font-semibold leading-tight">{t}</p>
-                        <p className="mt-0.5 truncate text-xs text-ink/60">{d}</p>
-                      </div>
-                      <span
-                        className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full bg-emerald-50 transition-all duration-500 ${
-                          done ? "scale-100 opacity-100" : "scale-75 opacity-0"
-                        }`}
-                      >
-                        <Check size={14} strokeWidth={2.8} className="text-emerald-600" />
-                      </span>
-                    </li>
-                  );
-                })}
-              </ol>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* ===== QUICK SERVICE LINKS (phones and tablets) ===== */}
-      <nav aria-label="Services" className="border-b border-line bg-white lg:hidden">
-        <ul className={`flex gap-2 overflow-x-auto px-5 py-4 sm:px-8 ${hideScroll}`}>
-          {services.map(({ to, icon: Icon, short }) => (
-            <li key={short} className="shrink-0">
-              <Link
-                to={to}
-                className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line bg-white px-4 py-2.5 text-sm font-semibold transition active:scale-[0.97] active:border-brand ${focusRing}`}
-              >
-                <Icon size={16} strokeWidth={1.8} className="text-brand" />
-                {short}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* ===== INTRO STATEMENT + PILLARS ===== */}
-      <section className={`${wrap} ${sectionY}`}>
-        <p className="max-w-4xl text-balance font-display text-[clamp(26px,3.6vw,46px)] font-medium leading-[1.22] tracking-[-0.01em]">
-          We design and build software around how your business actually works, then stay with you as it grows.
-        </p>
-        <ul className="mt-10 divide-y divide-line border-y border-line sm:mt-14 lg:grid lg:grid-cols-4 lg:divide-x lg:divide-y-0">
-          {pillars.map(({ icon: Icon, title, text }, i) => (
-            <li key={title} className={`flex items-start gap-4 py-5 lg:flex-col lg:gap-5 lg:px-8 lg:py-9 ${i === 0 ? "lg:pl-0" : ""}`}>
-              <span className="grid size-11 shrink-0 place-items-center rounded-full bg-brand/10">
-                <Icon size={20} strokeWidth={1.6} className="text-brand" />
-              </span>
-              <div>
-                <h3 className="text-base font-semibold leading-tight">{title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted">{text}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* ===== SERVICES ===== */}
-      <section id="services" className="scroll-mt-20 bg-mist">
-        <div className={`${wrap} ${sectionY}`}>
-          <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end md:gap-6">
-            <div className="max-w-2xl">
-              <h2 className={h2Cls}>Built for your business, not retrofitted to it.</h2>
-              <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-muted sm:text-base">
-                Every Rare IT solution is designed from scratch around how your teams work, with software, websites and apps that fit from day one.
-              </p>
-            </div>
-            <Link
-              to="/services"
-              className={`hidden items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold text-brand md:inline-flex md:self-auto ${focusRing}`}
-            >
-              View all services <ArrowRight size={14} />
-            </Link>
-          </div>
-
-          {/* phones: swipeable cards */}
-          <div className="md:hidden">
-            <ul
-              ref={svcRef}
-              onScroll={onSvcScroll}
-              className={`flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 ${bleed} ${hideScroll}`}
-            >
-              {services.map(({ to, icon: Icon, title, text, points }, i) => {
-                const dark = i === 0;
-                return (
-                  <li key={title} className="w-[84%] shrink-0 snap-start">
-                    <Link
-                      to={to}
-                      className={`relative flex min-h-[350px] flex-col justify-between gap-8 overflow-hidden rounded-3xl p-6 transition active:scale-[0.98] ${
-                        dark ? "bg-ink text-white" : "border border-line bg-white text-ink shadow-[0_18px_40px_-28px_rgba(11,21,48,0.45)]"
-                      } ${focusRing}`}
-                    >
-                      {dark && (
-                        <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
-                      )}
-                      <div className="relative flex items-start justify-between">
-                        <span className={`grid size-14 place-items-center rounded-2xl ${dark ? "bg-brand text-white" : "bg-ink text-white"}`}>
-                          <Icon size={24} strokeWidth={1.6} />
-                        </span>
-                        <span className={`grid size-10 place-items-center rounded-full border ${dark ? "border-white/25" : "border-line"}`}>
-                          <ArrowUpRight size={18} />
-                        </span>
-                      </div>
-                      <div className="relative">
-                        <h3 className="font-display text-[26px] font-medium tracking-tight">{title}</h3>
-                        <p className={`mt-2.5 text-[14px] leading-relaxed ${dark ? "text-white/75" : "text-muted"}`}>{text}</p>
-                        <ul className="mt-5 flex flex-wrap gap-2">
-                          {points.map((p) => (
-                            <li
-                              key={p}
-                              className={`rounded-full px-3 py-1.5 text-xs font-medium ${
-                                dark ? "border border-white/25 text-white/85" : "bg-mist text-ink/75"
-                              }`}
-                            >
-                              {p}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-            <Dots count={services.length} index={svcIndex} />
-            <Link
-              to="/services"
-              className={`mt-6 flex items-center justify-center gap-2 rounded-full border border-ink/15 bg-white py-4 text-[15px] font-semibold active:scale-[0.98] ${focusRing}`}
-            >
-              View all services <ArrowRight size={15} className="text-brand" />
-            </Link>
-          </div>
-
-          {/* tablet and desktop: grid */}
-          <div className="hidden gap-5 md:grid md:grid-cols-2 lg:grid-cols-3">
-            <Link
-              to={featured.to}
-              className={`group relative flex flex-col justify-between gap-12 overflow-hidden rounded-2xl bg-ink p-10 text-white transition active:scale-[0.99] md:col-span-2 ${focusRing}`}
-            >
-              <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_100%_0%,black,transparent_65%)]`} />
-              <div className="relative flex items-start justify-between">
-                <span className="grid size-14 place-items-center rounded-xl bg-brand">
-                  <FeaturedIcon size={26} strokeWidth={1.6} />
-                </span>
-                <span className="grid size-11 place-items-center rounded-full border border-white/25 transition group-hover:border-brand group-hover:bg-brand">
-                  <ArrowUpRight size={18} />
-                </span>
-              </div>
-              <div className="relative">
-                <h3 className="font-display text-4xl font-medium tracking-tight">{featured.title}</h3>
-                <p className="mt-3 max-w-lg text-[15px] leading-relaxed text-white/70">{featured.text}</p>
-                <ul className="mt-6 flex flex-wrap gap-2">
-                  {featured.points.map((p) => (
-                    <li key={p} className="rounded-full border border-white/25 px-3.5 py-1.5 text-xs font-medium text-white/85">
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Link>
-
-            {rest.map(({ to, icon: Icon, title, text, points }) => (
-              <Link
-                key={title}
-                to={to}
-                className={`group flex flex-col gap-6 rounded-2xl border border-line bg-white p-7 transition hover:border-brand hover:shadow-[0_20px_40px_-24px_rgba(11,21,48,0.35)] active:scale-[0.99] ${focusRing}`}
-              >
-                <div className="flex items-start justify-between">
-                  <span className="grid size-12 place-items-center rounded-xl bg-mist text-ink transition group-hover:bg-brand group-hover:text-white">
-                    <Icon size={22} strokeWidth={1.6} />
-                  </span>
-                  <ArrowUpRight size={18} className="text-ink/30 transition group-hover:text-brand" />
-                </div>
-                <div>
-                  <h3 className="font-display text-2xl font-medium tracking-tight">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
-                </div>
-                <ul className="mt-auto flex flex-wrap gap-2">
-                  {points.map((p) => (
-                    <li key={p} className="rounded-full bg-mist px-3 py-1 text-xs font-medium text-ink/75">
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== SMARTER (navy band) ===== */}
-      <section className={`relative overflow-hidden bg-ink text-white ${sectionY}`}>
-        <div className={`pointer-events-none absolute inset-0 ${gridTexture} [mask-image:radial-gradient(ellipse_at_80%_0%,black,transparent_65%)]`} />
-        <div className={`${wrap} relative`}>
-          <div className="grid gap-4 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-12">
-            <h2 className="text-balance font-display text-[clamp(30px,4.4vw,58px)] font-medium leading-[1.08] tracking-[-0.015em]">
-              What makes Rare IT solutions smarter?
-            </h2>
-            <p className="max-w-md text-[15px] leading-relaxed text-white/70 sm:text-base">
-              Automation, clean design and solid engineering work together, so your business runs faster with less manual effort.
-            </p>
-          </div>
-
-          <div className="mt-8 rounded-2xl border border-white/15 bg-white/[0.04] p-4 sm:mt-14 sm:p-7">
-            <p className="mb-3 text-sm font-medium text-white/65 sm:mb-4">One order, no manual steps</p>
-            <ol className={`flex items-center gap-2 overflow-x-auto sm:flex-wrap sm:gap-3 sm:overflow-visible ${hideScroll}`}>
-              {flow.map((s, i) => (
-                <li key={s} className="inline-flex shrink-0 items-center gap-2 sm:gap-3">
-                  <span
-                    className={`whitespace-nowrap rounded-lg px-4 py-2.5 text-sm font-semibold sm:rounded-md ${
-                      i === flow.length - 1 ? "bg-brand text-white" : "bg-white text-ink"
-                    }`}
+        {/* slide tabs with progress */}
+        <div className={`${wrap} pb-8`}>
+          <div className="flex items-center gap-3">
+            <ul className="grid flex-1 grid-cols-3 gap-3" role="tablist" aria-label="Choose highlight">
+              {slides.map((x, i) => (
+                <li key={x.tab}>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={i === slide}
+                    onClick={() => setSlide(i)}
+                    className={`block w-full text-left ${focusRing}`}
                   >
-                    {s}
-                  </span>
-                  {i < flow.length - 1 && <ArrowRight size={14} className="shrink-0 text-white/50" aria-hidden="true" />}
+                    <span className="block h-1 overflow-hidden rounded-full bg-white/15">
+                      {i === slide && (
+                        <span
+                          key={`p${slide}`}
+                          className="rit-fill block h-full bg-brand"
+                          style={{ animationPlayState: paused ? "paused" : "running" }}
+                        />
+                      )}
+                    </span>
+                    <span className={`mt-2.5 block text-sm font-semibold transition ${i === slide ? "text-white" : "text-white/50"}`}>
+                      {x.tab}
+                    </span>
+                  </button>
                 </li>
               ))}
-            </ol>
+            </ul>
+            <button
+              type="button"
+              onClick={() => setPaused((p) => !p)}
+              aria-label={paused ? "Play highlights" : "Pause highlights"}
+              className={`grid size-10 shrink-0 place-items-center rounded-full border border-white/25 transition hover:bg-white/10 ${focusRing}`}
+            >
+              {paused ? <Play size={14} /> : <Pause size={14} />}
+            </button>
           </div>
+        </div>
+      </section>
 
-          <ul
-            ref={smartRef}
-            onScroll={onSmartScroll}
-            className={`mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 sm:mt-5 ${bleed} ${hideScroll} lg:grid lg:snap-none lg:grid-cols-4 lg:gap-5 lg:overflow-visible lg:pb-0`}
-          >
-            {smarts.map(({ icon: Icon, title, text }) => (
-              <li
-                key={title}
-                className="w-[82%] shrink-0 snap-start rounded-3xl border border-white/10 bg-white/[0.05] p-6 transition sm:w-[46%] lg:w-auto lg:rounded-2xl lg:p-7 lg:hover:border-white/30 lg:hover:bg-white/[0.08]"
-              >
-                <span className="grid size-12 place-items-center rounded-xl bg-brand">
-                  <Icon size={22} strokeWidth={1.6} />
-                </span>
-                <h3 className="mt-6 font-display text-xl font-medium leading-tight">{title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">{text}</p>
-              </li>
-            ))}
-          </ul>
-          <Dots count={smarts.length} index={smartIndex} dark />
-
-          <div className="mt-8 sm:mt-10">
-            <PrimaryBtn to="/contact" block>
-              See it in action
-            </PrimaryBtn>
+      {/* ===== MEET RARE IT ===== */}
+      <section className={`${wrap} ${sectionY}`}>
+        <div className="grid gap-8 lg:grid-cols-[0.35fr_1fr] lg:gap-16">
+          <p className="text-sm font-semibold text-brand">Meet Rare IT</p>
+          <div>
+            <h2 className="max-w-3xl text-balance font-display text-[clamp(28px,3.8vw,48px)] font-medium leading-[1.15] tracking-[-0.02em]">
+              Software and AI-ready automation that know how your business works.
+            </h2>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+              Rare IT is a Hyderabad-based team that designs and builds software around the way you actually work, then stays with you as you grow. Senior engineers, transparent delivery and long-term support come as standard.
+            </p>
+            <ul className="mt-8 flex flex-wrap gap-2.5">
+              {["Built around your process", "Clear, collaborative delivery", "Support beyond launch"].map((t) => (
+                <li key={t} className="inline-flex items-center gap-2 rounded-full bg-mist px-4 py-2.5 text-sm font-medium">
+                  <Check size={15} strokeWidth={2.6} className="text-brand" /> {t}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
       {/* ===== INDUSTRIES ===== */}
-      <section className={`${wrap} ${sectionY}`}>
-        <div className="mb-8 flex flex-col justify-between gap-5 sm:mb-14 md:flex-row md:items-end">
-          <h2 className={`max-w-3xl ${h2Cls}`}>Deep domain expertise, where it matters.</h2>
-          <Link
+      <section id="industries" className="scroll-mt-20 bg-mist">
+        <div className={`${wrap} ${sectionY}`}>
+          <SectionHead
+            title="Built for your industry. Not retrofitted to it."
+            text="Every solution starts from the way your sector works: its data, rules, terminology and customers."
             to="/industries"
-            className={`hidden items-center gap-2 self-start border-b-2 border-brand pb-1 text-sm font-semibold text-brand md:inline-flex md:self-auto ${focusRing}`}
-          >
-            View all industries <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        <div className="grid gap-4 lg:grid-cols-[0.85fr_1.15fr] lg:gap-6">
-          <div
-            role="tablist"
-            aria-label="Industries"
-            className={`flex snap-x gap-2 overflow-x-auto pb-1 ${bleed} ${hideScroll} lg:flex-col lg:overflow-visible`}
-          >
-            {industries.map(({ icon: Icon, label }, i) => {
-              const on = ind === i;
-              return (
-                <button
-                  key={label}
-                  type="button"
-                  role="tab"
-                  id={`ind-tab-${i}`}
-                  aria-selected={on}
-                  aria-controls="ind-panel"
-                  onClick={() => setInd(i)}
-                  onMouseEnter={() => setInd(i)}
-                  className={`flex shrink-0 snap-start items-center gap-2.5 rounded-full border px-4 py-3 text-left text-sm font-semibold transition active:scale-[0.97] lg:gap-3 lg:rounded-lg lg:px-6 lg:py-5 lg:text-base ${focusRing} ${
-                    on ? "border-ink bg-ink text-white" : "border-line bg-mist text-ink hover:border-ink/30"
-                  }`}
+            link="View all industries"
+          />
+          <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {industries.map(({ icon: Icon, to, title, text }) => (
+              <li key={title}>
+                <Link
+                  to={to}
+                  className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition hover:-translate-y-1 hover:border-brand/40 hover:shadow-[0_24px_50px_-28px_rgba(11,21,48,0.4)] ${focusRing}`}
                 >
-                  <Icon size={19} strokeWidth={1.7} className={on ? "text-white" : "text-brand"} />
-                  <span className="whitespace-nowrap">{label}</span>
-                  <ArrowRight size={16} className={`ml-auto hidden transition lg:block ${on ? "opacity-100" : "opacity-0"}`} />
-                </button>
-              );
-            })}
-          </div>
+                  <span className="relative grid h-36 place-items-center bg-ink text-white">
+                    <span className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_0%,rgba(200,16,46,0.55),transparent_65%)]" />
+                    <Icon size={44} strokeWidth={1.2} className="relative transition group-hover:scale-110" />
+                  </span>
+                  <span className="flex flex-1 flex-col p-6">
+                    <span className="font-display text-2xl font-medium tracking-tight">{title}</span>
+                    <span className="mt-2 text-sm leading-relaxed text-muted">{text}</span>
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-semibold text-brand">
+                      {title} solutions <ArrowUpRight size={15} className="transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
-          <div
-            role="tabpanel"
-            id="ind-panel"
-            aria-labelledby={`ind-tab-${ind}`}
-            className="relative flex min-h-[290px] flex-col justify-between gap-8 overflow-hidden rounded-3xl bg-brand p-6 text-white sm:p-10 lg:min-h-[400px] lg:rounded-2xl"
-          >
-            <span className="pointer-events-none absolute -bottom-28 -right-20 size-72 rounded-full border-[56px] border-white/10 sm:size-96" />
-            <CurrentIcon size={44} strokeWidth={1.2} className="relative" />
+      {/* ===== WHAT MAKES IT SMARTER ===== */}
+      <section className={`${wrap} ${sectionY}`}>
+        <div className="grid overflow-hidden rounded-3xl bg-ink text-white lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="relative flex flex-col justify-between gap-10 overflow-hidden bg-brand p-8 sm:p-12">
+            <span className="pointer-events-none absolute -bottom-24 -right-20 size-72 rounded-full bg-white/10" />
             <div className="relative">
-              <h3 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">{current.label}</h3>
-              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/90 sm:text-base">{current.text}</p>
-              <Link
-                to={current.to}
-                className={`mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-ink transition hover:bg-mist active:scale-[0.98] sm:mt-7 sm:rounded-md ${focusRing}`}
-              >
-                Explore {current.label} <ArrowUpRight size={16} />
-              </Link>
+              <p className="text-sm font-semibold text-white/80">Our approach</p>
+              <h2 className="mt-3 text-balance font-display text-[clamp(30px,3.6vw,46px)] font-medium leading-[1.1] tracking-[-0.02em]">
+                What makes Rare IT solutions smarter?
+              </h2>
+              <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-white/90">
+                Automation, clean design and solid engineering work together, so your business runs faster with less manual effort.
+              </p>
+            </div>
+            <div className="relative">
+              <Btn to="/contact" variant="ghost">See it in action</Btn>
             </div>
           </div>
+          <ul className="grid gap-px bg-white/10 sm:grid-cols-2">
+            {smarts.map(({ icon: Icon, title, text }) => (
+              <li key={title} className="bg-ink p-7 sm:p-9">
+                <span className="grid size-12 place-items-center rounded-xl bg-white/10 text-brand">
+                  <Icon size={22} strokeWidth={1.6} />
+                </span>
+                <h3 className="mt-6 font-display text-xl font-medium leading-tight">{title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/65">{text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ===== SERVICES ===== */}
+      <section id="services" className="scroll-mt-20 border-y border-line bg-mist">
+        <div className={`${wrap} ${sectionY}`}>
+          <SectionHead
+            title="Software and services for every business need"
+            text="Explore what we build. Everything is designed to connect, so each piece works with the rest."
+            to="/services"
+            link="View all services"
+          />
+          <ul className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {services.map(({ icon: Icon, to, title, text, cta }) => (
+              <li key={title} className="bg-white">
+                <Link to={to} className={`group flex h-full flex-col p-7 transition hover:bg-mist sm:p-9 ${focusRing}`}>
+                  <span className="grid size-12 place-items-center rounded-xl bg-brand/10 text-brand transition group-hover:bg-brand group-hover:text-white">
+                    <Icon size={22} strokeWidth={1.6} />
+                  </span>
+                  <h3 className="mt-6 font-display text-2xl font-medium tracking-tight">{title}</h3>
+                  <p className="mt-2.5 text-sm leading-relaxed text-muted">{text}</p>
+                  <span className="mt-auto inline-flex items-center gap-2 pt-7 text-sm font-semibold text-brand">
+                    {cta} <ArrowRight size={15} className="transition group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
       {/* ===== PROCESS ===== */}
-      <section className={`border-y border-line bg-mist ${sectionY}`}>
-        <div className={wrap}>
-          <h2 className={`mb-10 max-w-2xl sm:mb-16 ${h2Cls}`}>A disciplined process, built for trust.</h2>
-          <ol className="relative grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            <span aria-hidden="true" className="absolute left-0 right-0 top-7 hidden h-px bg-ink/20 lg:block" />
-            {steps.map(({ icon: Icon, title, text }, i) => (
-              <li key={title} className="relative pl-[68px] sm:pl-0">
-                {i < steps.length - 1 && (
-                  <span aria-hidden="true" className="absolute -bottom-5 left-6 top-12 w-px bg-ink/20 sm:hidden" />
-                )}
-                <span className="absolute left-0 top-0 grid size-12 place-items-center rounded-full bg-ink text-white ring-4 ring-mist sm:relative sm:size-14 sm:ring-8">
+      <section className={`${wrap} ${sectionY}`}>
+        <SectionHead title="A disciplined process, built for trust." />
+        <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {steps.map(({ icon: Icon, title, text }, i) => (
+            <li key={title} className="rounded-2xl border border-line bg-white p-7">
+              <div className="flex items-center justify-between">
+                <span className="grid size-12 place-items-center rounded-full bg-ink text-white">
                   <Icon size={20} strokeWidth={1.6} />
                 </span>
-                <div className="rounded-2xl border border-line bg-white p-5 sm:mt-6 sm:rounded-xl sm:p-6">
-                  <span className="text-sm font-semibold text-brand">Step {i + 1}</span>
-                  <h3 className="mt-1 font-display text-2xl font-medium tracking-tight">{title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
+                <span className="text-sm font-semibold text-brand">Step {i + 1}</span>
+              </div>
+              <h3 className="mt-6 font-display text-2xl font-medium tracking-tight">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{text}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {/* ===== TOOLS ===== */}
-      <section className="overflow-hidden py-14 sm:py-20">
-        <div className={`${wrap} grid items-center gap-8 lg:grid-cols-[0.9fr_1.4fr] lg:gap-12`}>
-          <div>
-            <h2 className="text-balance font-display text-[clamp(26px,3.4vw,42px)] font-medium leading-[1.12] tracking-[-0.01em]">
-              Works with the tools you already use.
-            </h2>
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted sm:mt-4">
-              Examples of tools we can connect. We fit into your setup, not the other way round.
-            </p>
-          </div>
-
-          <ul className="hidden flex-wrap gap-3 lg:flex">
-            {tools.map((t) => (
-              <li
-                key={t}
-                className="rounded-md border border-line bg-white px-5 py-3 text-sm font-semibold transition hover:border-brand hover:text-brand"
-              >
-                {t}
-              </li>
-            ))}
-          </ul>
-
-          <div className="relative -mx-5 space-y-2.5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)] sm:-mx-8 lg:hidden">
-            {[toolsA, toolsB].map((row, r) => (
-              <ul key={r} className={`rit-marquee ${r === 1 ? "rit-marquee-rev" : ""} flex w-max gap-2.5 px-5`}>
-                {[...row, ...row, ...row, ...row].map((t, i) => (
-                  <li
-                    key={`${t}-${i}`}
-                    aria-hidden={i >= row.length}
-                    className="whitespace-nowrap rounded-full border border-line bg-white px-5 py-3 text-sm font-semibold"
-                  >
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== ABOUT ===== */}
-      <section className="relative overflow-hidden bg-ink text-white">
-        <div className="pointer-events-none absolute -right-32 -top-32 size-[420px] rounded-full border border-white/10" />
-        <div className="pointer-events-none absolute -right-16 -top-16 size-[420px] rounded-full border border-white/[0.06]" />
-        <div className={`${wrap} relative grid gap-8 ${sectionY} lg:grid-cols-2 lg:gap-20`}>
-          <h2 className="font-display text-[clamp(40px,5.2vw,72px)] font-medium leading-[1.03] tracking-[-0.02em]">
-            Technology with purpose.
+      <section className="overflow-hidden border-t border-line bg-mist py-14 sm:py-20">
+        <div className={`${wrap} mb-10 max-w-2xl`}>
+          <h2 className="text-balance font-display text-[clamp(26px,3.4vw,40px)] font-medium leading-[1.12] tracking-[-0.015em]">
+            Works with the tools you already use.
           </h2>
-          <div className="lg:pt-3">
-            <p className="mb-6 max-w-lg text-[15px] leading-relaxed text-white/70 sm:mb-7 sm:text-base">
-              Rare IT is a focused team that believes technology should create meaningful change. We hold ourselves to the
-              standards of long-established firms, with the speed and attention of a team that treats every client as a
-              partner.
-            </p>
-            <ul className="mb-8 space-y-2.5 text-sm font-medium sm:mb-9 sm:space-y-3.5">
-              {["Senior engineers on every project", "Transparent communication, no surprises", "Built to scale with your business"].map((t) => (
-                <li key={t} className="flex items-center gap-3 rounded-xl bg-white/[0.06] px-4 py-3.5 sm:bg-transparent sm:p-0">
-                  <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand text-white">
-                    <Check size={12} strokeWidth={3} />
-                  </span>
+          <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
+            Examples of tools we can connect. We fit into your setup, not the other way round.
+          </p>
+        </div>
+        <div className="space-y-3 [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+          {[toolsA, toolsB].map((row, r) => (
+            <ul key={r} className={`rit-marquee ${r === 1 ? "rit-marquee-rev" : ""} flex w-max gap-3 px-3`}>
+              {[...row, ...row, ...row, ...row].map((t, i) => (
+                <li key={`${t}-${i}`} aria-hidden={i >= row.length} className="whitespace-nowrap rounded-full border border-line bg-white px-6 py-3 text-sm font-semibold">
                   {t}
                 </li>
               ))}
             </ul>
-            <PrimaryBtn to="/about" block>
-              Our story
-            </PrimaryBtn>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* ===== FAQ ===== */}
       <section className={`${wrap} ${sectionY} grid gap-8 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
         <h2 className={h2Cls}>Questions, answered.</h2>
-        <div className="space-y-3 lg:space-y-0 lg:border-t lg:border-ink">
+        <div className="space-y-3">
           {faqs.map(({ q, a }) => (
-            <details
-              key={q}
-              className="group rounded-2xl border border-line bg-white px-5 open:border-brand/40 open:bg-mist lg:rounded-none lg:border-0 lg:border-b lg:bg-transparent lg:px-0 lg:open:bg-transparent"
-            >
-              <summary
-                className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-[15px] font-semibold leading-snug marker:hidden sm:py-6 sm:text-lg [&::-webkit-details-marker]:hidden ${focusRing}`}
-              >
+            <details key={q} className="group rounded-2xl border border-line bg-white px-6 transition open:border-brand/40 open:bg-mist">
+              <summary className={`flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-semibold leading-snug marker:hidden sm:text-lg [&::-webkit-details-marker]:hidden ${focusRing}`}>
                 {q}
-                <span className="grid size-10 shrink-0 place-items-center rounded-full border border-line bg-white transition group-open:rotate-45 group-open:border-brand group-open:bg-brand group-open:text-white sm:size-9">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line bg-white transition group-open:rotate-45 group-open:border-brand group-open:bg-brand group-open:text-white">
                   <Plus size={18} />
                 </span>
               </summary>
-              <p className="max-w-2xl pb-5 text-[15px] leading-relaxed text-muted sm:pb-6">{a}</p>
+              <p className="max-w-2xl pb-6 text-[15px] leading-relaxed text-muted">{a}</p>
             </details>
           ))}
         </div>
       </section>
 
       {/* ===== LET'S CONNECT ===== */}
-      <section id="contact" className={`${wrap} scroll-mt-20 pb-24 sm:pb-20 lg:pb-28`}>
-        <div className="grid overflow-hidden rounded-3xl border border-line shadow-[0_30px_70px_-40px_rgba(11,21,48,0.4)] lg:grid-cols-[0.9fr_1.1fr] lg:rounded-2xl">
-          <div className="relative overflow-hidden bg-brand p-6 text-white sm:p-14">
-            <span className="pointer-events-none absolute -bottom-32 -right-24 hidden size-80 rounded-full border-[56px] border-white/10 lg:block" />
+      <section id="contact" className={`${wrap} scroll-mt-20 pb-24 lg:pb-28`}>
+        <div className="grid overflow-hidden rounded-3xl border border-line shadow-[0_30px_70px_-40px_rgba(11,21,48,0.4)] lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative overflow-hidden bg-brand p-7 text-white sm:p-12">
+            <span className="pointer-events-none absolute -bottom-32 -right-24 hidden size-80 rounded-full bg-white/10 lg:block" />
             <div className="relative">
-              <h3 className="text-balance font-display text-[clamp(28px,3.6vw,46px)] font-medium leading-[1.1] tracking-[-0.015em]">
+              <h2 className="text-balance font-display text-[clamp(28px,3.6vw,44px)] font-medium leading-[1.1] tracking-[-0.015em]">
                 Let’s build something great together.
-              </h3>
-              <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/90 sm:mt-5">
-                Partner with Rare IT for innovative, scalable and future-ready solutions. Tell us about your project and
-                we’ll get back to you.
+              </h2>
+              <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/90">
+                Tell us about your project and we’ll get back to you.
               </p>
-              <ul className="mt-7 grid grid-cols-2 gap-3 text-sm font-medium sm:mt-8 lg:block lg:space-y-4">
-                {contact.map(({ icon: Icon, label, sub, href }) =>
-                  href ? (
+              <ul className="mt-8 space-y-4 text-sm font-medium">
+                {contact.map(({ icon: Icon, label, href }) => {
+                  const inner = (
+                    <>
+                      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-brand"><Icon size={17} /></span>
+                      {href ? <span className="font-semibold">{label}</span> : <address className="max-w-[280px] pt-1.5 not-italic leading-snug">{label}</address>}
+                    </>
+                  );
+                  return (
                     <li key={label}>
-                      <a
-                        href={href}
-                        className="flex h-full flex-col items-start gap-3 rounded-2xl bg-white/15 p-4 transition active:bg-white/25 lg:flex-row lg:items-center lg:rounded-none lg:bg-transparent lg:p-0 lg:underline-offset-4 lg:hover:underline"
-                      >
-                        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-brand lg:size-9">
-                          <Icon size={17} />
-                        </span>
-                        <span className="min-w-0">
-                          <span className="block text-[11px] font-medium text-white/75 lg:hidden">{sub}</span>
-                          <span className="block break-all text-[13px] font-semibold leading-snug lg:text-sm">{label}</span>
-                        </span>
-                      </a>
+                      {href ? <a href={href} className="flex items-center gap-3 underline-offset-4 hover:underline">{inner}</a> : <div className="flex items-start gap-3">{inner}</div>}
                     </li>
-                  ) : (
-                    <li key={label} className="col-span-2 flex items-start gap-3 rounded-2xl bg-white/10 p-4 lg:bg-transparent lg:p-0">
-                      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-brand lg:size-9">
-                        <Icon size={17} />
-                      </span>
-                      <address className="max-w-[280px] pt-1.5 not-italic leading-snug">{label}</address>
-                    </li>
-                  )
-                )}
+                  );
+                })}
               </ul>
             </div>
           </div>
 
-          <div className="bg-white p-5 sm:p-12">
+          <div className="bg-white p-6 sm:p-12">
             {sent ? (
               <div role="status" className="grid h-full min-h-64 place-items-center text-center">
                 <div>
-                  <span className="mx-auto grid size-14 place-items-center rounded-full bg-brand text-white">
-                    <Check size={26} strokeWidth={3} />
-                  </span>
-                  <h4 className="mt-5 font-display text-2xl font-medium tracking-tight">Thank you!</h4>
+                  <span className="mx-auto grid size-14 place-items-center rounded-full bg-brand text-white"><Check size={26} strokeWidth={3} /></span>
+                  <h3 className="mt-5 font-display text-2xl font-medium tracking-tight">Thank you!</h3>
                   <p className="mt-2 text-sm text-muted">We’ve received your details and will be in touch soon.</p>
                 </div>
               </div>
@@ -912,24 +513,22 @@ export default function Home() {
                 <input id="company" name="company" autoComplete="organization" placeholder="Company name" className={fieldCls} />
                 <label className="sr-only" htmlFor="phone">Phone number</label>
                 <input id="phone" type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone number" className={fieldCls} />
-                <label className="sr-only" htmlFor="service">Service you are interested in</label>
-                <select id="service" name="service" defaultValue="" className={`${fieldCls} sm:col-span-2`}>
-                  <option value="" disabled>I’m interested in…</option>
-                  <option>Process Automation</option>
-                  <option>Web Designing</option>
-                  <option>Custom Software</option>
-                  <option>Mobile App Development</option>
-                  <option>SAP</option>
-                  <option>Something else</option>
+                <label className="sr-only" htmlFor="country">Country or region</label>
+                <select id="country" required name="country" defaultValue="" className={fieldCls}>
+                  <option value="" disabled>Country / region *</option>
+                  <option>India</option><option>Singapore</option><option>United Arab Emirates</option>
+                  <option>Australia</option><option>United States</option><option>Other</option>
+                </select>
+                <label className="sr-only" htmlFor="industry">Industry</label>
+                <select id="industry" required name="industry" defaultValue="" className={fieldCls}>
+                  <option value="" disabled>Industry *</option>
+                  {industries.map((i) => <option key={i.title}>{i.title}</option>)}
+                  <option>Other</option>
                 </select>
                 <label className="sr-only" htmlFor="message">About your project</label>
                 <textarea id="message" name="message" rows={4} placeholder="Tell us a little about your project" className={`${fieldCls} resize-none sm:col-span-2`} />
-                <button
-                  type="submit"
-                  className={`group mt-1 inline-flex w-full items-center justify-between gap-3 rounded-full bg-brand py-4 pl-7 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:w-auto sm:justify-self-start sm:rounded-md sm:pl-6 sm:py-3.5 sm:text-sm ${focusRing}`}
-                >
-                  Get in touch
-                  <ArrowRight size={16} className="transition group-hover:translate-x-1" />
+                <button type="submit" className={`group mt-1 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brand px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:w-auto sm:justify-self-start ${focusRing}`}>
+                  Submit <ArrowRight size={16} className="transition group-hover:translate-x-1" />
                 </button>
               </form>
             )}
@@ -941,23 +540,14 @@ export default function Home() {
       {/* ===== MOBILE STICKY CTA ===== */}
       <div
         aria-hidden={!showBar}
-        className={`fixed inset-x-0 bottom-0 z-40 px-3 pt-2 transition duration-300 lg:hidden ${
-          showBar ? "translate-y-0 opacity-100" : "invisible translate-y-full opacity-0"
-        }`}
+        className={`fixed inset-x-0 bottom-0 z-40 px-3 pt-2 transition duration-300 lg:hidden ${showBar ? "translate-y-0 opacity-100" : "invisible translate-y-full opacity-0"}`}
         style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
       >
         <div className="mx-auto flex max-w-md items-center gap-2 rounded-full border border-white/10 bg-ink/95 p-1.5 shadow-[0_20px_50px_-10px_rgba(11,21,48,0.6)] backdrop-blur">
-          <Link
-            to="/contact"
-            className={`flex flex-1 items-center justify-center gap-2 rounded-full bg-brand py-3.5 text-sm font-semibold text-white active:scale-[0.98] ${focusRing}`}
-          >
+          <Link to="/contact" className={`flex flex-1 items-center justify-center gap-2 rounded-full bg-brand py-3.5 text-sm font-semibold text-white active:scale-[0.98] ${focusRing}`}>
             Start a project <ArrowRight size={16} />
           </Link>
-          <a
-            href="tel:+917997658999"
-            aria-label="Call Rare IT"
-            className={`grid size-12 shrink-0 place-items-center rounded-full bg-white text-ink active:scale-95 ${focusRing}`}
-          >
+          <a href="tel:+917997658999" aria-label="Call Rare IT" className={`grid size-12 shrink-0 place-items-center rounded-full bg-white text-ink active:scale-95 ${focusRing}`}>
             <Phone size={18} />
           </a>
         </div>
