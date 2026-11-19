@@ -6,12 +6,10 @@ export default function Logo({ className = "text-4xl", light = false }) {
     <Link
       to="/"
       aria-label="Rare IT home"
-      className={`inline-flex items-baseline gap-1 leading-none ${className}`}
+      className={`inline-flex items-baseline gap-[0.18em] font-sans font-extrabold leading-none tracking-tighter ${className}`}
     >
-      <span className="font-script text-[1.2em] font-bold text-brand">Rare</span>
-      <span
-        className={`font-extrabold tracking-tighter ${light ? "text-white" : "text-ink"}`}
-      >
+      <span className="text-brand">Rare</span>
+      <span className={light ? "text-white" : "text-ink"}>
         IT<span className="text-brand">!</span>
       </span>
     </Link>

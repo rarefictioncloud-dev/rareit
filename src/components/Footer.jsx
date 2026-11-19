@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaLinkedinIn, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { Mail, Phone, MapPin, ArrowUp, ArrowUpRight, ArrowRight } from "lucide-react";
+import Logo from "./logo"; // adjust the path if your Logo file lives elsewhere
 
 const company = [
   { to: "/", label: "Home" },
@@ -75,16 +76,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-12 sm:gap-x-12 sm:gap-y-12 sm:py-14 lg:grid-cols-[1.4fr_0.7fr_0.9fr_1.2fr]">
           {/* Brand */}
           <div className="col-span-2 lg:col-span-1">
-            <Link
-              to="/"
-              aria-label="Rare IT home"
-              className={`inline-flex items-baseline gap-1 text-4xl leading-none ${focusRing}`}
-            >
-              <span className="font-script text-[1.2em] font-bold text-brand">Rare</span>
-              <span className="font-extrabold tracking-tighter text-white">
-                IT<span className="text-brand">!</span>
-              </span>
-            </Link>
+            <Logo light className="text-4xl" />
             <p className="mt-5 max-w-[300px] text-sm leading-relaxed text-white/65">
               A next-gen IT partner helping businesses transform ideas into
               powerful digital solutions.
