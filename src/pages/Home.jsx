@@ -315,12 +315,7 @@ export default function Home() {
           {/* first screen on phones: message + trust, pinned to the fold */}
           <div className="flex min-h-[calc(100svh-5.5rem)] flex-col justify-between gap-12 lg:block lg:min-h-0">
             <div className="pt-4 lg:pt-0">
-              <span
-                className="rit-rise mb-6 inline-flex items-center gap-2.5 rounded-full bg-white px-4 py-2 text-[13px] font-medium text-ink sm:mb-8"
-              >
-                <span aria-hidden="true" className="size-2 rounded-full bg-brand" />
-                Digital products · Automation · Hyderabad
-              </span>
+
               <h1
                 className="rit-rise font-display text-[clamp(40px,11.2vw,66px)] font-medium leading-[1.04] tracking-[-0.02em] lg:text-[clamp(44px,min(5.4vw,10vh),84px)]"
                 style={{ animationDelay: "60ms" }}
@@ -424,11 +419,6 @@ export default function Home() {
                 })}
               </ol>
 
-              <div className="mt-4 flex items-center gap-3 rounded-2xl bg-black px-4 py-3.5 text-sm font-medium text-white">
-                <ShieldCheck size={16} className="shrink-0" />
-                Designed with control in mind
-                <ArrowUpRight size={16} className="ml-auto shrink-0 text-brand" />
-              </div>
             </div>
           </div>
         </div>
