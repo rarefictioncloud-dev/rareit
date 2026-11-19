@@ -314,8 +314,7 @@ export default function Home() {
           <SectionHead
             title="Built for your industry. Not retrofitted to it."
             text="Every solution starts from the way your sector works: its data, rules, terminology and customers."
-            to="/industries"
-            link="View all industries"
+   
           />
           <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {industries.map(({ icon: Icon, to, title, text }) => (
@@ -380,8 +379,7 @@ export default function Home() {
           <SectionHead
             title="Software and services for every business need"
             text="Explore what we build. Everything is designed to connect, so each piece works with the rest."
-            to="/services"
-            link="View all services"
+
           />
           <ul className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {services.map(({ icon: Icon, to, title, text, cta }) => (
