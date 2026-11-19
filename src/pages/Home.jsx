@@ -206,21 +206,26 @@ const css = `
 .rit-marquee-rev { animation-direction: reverse; animation-duration: 40s; }
 @keyframes rit-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 .rit-rise { opacity: 0; animation: rit-rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes rit-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+.rit-bob { animation: rit-bob 1.8s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) {
   .rit-marquee { animation: none; }
   .rit-rise { opacity: 1; animation: none; }
+  .rit-bob { animation: none; }
 }
 `;
 
 const PrimaryBtn = ({ to, children, block = false }) => (
   <Link
     to={to}
-    className={`group inline-flex items-center gap-3 rounded-xl bg-brand py-4 pl-6 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:rounded-md sm:py-3.5 sm:text-sm ${
+    className={`group inline-flex items-center gap-3 rounded-full bg-brand py-4 pl-7 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:rounded-md sm:pl-6 sm:py-3.5 sm:text-sm ${
       block ? "w-full justify-between sm:w-auto sm:justify-start" : ""
     } ${focusRing}`}
   >
     {children}
-    <ArrowRight size={16} className="transition group-hover:translate-x-1" />
+    <span className="grid size-8 place-items-center rounded-full bg-white/20 sm:size-auto sm:bg-transparent">
+      <ArrowRight size={16} className="transition group-hover:translate-x-1" />
+    </span>
   </Link>
 );
 
@@ -310,14 +315,13 @@ export default function Home() {
       {/* ===== HERO (plain black, no lines) ===== */}
       <section className={`relative overflow-hidden bg-black text-white lg:flex lg:items-center ${HERO_MIN_H}`}>
         <div
-          className={`${wrap} relative grid gap-12 pb-14 pt-8 sm:gap-14 sm:pb-20 sm:pt-16 lg:w-[min(1280px,100%-64px)] lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:py-10`}
+          className={`${wrap} relative grid gap-10 pb-12 pt-5 sm:gap-14 sm:pb-20 sm:pt-16 lg:w-[min(1280px,100%-64px)] lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16 lg:py-10`}
         >
           {/* first screen on phones: message + trust, pinned to the fold */}
-          <div className="flex min-h-[calc(100svh-5.5rem)] flex-col justify-between gap-12 lg:block lg:min-h-0">
-            <div className="pt-4 lg:pt-0">
-
+          <div className="flex min-h-[calc(100svh-5.5rem)] flex-col justify-between gap-10 lg:block lg:min-h-0">
+            <div className="flex flex-1 flex-col justify-center pt-2 lg:block lg:pt-0">
               <h1
-                className="rit-rise font-display text-[clamp(40px,11.2vw,66px)] font-medium leading-[1.04] tracking-[-0.02em] lg:text-[clamp(44px,min(5.4vw,10vh),84px)]"
+                className="rit-rise font-display text-[clamp(48px,14.5vw,70px)] font-medium leading-[0.98] tracking-[-0.035em] sm:text-[clamp(40px,11.2vw,66px)] sm:leading-[1.04] sm:tracking-[-0.02em] lg:text-[clamp(44px,min(5.4vw,10vh),84px)]"
                 style={{ animationDelay: "60ms" }}
               >
                 Better software.
@@ -325,13 +329,13 @@ export default function Home() {
                 <span className="text-brand">Less friction.</span>
               </h1>
               <p
-                className="rit-rise mt-6 max-w-xl text-[17px] leading-relaxed text-white/75 sm:mt-8 sm:text-xl lg:mt-[clamp(16px,3vh,32px)] lg:text-[clamp(16px,2.4vh,20px)]"
+                className="rit-rise mt-6 max-w-md text-[17px] leading-[1.6] text-white/70 sm:mt-8 sm:max-w-xl sm:text-xl sm:text-white/75 lg:mt-[clamp(16px,3vh,32px)] lg:text-[clamp(16px,2.4vh,20px)]"
                 style={{ animationDelay: "200ms" }}
               >
                 We design and build software around the way your business actually works—from connected workflows to custom platforms, websites and apps.
               </p>
               <div
-                className="rit-rise mt-9 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:items-center sm:gap-4 lg:mt-[clamp(20px,4vh,44px)]"
+                className="rit-rise mt-8 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:items-center sm:gap-4 lg:mt-[clamp(20px,4vh,44px)]"
                 style={{ animationDelay: "340ms" }}
               >
                 <PrimaryBtn to="/contact" block>
@@ -339,20 +343,23 @@ export default function Home() {
                 </PrimaryBtn>
                 <a
                   href="#services"
-                  className={`flex items-center justify-center gap-2 rounded-xl border border-white/30 px-7 py-4 text-[15px] font-semibold text-white transition hover:border-white hover:bg-white/10 active:scale-[0.98] sm:rounded-md sm:py-3.5 sm:text-sm lg:border-transparent lg:hover:bg-transparent lg:hover:text-brand ${focusRing}`}
+                  className={`flex items-center justify-center gap-2 rounded-full bg-white/[0.07] px-7 py-4 text-[15px] font-semibold text-white transition active:scale-[0.98] active:bg-white/15 sm:rounded-md sm:border sm:border-white/30 sm:bg-transparent sm:py-3.5 sm:text-sm sm:hover:border-white sm:hover:bg-white/10 lg:border-transparent lg:hover:bg-transparent lg:hover:text-brand ${focusRing}`}
                 >
-                  Explore what we do <ArrowDown size={15} />
+                  Explore what we do <ArrowDown size={15} className="rit-bob sm:animate-none" />
                 </a>
               </div>
             </div>
 
             <ul
-              className="rit-rise flex flex-col gap-2.5 pt-2 text-sm text-white/70 sm:flex-row sm:flex-wrap sm:gap-x-7 lg:mt-[clamp(20px,5vh,56px)]"
+              className="rit-rise flex flex-col gap-3 rounded-2xl bg-white/[0.06] p-4 text-[13.5px] text-white/80 sm:flex-row sm:flex-wrap sm:gap-x-7 sm:gap-y-2.5 sm:rounded-none sm:bg-transparent sm:p-0 sm:pt-2 sm:text-sm sm:text-white/70 lg:mt-[clamp(20px,5vh,56px)]"
               style={{ animationDelay: "480ms" }}
             >
               {heroTrust.map((label) => (
-                <li key={label} className="flex items-center gap-2">
-                  <Check size={15} strokeWidth={2.6} className="shrink-0 text-brand" />
+                <li key={label} className="flex items-center gap-3 sm:gap-2">
+                  <span className="grid size-5 shrink-0 place-items-center rounded-full bg-brand sm:size-auto sm:bg-transparent">
+                    <Check size={12} strokeWidth={3} className="text-white sm:hidden" />
+                    <Check size={15} strokeWidth={2.6} className="hidden text-brand sm:block" />
+                  </span>
                   {label}
                 </li>
               ))}
@@ -361,23 +368,26 @@ export default function Home() {
 
           {/* workflow card */}
           <div className="rit-rise relative mx-auto w-full max-w-[560px] lg:mr-0" style={{ animationDelay: "560ms" }}>
-            <div className="rounded-3xl bg-white p-5 text-ink shadow-[0_40px_90px_-30px_rgba(255,255,255,0.12)] sm:p-7">
+            <div className="rounded-[28px] bg-white p-5 text-ink shadow-[0_40px_90px_-30px_rgba(255,255,255,0.12)] sm:p-7 lg:rounded-3xl">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink/60">Workflow concept</p>
-                  <h3 className="mt-1.5 text-xl font-semibold leading-tight sm:text-2xl">From order to invoice</h3>
+                  <h3 className="mt-1.5 text-[22px] font-semibold leading-tight sm:text-2xl">From order to invoice</h3>
                 </div>
                 <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
-                  <span className="size-1.5 rounded-full bg-emerald-500" />
+                  <span className="relative flex size-2">
+                    <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 motion-reduce:animate-none" />
+                    <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+                  </span>
                   Connected
                 </span>
               </div>
 
-              <ul className="mt-5 grid grid-cols-3 gap-2.5 sm:gap-3">
+              <ul className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
                 {heroTiles.map(({ k, v }) => (
-                  <li key={k} className="rounded-2xl bg-mist px-3.5 py-3 sm:px-4 sm:py-3.5">
-                    <p className="text-xs text-ink/65">{k}</p>
-                    <p className="mt-1.5 text-sm font-semibold sm:text-base">{v}</p>
+                  <li key={k} className="rounded-2xl bg-mist px-3 py-3 sm:px-4 sm:py-3.5">
+                    <p className="text-[11px] text-ink/60 sm:text-xs sm:text-ink/65">{k}</p>
+                    <p className="mt-1 text-[13px] font-semibold sm:mt-1.5 sm:text-base">{v}</p>
                   </li>
                 ))}
               </ul>
@@ -389,8 +399,8 @@ export default function Home() {
                   return (
                     <li
                       key={t}
-                      className={`flex items-center gap-4 rounded-2xl border p-3 transition-colors duration-500 motion-reduce:transition-none sm:p-3.5 ${
-                        running ? "border-brand/60" : "border-line"
+                      className={`flex items-center gap-3.5 rounded-2xl border p-3 transition-colors duration-500 motion-reduce:transition-none sm:gap-4 sm:p-3.5 ${
+                        running ? "border-brand/60 bg-brand/[0.03]" : "border-line"
                       }`}
                     >
                       <span
@@ -407,18 +417,17 @@ export default function Home() {
                         <p className="text-[15px] font-semibold leading-tight">{t}</p>
                         <p className="mt-0.5 truncate text-xs text-ink/60">{d}</p>
                       </div>
-                      <Check
-                        size={16}
-                        strokeWidth={2.6}
-                        className={`ml-auto shrink-0 text-emerald-600 transition-all duration-500 ${
+                      <span
+                        className={`ml-auto grid size-6 shrink-0 place-items-center rounded-full bg-emerald-50 transition-all duration-500 ${
                           done ? "scale-100 opacity-100" : "scale-75 opacity-0"
                         }`}
-                      />
+                      >
+                        <Check size={14} strokeWidth={2.8} className="text-emerald-600" />
+                      </span>
                     </li>
                   );
                 })}
               </ol>
-
             </div>
           </div>
         </div>
@@ -531,7 +540,7 @@ export default function Home() {
             <Dots count={services.length} index={svcIndex} />
             <Link
               to="/services"
-              className={`mt-6 flex items-center justify-center gap-2 rounded-xl border border-ink/15 bg-white py-4 text-[15px] font-semibold active:scale-[0.98] ${focusRing}`}
+              className={`mt-6 flex items-center justify-center gap-2 rounded-full border border-ink/15 bg-white py-4 text-[15px] font-semibold active:scale-[0.98] ${focusRing}`}
             >
               View all services <ArrowRight size={15} className="text-brand" />
             </Link>
@@ -708,7 +717,7 @@ export default function Home() {
               <p className="mt-3 max-w-md text-[15px] leading-relaxed text-white/90 sm:text-base">{current.text}</p>
               <Link
                 to={current.to}
-                className={`mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-ink transition hover:bg-mist active:scale-[0.98] sm:mt-7 sm:rounded-md ${focusRing}`}
+                className={`mt-6 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-ink transition hover:bg-mist active:scale-[0.98] sm:mt-7 sm:rounded-md ${focusRing}`}
               >
                 Explore {current.label} <ArrowUpRight size={16} />
               </Link>
@@ -917,7 +926,7 @@ export default function Home() {
                 <textarea id="message" name="message" rows={4} placeholder="Tell us a little about your project" className={`${fieldCls} resize-none sm:col-span-2`} />
                 <button
                   type="submit"
-                  className={`group mt-1 inline-flex w-full items-center justify-between gap-3 rounded-xl bg-brand py-4 pl-6 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:w-auto sm:justify-self-start sm:rounded-md sm:py-3.5 sm:text-sm ${focusRing}`}
+                  className={`group mt-1 inline-flex w-full items-center justify-between gap-3 rounded-full bg-brand py-4 pl-7 pr-5 text-[15px] font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:w-auto sm:justify-self-start sm:rounded-md sm:pl-6 sm:py-3.5 sm:text-sm ${focusRing}`}
                 >
                   Get in touch
                   <ArrowRight size={16} className="transition group-hover:translate-x-1" />
@@ -937,17 +946,17 @@ export default function Home() {
         }`}
         style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
       >
-        <div className="mx-auto flex max-w-md items-center gap-2 rounded-2xl border border-white/10 bg-ink/95 p-1.5 shadow-[0_20px_50px_-10px_rgba(11,21,48,0.6)] backdrop-blur">
+        <div className="mx-auto flex max-w-md items-center gap-2 rounded-full border border-white/10 bg-ink/95 p-1.5 shadow-[0_20px_50px_-10px_rgba(11,21,48,0.6)] backdrop-blur">
           <Link
             to="/contact"
-            className={`flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand py-3.5 text-sm font-semibold text-white active:scale-[0.98] ${focusRing}`}
+            className={`flex flex-1 items-center justify-center gap-2 rounded-full bg-brand py-3.5 text-sm font-semibold text-white active:scale-[0.98] ${focusRing}`}
           >
             Start a project <ArrowRight size={16} />
           </Link>
           <a
             href="tel:+917997658999"
             aria-label="Call Rare IT"
-            className={`grid size-12 shrink-0 place-items-center rounded-xl bg-white text-ink active:scale-95 ${focusRing}`}
+            className={`grid size-12 shrink-0 place-items-center rounded-full bg-white text-ink active:scale-95 ${focusRing}`}
           >
             <Phone size={18} />
           </a>
