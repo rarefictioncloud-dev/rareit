@@ -85,6 +85,7 @@ export default function Contact() {
       // TODO: save to Firebase later
       setSent(true);
     } catch (err) {
+      console.error("EmailJS error:", err);
       setError(`Something went wrong. Please try again or email us at ${EMAIL}.`);
     } finally {
       setSending(false);

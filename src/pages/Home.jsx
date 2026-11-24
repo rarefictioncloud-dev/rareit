@@ -570,7 +570,7 @@ export default function Home() {
                   <p className={`relative mt-2.5 max-w-md text-sm leading-relaxed text-muted sm:mt-3 lg:text-[15px] ${feature ? "lg:text-base" : ""}`}>{text}</p>
                   {feature && (
                     <ul className="relative mt-5 flex flex-wrap gap-2 lg:mt-6">
-                      {["Approvals", "Reporting", "Hand-offs", "Notifications"].map((c) => (
+                      {["Approvals", "Reporting", "Hand-off", "Notifications"].map((c) => (
                         <li key={c} className="rounded-full border border-line bg-white px-3.5 py-1.5 text-[13px] font-medium transition group-hover:border-brand/30 lg:px-4 lg:py-2 lg:text-sm">{c}</li>
                       ))}
                     </ul>

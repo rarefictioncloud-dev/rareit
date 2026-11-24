@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -13,9 +14,10 @@ import {
   TrendingUp,
   Code2,
   Palette,
-  Smartphone,
   Server,
-  Megaphone,
+  Layers,
+  Workflow,
+  Bug,
   GraduationCap,
   Mail,
 } from "lucide-react";
@@ -40,12 +42,13 @@ const perks = [
 ];
 
 const roles = [
+  { icon: Layers, title: "Full Stack Developer", type: "Full time", text: "Own features from database to interface, building complete web applications for our clients.", skills: ["React", "Node.js", "Databases"] },
   { icon: Code2, title: "Frontend Developer", type: "Full time", text: "Build fast, clean interfaces for websites and web apps using React and Tailwind CSS.", skills: ["React", "JavaScript", "Tailwind CSS"] },
   { icon: Server, title: "Backend Developer", type: "Full time", text: "Design APIs and databases that power our custom software and automation projects.", skills: ["Node.js", "APIs", "Databases"] },
-  { icon: Smartphone, title: "Mobile App Developer", type: "Full time", text: "Create Android and iOS apps for customers across different industries.", skills: ["React Native", "Flutter", "Firebase"] },
+  { icon: Workflow, title: "Process Automation Engineer", type: "Full time", text: "Study how businesses work and automate repetitive tasks with reliable, easy to use workflows.", skills: ["Workflow design", "Scripting", "Integrations"] },
   { icon: Palette, title: "UI/UX Designer", type: "Full time", text: "Turn business needs into clear screens and flows people enjoy using.", skills: ["Figma", "Prototyping", "Design systems"] },
-  { icon: Megaphone, title: "Business Development Executive", type: "Full time", text: "Meet new businesses, understand their needs and bring them to our team.", skills: ["Communication", "Lead research", "Presentations"] },
-  { icon: GraduationCap, title: "Software Intern", type: "Internship", text: "Learn on live projects with guidance from our developers and designers.", skills: ["Basics of web", "Eager to learn", "Problem solving"] },
+  { icon: Bug, title: "Tester", type: "Full time", text: "Test our websites, apps and automations to catch issues early and keep every release dependable.", skills: ["Manual testing", "Test cases", "Bug reporting"] },
+  { icon: GraduationCap, title: "SDE Intern", type: "Internship", text: "Learn on live projects with guidance from our developers and designers.", skills: ["Basics of web", "Eager to learn", "Problem solving"] },
 ];
 
 const process = [
@@ -80,6 +83,8 @@ function PrimaryBtn({ to, children }) {
 export default function Careers() {
   const [role, setRole] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
   const applyFor = (title) => {
     setRole(title);
@@ -87,10 +92,26 @@ export default function Careers() {
     document.getElementById("apply")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // TODO: save to Firebase later
-    setSent(true);
+    const formEl = e.currentTarget;
+    setSending(true);
+    setError("");
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_CAREERS_TEMPLATE_ID,
+        formEl,
+        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
+      );
+      // TODO: save to Firebase later
+      setSent(true);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setError("Something went wrong. Please try again or email us at hr@rareit.in.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -269,7 +290,7 @@ export default function Careers() {
                   <option>General application</option>
                 </select>
                 <label className="sr-only" htmlFor="experience">Experience level</label>
-                <select id="experience" name="experience" defaultValue="" className={`${fieldCls} sm:col-span-2`}>
+                <select id="experience" required name="experience" defaultValue="" className={`${fieldCls} sm:col-span-2`}>
                   <option value="" disabled>Experience level</option>
                   <option>Fresher</option>
                   <option>Less than 1 year</option>
@@ -280,12 +301,18 @@ export default function Careers() {
                 <label className="sr-only" htmlFor="link">Link to resume, portfolio or LinkedIn</label>
                 <input id="link" required type="url" name="link" placeholder="Link to resume, portfolio or LinkedIn" className={`${fieldCls} sm:col-span-2`} />
                 <label className="sr-only" htmlFor="message">About you</label>
-                <textarea id="message" name="message" rows={4} placeholder="Tell us a little about yourself" className={`${fieldCls} resize-none sm:col-span-2`} />
+                <textarea id="message" required name="message" rows={4} placeholder="Tell us a little about yourself" className={`${fieldCls} resize-none sm:col-span-2`} />
+                {error && (
+                  <p role="alert" className="text-sm text-brand sm:col-span-2">
+                    {error}
+                  </p>
+                )}
                 <button
                   type="submit"
-                  className={`group mt-1 inline-flex items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:justify-self-start ${focusRing}`}
+                  disabled={sending}
+                  className={`group mt-1 inline-flex items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2 sm:justify-self-start ${focusRing}`}
                 >
-                  Submit application
+                  {sending ? "Sending..." : "Submit application"}
                   <span className="grid size-10 place-items-center rounded-full bg-white text-brand transition group-hover:translate-x-0.5">
                     <ArrowRight size={16} />
                   </span>
