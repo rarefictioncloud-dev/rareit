@@ -12,6 +12,7 @@ import {
   Database,
   HeartPulse,
   Factory,
+  Truck,
   ShoppingCart,
   Landmark,
   GraduationCap,
@@ -29,6 +30,7 @@ const serviceItems = [
 const industryItems = [
   { icon: HeartPulse, label: "Healthcare", desc: "Clinics and care teams", to: "/industries/healthcare" },
   { icon: Factory, label: "Manufacturing", desc: "Production and inventory", to: "/industries/manufacturing" },
+  { icon: Truck, label: "Distribution", desc: "Orders, dispatch and delivery", to: "/industries/distribution" },
   { icon: ShoppingCart, label: "Retail & E-commerce", desc: "Stores and online selling", to: "/industries/retail" },
   { icon: Landmark, label: "Finance", desc: "Billing and approvals", to: "/industries/finance" },
   { icon: GraduationCap, label: "Education", desc: "Schools and institutes", to: "/industries/education" },

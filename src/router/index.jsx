@@ -12,6 +12,7 @@ import SAP from "../pages/sap";
 import Industries from "../pages/Industries";
 import Healthcare from "../pages/healthcare";
 import Manufacturing from "../pages/manufacturing";
+import Distribution from "../pages/dis";
 import Retail from "../pages/retail";
 import Finance from "../pages/finance";
 import Education from "../pages/education";
@@ -48,6 +49,7 @@ const router = createBrowserRouter(
         { path: "industries", element: <Industries /> },
         { path: "industries/healthcare", element: <Healthcare /> },
         { path: "industries/manufacturing", element: <Manufacturing /> },
+        { path: "industries/distribution", element: <Distribution /> },
         { path: "industries/retail", element: <Retail /> },
         { path: "industries/finance", element: <Finance /> },
         { path: "industries/education", element: <Education /> },
