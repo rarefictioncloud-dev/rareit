@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -66,11 +67,28 @@ const faqs = [
 /* ---------- PAGE ---------- */
 export default function Contact() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // TODO: save to Firebase later
-    setSent(true);
+    const formEl = e.currentTarget;
+    setSending(true);
+    setError("");
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID,
+        formEl,
+        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
+      );
+      // TODO: save to Firebase later
+      setSent(true);
+    } catch (err) {
+      setError(`Something went wrong. Please try again or email us at ${EMAIL}.`);
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -157,11 +175,17 @@ export default function Contact() {
                   </select>
                   <label className="sr-only" htmlFor="message">About your project</label>
                   <textarea id="message" required name="message" rows={5} placeholder="Tell us a little about your project *" className={`${fieldCls} resize-none sm:col-span-2`} />
+                  {error && (
+                    <p role="alert" className="text-sm text-brand sm:col-span-2">
+                      {error}
+                    </p>
+                  )}
                   <button
                     type="submit"
-                    className={`group mt-1 inline-flex items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:justify-self-start ${focusRing}`}
+                    disabled={sending}
+                    className={`group mt-1 inline-flex items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2 sm:justify-self-start ${focusRing}`}
                   >
-                    Send message
+                    {sending ? "Sending..." : "Send message"}
                     <span className="grid size-10 place-items-center rounded-full bg-white text-brand transition group-hover:translate-x-0.5">
                       <ArrowRight size={16} />
                     </span>
