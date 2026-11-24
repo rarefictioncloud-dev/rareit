@@ -64,6 +64,51 @@ const faqs = [
   },
 ];
 
+/* ---------- FORM LIMITS (client side, shared with the Home page form) ---------- */
+const SENT_KEY = "rareit_contact_sent";
+const ATTEMPTS_KEY = "rareit_contact_attempts";
+const REPEAT_WINDOW_MS = 2 * 24 * 60 * 60 * 1000; // same email or phone can write again after 2 days
+const ATTEMPT_WINDOW_MS = 10 * 60 * 1000; // rate limit window: 10 minutes
+const MAX_ATTEMPTS = 3; // max submissions per device inside the window
+
+const readStore = (key) => {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeStore = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* storage unavailable, skip */
+  }
+};
+
+const normalizeEmail = (value) => {
+  const [local = "", domain = ""] = value.trim().toLowerCase().split("@");
+  let name = local.split("+")[0];
+  if (domain === "gmail.com" || domain === "googlemail.com") name = name.replace(/\./g, "");
+  return `${name}@${domain}`;
+};
+
+const normalizePhone = (value) => value.replace(/\D/g, "").slice(-10);
+
+async function fingerprint(value) {
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  } catch {
+    return value;
+  }
+}
+
+const formatDate = (ms) =>
+  new Date(ms).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+
 /* ---------- PAGE ---------- */
 export default function Contact() {
   const [sent, setSent] = useState(false);
@@ -76,11 +121,39 @@ export default function Contact() {
     setSending(true);
     setError("");
     try {
+      const data = new FormData(formEl);
+      const emailKey = `e:${await fingerprint(normalizeEmail(String(data.get("email") || "")))}`;
+      const phoneDigits = normalizePhone(String(data.get("phone") || ""));
+      const phoneKey = phoneDigits ? `p:${await fingerprint(phoneDigits)}` : null;
+      const now = Date.now();
+
+      // Rate limit: max attempts per device in a short window
+      const attempts = readStore(ATTEMPTS_KEY).filter((t) => now - t < ATTEMPT_WINDOW_MS);
+      if (attempts.length >= MAX_ATTEMPTS) {
+        setError("Too many attempts. Please wait a few minutes and try again.");
+        return;
+      }
+
+      // Same email or phone: try again after 2 days
+      const recent = readStore(SENT_KEY).filter((a) => now - a.t < REPEAT_WINDOW_MS);
+      const previous = recent.find((a) => a.k === emailKey || (phoneKey && a.k === phoneKey));
+      if (previous) {
+        setError(`You have already contacted us with these details. Please try again after 2 days. You can send another message on ${formatDate(previous.t + REPEAT_WINDOW_MS)}.`);
+        return;
+      }
+
+      writeStore(ATTEMPTS_KEY, [...attempts, now]);
+
       await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID,
         formEl,
         { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
+      );
+
+      writeStore(
+        SENT_KEY,
+        [...recent, { k: emailKey, t: now }, ...(phoneKey ? [{ k: phoneKey, t: now }] : [])]
       );
       // TODO: save to Firebase later
       setSent(true);

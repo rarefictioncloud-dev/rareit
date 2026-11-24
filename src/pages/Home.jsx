@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 import {
   ArrowRight, ArrowUpRight, Check, Workflow, Palette, Code2, Smartphone, Database,
   HeartPulse, Factory, ShoppingCart, Landmark, GraduationCap, Truck, Search, PenTool,
@@ -161,6 +162,51 @@ const css = `
   .rit-step[data-on="false"] { opacity: 1; transform: none; }
 }
 `;
+
+/* ---------- FORM LIMITS (client side) ---------- */
+const SENT_KEY = "rareit_contact_sent";
+const ATTEMPTS_KEY = "rareit_contact_attempts";
+const REPEAT_WINDOW_MS = 2 * 24 * 60 * 60 * 1000; // same email or phone can write again after 2 days
+const ATTEMPT_WINDOW_MS = 10 * 60 * 1000; // rate limit window: 10 minutes
+const MAX_ATTEMPTS = 3; // max submissions per device inside the window
+
+const readStore = (key) => {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeStore = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* storage unavailable, skip */
+  }
+};
+
+const normalizeEmail = (value) => {
+  const [local = "", domain = ""] = value.trim().toLowerCase().split("@");
+  let name = local.split("+")[0];
+  if (domain === "gmail.com" || domain === "googlemail.com") name = name.replace(/\./g, "");
+  return `${name}@${domain}`;
+};
+
+const normalizePhone = (value) => value.replace(/\D/g, "").slice(-10);
+
+async function fingerprint(value) {
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  } catch {
+    return value;
+  }
+}
+
+const formatDate = (ms) =>
+  new Date(ms).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
 
 /* ---------- HOOKS ---------- */
 const prefersReducedMotion = () =>
@@ -421,6 +467,8 @@ function SampleDashboard() {
 /* ---------- PAGE ---------- */
 export default function Home() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
   const [showBar, setShowBar] = useState(false);
   const [tick, setTick] = useState(0);
   const [ind, setInd] = useState(0);
@@ -445,10 +493,54 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    // TODO: save to Firebase later
-    setSent(true);
+    const formEl = e.currentTarget;
+    setSending(true);
+    setError("");
+    try {
+      const data = new FormData(formEl);
+      const emailKey = `e:${await fingerprint(normalizeEmail(String(data.get("email") || "")))}`;
+      const phoneDigits = normalizePhone(String(data.get("phone") || ""));
+      const phoneKey = phoneDigits ? `p:${await fingerprint(phoneDigits)}` : null;
+      const now = Date.now();
+
+      // Rate limit: max attempts per device in a short window
+      const attempts = readStore(ATTEMPTS_KEY).filter((t) => now - t < ATTEMPT_WINDOW_MS);
+      if (attempts.length >= MAX_ATTEMPTS) {
+        setError("Too many attempts. Please wait a few minutes and try again.");
+        return;
+      }
+
+      // Same email or phone: try again after 2 days
+      const recent = readStore(SENT_KEY).filter((a) => now - a.t < REPEAT_WINDOW_MS);
+      const previous = recent.find((a) => a.k === emailKey || (phoneKey && a.k === phoneKey));
+      if (previous) {
+        setError(`You have already contacted us with these details. Please try again after 2 days. You can send another message on ${formatDate(previous.t + REPEAT_WINDOW_MS)}.`);
+        return;
+      }
+
+      writeStore(ATTEMPTS_KEY, [...attempts, now]);
+
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_CONTACT_TEMPLATE_ID,
+        formEl,
+        { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
+      );
+
+      writeStore(
+        SENT_KEY,
+        [...recent, { k: emailKey, t: now }, ...(phoneKey ? [{ k: phoneKey, t: now }] : [])]
+      );
+      // TODO: save to Firebase later
+      setSent(true);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      setError("Something went wrong. Please try again or email us at info@rareit.in.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -777,6 +869,7 @@ export default function Home() {
               </div>
             ) : (
               <form onSubmit={onSubmit} className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:gap-5">
+                <input type="hidden" name="service" value="General enquiry" />
                 <label className="sr-only" htmlFor="first">First name</label>
                 <input id="first" required name="first" autoComplete="given-name" placeholder="First name" className={fieldCls} />
                 <label className="sr-only" htmlFor="last">Last name</label>
@@ -801,8 +894,13 @@ export default function Home() {
                 </select>
                 <label className="sr-only" htmlFor="message">About your project</label>
                 <textarea id="message" name="message" rows={4} placeholder="Tell us a little about your project" className={`${fieldCls} resize-none sm:col-span-2`} />
-                <button type="submit" className={`rit-sheen group mt-1 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brand px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] sm:col-span-2 sm:w-auto sm:justify-self-start lg:mt-2 lg:py-4 lg:shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] ${focusRing}`}>
-                  Submit <ArrowRight size={16} className="relative z-10 transition group-hover:translate-x-1" />
+                {error && (
+                  <p role="alert" className="text-sm text-brand sm:col-span-2">
+                    {error}
+                  </p>
+                )}
+                <button type="submit" disabled={sending} className={`rit-sheen group mt-1 inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-brand px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2 sm:w-auto sm:justify-self-start lg:mt-2 lg:py-4 lg:shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] ${focusRing}`}>
+                  {sending ? "Sending..." : "Submit"} <ArrowRight size={16} className="relative z-10 transition group-hover:translate-x-1" />
                 </button>
               </form>
             )}

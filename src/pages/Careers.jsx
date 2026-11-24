@@ -79,6 +79,51 @@ function PrimaryBtn({ to, children }) {
   );
 }
 
+/* ---------- APPLICATION LIMITS (client side) ---------- */
+const APPLIED_KEY = "rareit_careers_applied";
+const ATTEMPTS_KEY = "rareit_careers_attempts";
+const APPLY_COOLDOWN_MS = 30 * 24 * 60 * 60 * 1000; // one application per person every 30 days
+const ATTEMPT_WINDOW_MS = 10 * 60 * 1000; // rate limit window: 10 minutes
+const MAX_ATTEMPTS = 3; // max submissions per device inside the window
+
+const readStore = (key) => {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+};
+
+const writeStore = (key, value) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* storage unavailable, skip */
+  }
+};
+
+const normalizeEmail = (value) => {
+  const [local = "", domain = ""] = value.trim().toLowerCase().split("@");
+  let name = local.split("+")[0];
+  if (domain === "gmail.com" || domain === "googlemail.com") name = name.replace(/\./g, "");
+  return `${name}@${domain}`;
+};
+
+const normalizePhone = (value) => value.replace(/\D/g, "").slice(-10);
+
+async function fingerprint(value) {
+  try {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  } catch {
+    return value;
+  }
+}
+
+const formatDate = (ms) =>
+  new Date(ms).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
+
 /* ---------- PAGE ---------- */
 export default function Careers() {
   const [role, setRole] = useState("");
@@ -98,11 +143,39 @@ export default function Careers() {
     setSending(true);
     setError("");
     try {
+      const data = new FormData(formEl);
+      const emailKey = `e:${await fingerprint(normalizeEmail(String(data.get("email") || "")))}`;
+      const phoneDigits = normalizePhone(String(data.get("phone") || ""));
+      const phoneKey = phoneDigits ? `p:${await fingerprint(phoneDigits)}` : null;
+      const now = Date.now();
+
+      // Rate limit: max attempts per device in a short window
+      const attempts = readStore(ATTEMPTS_KEY).filter((t) => now - t < ATTEMPT_WINDOW_MS);
+      if (attempts.length >= MAX_ATTEMPTS) {
+        setError("Too many attempts. Please wait a few minutes and try again.");
+        return;
+      }
+
+      // One application per person every 30 days (same email or same phone)
+      const applied = readStore(APPLIED_KEY).filter((a) => now - a.t < APPLY_COOLDOWN_MS);
+      const previous = applied.find((a) => a.k === emailKey || (phoneKey && a.k === phoneKey));
+      if (previous) {
+        setError(`You have already applied with these details. You can apply again on ${formatDate(previous.t + APPLY_COOLDOWN_MS)}.`);
+        return;
+      }
+
+      writeStore(ATTEMPTS_KEY, [...attempts, now]);
+
       await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_CAREERS_TEMPLATE_ID,
         formEl,
         { publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY }
+      );
+
+      writeStore(
+        APPLIED_KEY,
+        [...applied, { k: emailKey, t: now }, ...(phoneKey ? [{ k: phoneKey, t: now }] : [])]
       );
       // TODO: save to Firebase later
       setSent(true);
@@ -302,6 +375,7 @@ export default function Careers() {
                 <input id="link" required type="url" name="link" placeholder="Link to resume, portfolio or LinkedIn" className={`${fieldCls} sm:col-span-2`} />
                 <label className="sr-only" htmlFor="message">About you</label>
                 <textarea id="message" required name="message" rows={4} placeholder="Tell us a little about yourself" className={`${fieldCls} resize-none sm:col-span-2`} />
+                <p className="text-xs text-muted sm:col-span-2">You can submit one application every 30 days.</p>
                 {error && (
                   <p role="alert" className="text-sm text-brand sm:col-span-2">
                     {error}
