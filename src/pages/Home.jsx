@@ -907,7 +907,7 @@ export default function Home() {
             <p className="mt-6 text-xs text-muted lg:mt-8">SAP is a trademark of SAP SE. Rare IT is an independent IT company.</p>
           </div>
         </div>
-      </section>
+      </section>    
 
       {/* ===== MOBILE QUICK-CALL BAR (phones only; delete this block to remove) ===== */}
       <div
