@@ -42,14 +42,18 @@ const mapLinkUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIC
 const focusRing =
   "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
+/* Same full-width container as every page, so the footer lines up with the content above it */
+const wrap =
+  "mx-auto w-[min(2000px,100%-24px)] sm:w-[min(2000px,100%-40px)] lg:w-[min(2000px,100%-64px)] 2xl:w-[min(2000px,100%-96px)]";
+
 const Heading = ({ children }) => (
-  <h2 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-white sm:mb-6">{children}</h2>
+  <h2 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-white sm:mb-6 2xl:mb-7 2xl:text-sm">{children}</h2>
 );
 
 const FooterLink = ({ to, children }) => (
   <Link
     to={to}
-    className={`group inline-flex items-center gap-2 py-1 text-sm leading-snug text-white/65 transition hover:text-white active:text-white ${focusRing}`}
+    className={`group inline-flex items-center gap-2 py-1 text-sm leading-snug text-white/65 transition hover:text-white active:text-white 2xl:text-base ${focusRing}`}
   >
     <ArrowRight
       size={13}
@@ -71,13 +75,13 @@ export default function Footer() {
       <div className="absolute inset-x-0 top-0 h-1 bg-brand" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_85%_0%,black,transparent_60%)]" />
 
-      <div className="relative mx-auto w-[min(1180px,100%-32px)] sm:w-[min(1180px,100%-48px)]">
+      <div className={`relative ${wrap}`}>
         {/* ===== MAIN GRID ===== */}
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-12 sm:gap-x-12 sm:gap-y-12 sm:py-14 lg:grid-cols-[1.4fr_0.7fr_0.9fr_1.2fr]">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 py-12 min-[480px]:grid-cols-2 sm:gap-x-12 sm:gap-y-12 sm:py-14 lg:grid-cols-[1.4fr_0.7fr_0.9fr_1.2fr] lg:gap-x-14 lg:py-16 2xl:gap-x-24 2xl:py-24">
           {/* Brand */}
-          <div className="col-span-2 lg:col-span-1">
-            <Logo light className="text-4xl" />
-            <p className="mt-5 max-w-[300px] text-sm leading-relaxed text-white/65">
+          <div className="min-[480px]:col-span-2 lg:col-span-1">
+            <Logo light className="text-4xl 2xl:text-5xl" />
+            <p className="mt-5 max-w-[300px] text-sm leading-relaxed text-white/65 2xl:max-w-[380px] 2xl:text-lg">
               A next-gen IT partner helping businesses transform ideas into
               powerful digital solutions.
             </p>
@@ -89,7 +93,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className={`grid size-11 place-items-center rounded-full border border-white/15 transition hover:-translate-y-1 hover:border-brand hover:bg-brand active:border-brand active:bg-brand ${focusRing}`}
+                    className={`grid size-11 place-items-center rounded-full border border-white/15 transition hover:-translate-y-1 hover:border-brand hover:bg-brand active:border-brand active:bg-brand 2xl:size-12 ${focusRing}`}
                   >
                     <Icon size={15} />
                   </a>
@@ -123,15 +127,15 @@ export default function Footer() {
           </nav>
 
           {/* Contact */}
-          <div className="col-span-2 lg:col-span-1">
+          <div className="min-[480px]:col-span-2 lg:col-span-1">
             <Heading>Contact</Heading>
-            <ul className="space-y-4 text-sm text-white/70 sm:space-y-5">
+            <ul className="space-y-4 text-sm text-white/70 sm:space-y-5 2xl:text-base">
               <li>
                 <a
                   href={`mailto:${email}`}
                   className={`flex items-center gap-3 transition hover:text-white active:text-white ${focusRing}`}
                 >
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-brand">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-brand 2xl:size-11">
                     <Mail size={15} />
                   </span>
                   <span className="min-w-0 break-words">{email}</span>
@@ -142,14 +146,14 @@ export default function Footer() {
                   href={`tel:${phone.replace(/\s/g, "")}`}
                   className={`flex items-center gap-3 transition hover:text-white active:text-white ${focusRing}`}
                 >
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-brand">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-brand 2xl:size-11">
                     <Phone size={15} />
                   </span>
                   <span className="min-w-0">{phone}</span>
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-brand">
+                <span className="grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-brand 2xl:size-11">
                   <MapPin size={15} />
                 </span>
                 <address className="min-w-0 not-italic leading-relaxed">
@@ -165,7 +169,7 @@ export default function Footer() {
         </div>
 
         {/* ===== MAP STRIP ===== */}
-        <div className="relative h-56 overflow-hidden rounded-3xl border border-white/10 bg-white/5 sm:h-64">
+        <div className="relative h-56 overflow-hidden rounded-3xl border border-white/10 bg-white/5 sm:h-64 lg:h-72 2xl:h-96 2xl:rounded-[32px]">
           <iframe
             title="Rare IT office location"
             src={mapEmbedUrl}
@@ -177,7 +181,7 @@ export default function Footer() {
             href={mapLinkUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-ink px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg transition hover:bg-brand active:bg-brand sm:bottom-4 sm:left-4 sm:px-5 sm:py-2.5 ${focusRing}`}
+            className={`absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-ink px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg transition hover:bg-brand active:bg-brand sm:bottom-4 sm:left-4 sm:px-5 sm:py-2.5 2xl:bottom-6 2xl:left-6 2xl:px-6 2xl:py-3 2xl:text-xs ${focusRing}`}
           >
             Open in Google Maps <ArrowUpRight size={12} />
           </a>
@@ -186,13 +190,13 @@ export default function Footer() {
         {/* ===== BIG OUTLINED WORDMARK ===== */}
         <div
           aria-hidden="true"
-          className="pointer-events-none mt-8 select-none overflow-hidden whitespace-nowrap text-center text-[clamp(56px,17vw,230px)] font-extrabold leading-[0.85] tracking-tighter text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.12)] sm:mt-10"
+          className="pointer-events-none mt-8 select-none overflow-hidden whitespace-nowrap text-center text-[clamp(56px,17vw,230px)] font-extrabold leading-[0.85] tracking-tighter text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.12)] sm:mt-10 2xl:mt-14 2xl:text-[clamp(200px,15vw,340px)]"
         >
           Rare IT!
         </div>
 
         {/* ===== BOTTOM BAR ===== */}
-        <div className="flex flex-col items-start justify-between gap-4 border-t border-white/10 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6 text-xs text-white/55 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start justify-between gap-4 border-t border-white/10 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-6 text-xs text-white/55 sm:flex-row sm:items-center 2xl:pt-8 2xl:text-sm">
           <p>
             © {new Date().getFullYear()} <strong className="text-white">Rare IT.</strong> All
             rights reserved.
@@ -203,7 +207,7 @@ export default function Footer() {
           <button
             type="button"
             onClick={scrollTop}
-            className={`inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 font-medium text-white/80 transition hover:border-brand hover:text-white active:border-brand active:text-white sm:py-2 ${focusRing}`}
+            className={`inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2.5 font-medium text-white/80 transition hover:border-brand hover:text-white active:border-brand active:text-white sm:py-2 2xl:px-5 2xl:py-2.5 ${focusRing}`}
           >
             Back to top <ArrowUp size={13} />
           </button>

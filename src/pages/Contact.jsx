@@ -7,21 +7,28 @@ import {
   Check,
   Mail,
   Phone,
-  MapPin,
   Clock,
   Plus,
+  Rocket,
+  RefreshCw,
+  LifeBuoy,
+  Handshake,
+  MessageCircle,
+  Briefcase,
 } from "lucide-react";
 
-/* ---------- STYLE HELPERS (same white theme as Home, About and Careers) ---------- */
-const wrap = "mx-auto w-[min(1240px,100%-32px)] sm:w-[min(1240px,100%-64px)] lg:w-[min(1400px,100%-96px)]";
-const sectionY = "py-16 sm:py-24 lg:py-28";
-const h2Cls = "text-balance font-display font-medium leading-[1.08] tracking-[-0.03em] text-[clamp(30px,4vw,56px)]";
+/* ---------- STYLE HELPERS ---------- */
+/* Full-width container: small margins on phones, wide on laptops and 24"+ monitors (same width as the other pages' hero cards) */
+const wrap =
+  "mx-auto w-[min(2000px,100%-24px)] sm:w-[min(2000px,100%-40px)] lg:w-[min(2000px,100%-64px)] 2xl:w-[min(2000px,100%-96px)]";
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 const iconTile = "grid place-items-center rounded-full border border-brand/25 bg-white text-brand transition";
 const fieldCls =
-  "w-full rounded-xl border border-line bg-white px-4 py-3.5 text-base text-ink outline-none transition placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/10 sm:text-sm lg:py-4 lg:hover:border-ink/25";
-const dotField =
-  "pointer-events-none absolute inset-0 -z-10 [background-image:radial-gradient(#D5DBE8_1px,transparent_1px)] [background-size:26px_26px]";
+  "w-full rounded-lg border border-line bg-white px-4 py-3.5 text-base text-ink outline-none transition placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/10 sm:text-sm 2xl:py-4 2xl:text-base lg:hover:border-ink/25";
+const labelCls = "mb-1.5 block text-sm font-medium text-ink 2xl:text-base";
+const tileBase =
+  "flex min-h-14 w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-sm font-semibold transition 2xl:min-h-16 2xl:text-base";
+const h2Cls = "font-display text-3xl font-medium tracking-tight sm:text-4xl 2xl:text-5xl";
 
 /* ---------- DATA ---------- */
 const EMAIL = "info@rareit.in";
@@ -31,15 +38,18 @@ const ADDRESS = "Rareit, Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madha
 const MAP_EMBED = `https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}&output=embed`;
 const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ADDRESS)}`;
 
+/* "How can we help?" options. The Careers tile is a link, the rest select the form topic. */
+const topics = [
+  { id: "New project", icon: Rocket, blurb: "Tell us about a project you want to build or automate." },
+  { id: "Project update", icon: RefreshCw, blurb: "Share a change, feedback or an update on a running project." },
+  { id: "Support", icon: LifeBuoy, blurb: "Report an issue with something we built for you." },
+  { id: "Partnership", icon: Handshake, blurb: "Explore working together as a partner or vendor." },
+  { id: "Other", icon: MessageCircle, blurb: "Anything else you would like to ask us." },
+];
+
 const details = [
   { icon: Mail, label: "Email", value: EMAIL, href: `mailto:${EMAIL}` },
   { icon: Phone, label: "Phone", value: PHONE, href: PHONE_LINK },
-  {
-    icon: MapPin,
-    label: "Office",
-    value: "Raghuma Towers, 4th Floor, Phase 2, Kavuri Hills, Madhapur, Hyderabad, Telangana 500081",
-    href: MAP_LINK,
-  },
   { icon: Clock, label: "Reply time", value: "Within 24 business hours" },
 ];
 
@@ -111,10 +121,14 @@ const formatDate = (ms) =>
 
 /* ---------- PAGE ---------- */
 export default function Contact() {
+  const [topic, setTopic] = useState(topics[0].id);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
 
+  const activeTopic = topics.find((t) => t.id === topic);
+
+  /* EmailJS logic below is exactly the same as before */
   const onSubmit = async (e) => {
     e.preventDefault();
     const formEl = e.currentTarget;
@@ -138,7 +152,9 @@ export default function Contact() {
       const recent = readStore(SENT_KEY).filter((a) => now - a.t < REPEAT_WINDOW_MS);
       const previous = recent.find((a) => a.k === emailKey || (phoneKey && a.k === phoneKey));
       if (previous) {
-        setError(`You have already contacted us with these details. Please try again after 2 days. You can send another message on ${formatDate(previous.t + REPEAT_WINDOW_MS)}.`);
+        setError(
+          `You have already contacted us with these details. Please try again after 2 days. You can send another message on ${formatDate(previous.t + REPEAT_WINDOW_MS)}.`
+        );
         return;
       }
 
@@ -167,97 +183,230 @@ export default function Contact() {
 
   return (
     <div className="overflow-x-hidden bg-white font-sans text-ink antialiased">
-      {/* ===== HERO ===== */}
-      <section className="pt-2.5 sm:pt-4" aria-label="Contact Rare IT">
-        <div className="relative isolate mx-auto w-[min(1240px,100%-20px)] overflow-hidden rounded-[24px] border border-line bg-white shadow-[0_40px_90px_-60px_rgba(11,21,48,0.35)] sm:w-[min(1240px,100%-40px)] sm:rounded-[32px] lg:w-[min(1720px,100%-64px)] lg:rounded-[44px]">
-          <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-brand" />
-          <div aria-hidden="true" className={`${dotField} [mask-image:radial-gradient(ellipse_at_70%_30%,black,transparent_70%)]`} />
+      {/* ===== TOP: LEFT (HERO + OFFICE + MAP) / RIGHT (FORM PANEL) ===== */}
+      <section className={`${wrap} pb-14 pt-3 sm:pb-20 sm:pt-5 lg:pb-24`} aria-label="Contact Rare IT">
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8 2xl:gap-12">
+          {/* ---------- LEFT COLUMN ---------- */}
+          <div className="flex min-w-0 flex-col">
+            {/* Dark hero card */}
+            <div className="relative isolate flex min-h-[260px] flex-col justify-end overflow-hidden rounded-[24px] bg-ink p-6 sm:min-h-[340px] sm:rounded-[32px] sm:p-10 lg:min-h-[380px] lg:p-12 2xl:min-h-[460px] 2xl:rounded-[44px] 2xl:p-16">
+              <div aria-hidden="true" className="absolute -right-24 -top-24 -z-10 h-[420px] w-[420px] rotate-12 rounded-[48px] bg-white/[0.05]" />
+              <div aria-hidden="true" className="absolute -bottom-32 right-10 -z-10 h-[360px] w-[520px] -rotate-6 rounded-[48px] bg-white/[0.06]" />
+              <div aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-1 bg-brand" />
 
-          <div className="px-5 pb-10 pt-12 sm:px-10 sm:pb-14 sm:pt-16 lg:px-16 lg:pb-14 lg:pt-24 xl:px-20">
-            <p className="text-sm font-semibold text-brand">Contact Rare IT</p>
-            <h1 className="mt-5 max-w-5xl text-balance font-display text-[clamp(40px,10vw,68px)] font-medium leading-[1.02] tracking-[-0.04em] lg:text-[clamp(56px,7vw,110px)] lg:leading-[0.96]">
-              Let’s connect<span className="text-brand">.</span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg lg:mt-8 lg:text-[20px] lg:leading-[1.6]">
-              Tell us about your project, your team or just an idea. We will reply within 24 business hours with clear next steps.
-            </p>
+              <h1 className="text-balance font-display text-[clamp(34px,8vw,56px)] font-medium leading-[1.02] tracking-[-0.03em] text-white lg:text-[clamp(44px,5vw,72px)] 2xl:text-[clamp(64px,4.6vw,96px)]">
+                Contact Rare IT<span className="text-brand">.</span>
+              </h1>
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-white/80 sm:mt-5 sm:text-lg 2xl:max-w-2xl 2xl:text-xl">
+                Share a project, send an update or ask a question. We reply within 24 business hours with clear next steps.
+              </p>
+            </div>
+
+            {/* Office */}
+            <div className="mt-10 flex flex-1 flex-col sm:mt-14">
+              <h2 className={h2Cls}>Our office</h2>
+              <h3 className="mt-5 font-display text-xl font-medium tracking-tight 2xl:text-2xl">Hyderabad</h3>
+              <address className="mt-2 max-w-md text-[15px] not-italic leading-relaxed text-muted 2xl:max-w-lg 2xl:text-base">
+                Raghuma Towers, 4th Floor, Phase 2,
+                <br />
+                Kavuri Hills, Madhapur,
+                <br />
+                Hyderabad, Telangana 500081
+              </address>
+              <a
+                href={MAP_LINK}
+                target="_blank"
+                rel="noreferrer"
+                className={`group mt-4 inline-flex w-fit items-center gap-2 text-sm font-semibold text-brand underline-offset-4 hover:underline 2xl:text-base ${focusRing}`}
+              >
+                Open in Google Maps
+                <ArrowUpRight size={15} className="transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+
+              <ul className="mt-7 grid divide-y divide-line border-y border-line min-[640px]:grid-cols-3 min-[640px]:divide-x min-[640px]:divide-y-0">
+                {details.map(({ icon: Icon, label, value, href }) => {
+                  const inner = (
+                    <>
+                      <span className={`${iconTile} size-10 shrink-0 2xl:size-12`}>
+                        <Icon size={18} strokeWidth={1.8} />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] text-muted 2xl:text-sm">{label}</span>
+                        <span className="mt-0.5 block break-words text-sm font-semibold leading-snug 2xl:text-base">{value}</span>
+                      </span>
+                    </>
+                  );
+                  const cls = "flex items-center gap-3 px-1 py-4 min-[640px]:px-4 min-[640px]:first:pl-0 2xl:py-5";
+                  return (
+                    <li key={label} className="min-w-0">
+                      {href ? (
+                        <a href={href} className={`${cls} transition hover:text-brand ${focusRing}`}>
+                          {inner}
+                        </a>
+                      ) : (
+                        <div className={cls}>{inner}</div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+
+              {/* Map fills the remaining height so both columns end level on desktop */}
+              <div className="relative mt-7 min-h-[280px] flex-1 overflow-hidden rounded-2xl border border-line sm:min-h-[340px] lg:min-h-[320px]">
+                <iframe
+                  title="Rare IT office location on Google Maps"
+                  src={MAP_EMBED}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0 h-full w-full grayscale transition duration-500 hover:grayscale-0"
+                />
+              </div>
+            </div>
           </div>
 
-          <ul className="grid border-t border-line sm:grid-cols-3">
-            {[details[0], details[1], details[3]].map(({ icon: Icon, label, value, href }, i) => {
-              const inner = (
-                <>
-                  <span className={`${iconTile} size-10 shrink-0 lg:size-11`}><Icon size={18} strokeWidth={1.8} /></span>
-                  <span>
-                    <span className="block text-[13px] text-muted">{label}</span>
-                    <span className="mt-0.5 block text-sm font-semibold leading-snug lg:text-[15px]">{value}</span>
-                  </span>
-                </>
-              );
-              const cls = `flex items-center gap-4 px-5 py-5 sm:px-8 lg:px-12 lg:py-7 ${i > 0 ? "border-t border-line sm:border-l sm:border-t-0" : ""}`;
-              return (
-                <li key={label}>
-                  {href ? <a href={href} className={`${cls} transition hover:text-brand ${focusRing}`}>{inner}</a> : <div className={cls}>{inner}</div>}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </section>
-
-      {/* ===== FORM + DETAILS ===== */}
-      <section className={`${wrap} ${sectionY}`}>
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
-          {/* Form */}
-          <div className="relative overflow-hidden rounded-3xl border border-line bg-white p-6 pt-9 shadow-[0_40px_80px_-52px_rgba(11,21,48,0.4)] sm:p-10 sm:pt-12 lg:p-12 lg:pt-14">
-            <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-brand" />
+          {/* ---------- RIGHT COLUMN: FORM PANEL ---------- */}
+          <aside className="min-w-0 rounded-[24px] bg-[#F4F5F8] p-5 sm:rounded-[32px] sm:p-8 lg:p-8 xl:p-10 2xl:rounded-[44px] 2xl:p-14">
             {sent ? (
-              <div role="status" className="grid h-full min-h-[420px] place-items-center text-center">
+              <div role="status" className="grid min-h-[480px] place-items-center text-center">
                 <div>
                   <span className="mx-auto grid size-14 place-items-center rounded-full bg-brand text-white">
                     <Check size={26} strokeWidth={3} />
                   </span>
-                  <h2 className="mt-5 font-display text-2xl font-medium tracking-tight">Thank you!</h2>
-                  <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
+                  <h2 className="mt-5 font-display text-2xl font-medium tracking-tight 2xl:text-3xl">Thank you!</h2>
+                  <p className="mx-auto mt-2 max-w-sm text-sm text-muted 2xl:text-base">
                     We have received your details and will be in touch within 24 business hours.
                   </p>
                 </div>
               </div>
             ) : (
               <>
-                <h2 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">Send us a message</h2>
-                <p className="mt-2 text-sm text-muted">Fields marked with a star are required.</p>
-                <form onSubmit={onSubmit} className="mt-7 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:gap-5">
-                  <label className="sr-only" htmlFor="first">First name</label>
-                  <input id="first" required name="first" autoComplete="given-name" placeholder="First name *" className={fieldCls} />
-                  <label className="sr-only" htmlFor="last">Last name</label>
-                  <input id="last" required name="last" autoComplete="family-name" placeholder="Last name *" className={fieldCls} />
-                  <label className="sr-only" htmlFor="email">Business email address</label>
-                  <input id="email" required type="email" name="email" autoComplete="email" placeholder="Business email address *" className={`${fieldCls} sm:col-span-2`} />
-                  <label className="sr-only" htmlFor="company">Company name</label>
-                  <input id="company" name="company" autoComplete="organization" placeholder="Company name" className={fieldCls} />
-                  <label className="sr-only" htmlFor="phone">Phone number</label>
-                  <input id="phone" type="tel" name="phone" autoComplete="tel" inputMode="tel" placeholder="Phone number" className={fieldCls} />
-                  <label className="sr-only" htmlFor="service">I’m interested in</label>
-                  <select id="service" required name="service" defaultValue="" className={`${fieldCls} sm:col-span-2`}>
-                    <option value="" disabled>I’m interested in *</option>
-                    <option>Process Automation</option>
-                    <option>Web Designing</option>
-                    <option>Custom Software</option>
-                    <option>Mobile App Development</option>
-                    <option>Something else</option>
-                  </select>
-                  <label className="sr-only" htmlFor="message">About your project</label>
-                  <textarea id="message" required name="message" rows={5} placeholder="Tell us a little about your project *" className={`${fieldCls} resize-none sm:col-span-2`} />
+                <h2 className={h2Cls}>Contact us</h2>
+                <h3 className="mt-7 font-display text-xl font-medium tracking-tight sm:text-2xl 2xl:mt-10 2xl:text-3xl">
+                  How can we help?
+                </h3>
+
+                {/* Topic tiles */}
+                <div
+                  role="radiogroup"
+                  aria-label="How can we help?"
+                  className="mt-5 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 2xl:gap-4"
+                >
+                  {topics.map(({ id, icon: Icon }) => {
+                    const active = topic === id;
+                    return (
+                      <button
+                        key={id}
+                        type="button"
+                        role="radio"
+                        aria-checked={active}
+                        onClick={() => setTopic(id)}
+                        className={`${tileBase} ${focusRing} ${
+                          active
+                            ? "border-brand bg-brand text-white"
+                            : "border-line bg-white text-ink hover:border-brand/50"
+                        }`}
+                      >
+                        <Icon size={18} strokeWidth={2} className="shrink-0" />
+                        {id}
+                      </button>
+                    );
+                  })}
+
+                  {/* Careers: redirects to the careers page */}
+                  <Link
+                    to="/careers"
+                    className={`${tileBase} justify-between border-line bg-white text-ink hover:border-brand hover:text-brand ${focusRing}`}
+                  >
+                    <span className="flex items-center gap-3">
+                      <Briefcase size={18} strokeWidth={2} className="shrink-0" />
+                      Careers
+                    </span>
+                    <ArrowUpRight size={16} />
+                  </Link>
+                </div>
+
+                <p className="mt-7 text-[15px] leading-relaxed text-ink 2xl:mt-9 2xl:text-lg">
+                  {activeTopic.blurb} Fill out your details below and a Rare IT team member will contact you shortly.
+                </p>
+                <p className="mt-3 text-sm text-muted 2xl:text-base">
+                  <span className="text-brand">*</span> is required for submission
+                </p>
+
+                <form
+                  onSubmit={onSubmit}
+                  className="mt-6 grid grid-cols-1 gap-4 min-[520px]:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:gap-5"
+                >
+                  <input type="hidden" name="topic" value={topic} />
+
+                  <div>
+                    <label className={labelCls} htmlFor="first">
+                      First name <span className="text-brand">*</span>
+                    </label>
+                    <input id="first" required name="first" autoComplete="given-name" className={fieldCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls} htmlFor="last">
+                      Last name <span className="text-brand">*</span>
+                    </label>
+                    <input id="last" required name="last" autoComplete="family-name" className={fieldCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls} htmlFor="email">
+                      Email address <span className="text-brand">*</span>
+                    </label>
+                    <input id="email" required type="email" name="email" autoComplete="email" className={fieldCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls} htmlFor="company">
+                      Company name
+                    </label>
+                    <input id="company" name="company" autoComplete="organization" className={fieldCls} />
+                  </div>
+                  <div className="min-[520px]:col-span-2 lg:col-span-1 xl:col-span-2">
+                    <label className={labelCls} htmlFor="phone">
+                      Phone number
+                    </label>
+                    <input id="phone" type="tel" name="phone" autoComplete="tel" inputMode="tel" className={fieldCls} />
+                  </div>
+                  <div className="min-[520px]:col-span-2 lg:col-span-1 xl:col-span-2">
+                    <label className={labelCls} htmlFor="service">
+                      I’m interested in <span className="text-brand">*</span>
+                    </label>
+                    <select id="service" required name="service" defaultValue="" className={fieldCls}>
+                      <option value="" disabled>
+                        Select a service
+                      </option>
+                      <option>Process Automation</option>
+                      <option>Web Designing</option>
+                      <option>Custom Software</option>
+                      <option>Mobile App Development</option>
+                      <option>Something else</option>
+                    </select>
+                  </div>
+                  <div className="min-[520px]:col-span-2 lg:col-span-1 xl:col-span-2">
+                    <label className={labelCls} htmlFor="message">
+                      Message <span className="text-brand">*</span>
+                    </label>
+                    <textarea
+                      id="message"
+                      required
+                      name="message"
+                      rows={5}
+                      placeholder="Tell us a little about your project"
+                      className={`${fieldCls} resize-none`}
+                    />
+                  </div>
+
                   {error && (
-                    <p role="alert" className="text-sm text-brand sm:col-span-2">
+                    <p role="alert" className="text-sm text-brand min-[520px]:col-span-2 lg:col-span-1 xl:col-span-2">
                       {error}
                     </p>
                   )}
+
                   <button
                     type="submit"
                     disabled={sending}
-                    className={`group mt-1 inline-flex items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2 sm:justify-self-start ${focusRing}`}
+                    className={`group mt-1 inline-flex items-center justify-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] transition hover:bg-brand-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 min-[520px]:col-span-2 min-[520px]:justify-self-start lg:col-span-1 xl:col-span-2 2xl:text-base ${focusRing}`}
                   >
                     {sending ? "Sending..." : "Send message"}
                     <span className="grid size-10 place-items-center rounded-full bg-white text-brand transition group-hover:translate-x-0.5">
@@ -267,133 +416,55 @@ export default function Contact() {
                 </form>
               </>
             )}
-          </div>
-
-          {/* Details */}
-          <aside className="relative isolate overflow-hidden rounded-3xl border border-line bg-white p-6 pt-9 shadow-[0_40px_80px_-52px_rgba(11,21,48,0.3)] sm:p-10 sm:pt-12 lg:self-start lg:p-12 lg:pt-14">
-            <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-brand" />
-            <div aria-hidden="true" className={`${dotField} [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_top_right,black,transparent_65%)]`} />
-            <h2 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">Reach us directly.</h2>
-            <ul className="mt-8 divide-y divide-line border-t border-line">
-              {details.map(({ icon: Icon, label, value, href }) => (
-                <li key={label} className="flex items-start gap-4 py-5">
-                  <span className={`${iconTile} size-11 shrink-0`}>
-                    <Icon size={18} strokeWidth={1.8} />
-                  </span>
-                  <div className="min-w-0">
-                    <span className="block text-sm text-muted">{label}</span>
-                    {href ? (
-                      <a
-                        href={href}
-                        target={href.startsWith("http") ? "_blank" : undefined}
-                        rel={href.startsWith("http") ? "noreferrer" : undefined}
-                        className={`mt-0.5 block break-words font-semibold leading-snug underline-offset-4 transition hover:text-brand hover:underline ${focusRing}`}
-                      >
-                        {value}
-                      </a>
-                    ) : (
-                      <span className="mt-0.5 block font-semibold leading-snug">{value}</span>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
           </aside>
         </div>
       </section>
 
-      {/* ===== MAP ===== */}
+      {/* ===== BOTTOM: WHAT HAPPENS NEXT + FAQ (full width) ===== */}
       <section className="border-t border-line bg-white">
-        <div className={`${wrap} ${sectionY}`}>
-          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
-            <h2 className={`${h2Cls} max-w-2xl`}>Visit our office.</h2>
-            <a
-              href={MAP_LINK}
-              target="_blank"
-              rel="noreferrer"
-              className={`group inline-flex items-center gap-2 rounded-full border border-line bg-white py-1.5 pl-5 pr-1.5 text-sm font-semibold transition hover:border-brand hover:bg-brand hover:text-white ${focusRing}`}
-            >
-              Open in Google Maps
-              <span className="grid size-8 place-items-center rounded-full border border-brand/25 text-brand transition group-hover:border-white/40 group-hover:text-white">
-                <ArrowUpRight size={15} />
-              </span>
-            </a>
-          </div>
-          <div className="relative mt-10 overflow-hidden rounded-3xl border border-line shadow-[0_40px_80px_-52px_rgba(11,21,48,0.4)] lg:mt-14">
-            <iframe
-              title="Rare IT office location on Google Maps"
-              src={MAP_EMBED}
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="h-[380px] w-full grayscale transition duration-500 hover:grayscale-0 sm:h-[460px] lg:h-[520px]"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ===== WHAT HAPPENS NEXT ===== */}
-      <section className="border-t border-line bg-white">
-        <div className={`${wrap} ${sectionY}`}>
-          <h2 className={`${h2Cls} max-w-2xl`}>What happens next.</h2>
-          <ol className="mt-10 grid gap-0 md:grid-cols-3 md:gap-x-10 lg:mt-14 lg:gap-x-0">
-            {next.map(({ title, text }, i) => (
-              <li key={title} className="relative border-t border-ink/15 py-7 lg:pr-12">
-                <span aria-hidden="true" className="absolute -top-px left-0 h-0.5 w-12 bg-brand" />
-                <span aria-hidden="true" className="font-display text-5xl font-medium leading-none tracking-tight text-ink/10 lg:text-7xl">0{i + 1}</span>
-                <h3 className="mt-5 font-display text-2xl font-medium tracking-tight lg:text-[28px]">{title}</h3>
-                <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted lg:text-[15px]">{text}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* ===== FAQ ===== */}
-      <section className="border-t border-line bg-white">
-        <div className={`${wrap} ${sectionY} grid gap-8 lg:grid-cols-[0.8fr_1.6fr] lg:gap-20`}>
-          <div className="lg:sticky lg:top-28 lg:self-start">
-            <h2 className={h2Cls}>Common questions.</h2>
-          </div>
-          <div className="space-y-3 lg:space-y-4">
-            {faqs.map((f) => (
-              <details
-                key={f.q}
-                className="group rounded-2xl border border-line bg-white px-5 transition open:border-brand/40 open:shadow-[0_24px_50px_-36px_rgba(11,21,48,0.35)] sm:px-6 lg:rounded-3xl lg:px-9 lg:hover:border-ink/25"
-              >
-                <summary className={`flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-semibold leading-snug marker:hidden sm:text-lg lg:min-h-24 lg:text-xl [&::-webkit-details-marker]:hidden ${focusRing}`}>
-                  {f.q}
-                  <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line bg-white transition group-open:rotate-45 group-open:border-brand group-open:bg-brand group-open:text-white lg:size-11">
-                    <Plus size={18} />
+        <div className={`${wrap} grid gap-12 py-14 sm:py-20 lg:grid-cols-2 lg:gap-16 lg:py-24 2xl:gap-24`}>
+          {/* What happens next */}
+          <div className="min-w-0">
+            <h2 className={h2Cls}>What happens next</h2>
+            <ol className="mt-6 divide-y divide-line border-y border-line 2xl:mt-8">
+              {next.map(({ title, text }, i) => (
+                <li key={title} className="flex gap-5 py-5 2xl:py-7">
+                  <span
+                    aria-hidden="true"
+                    className="grid size-9 shrink-0 place-items-center rounded-full bg-brand text-sm font-semibold text-white 2xl:size-11 2xl:text-base"
+                  >
+                    {i + 1}
                   </span>
-                </summary>
-                <p className="max-w-2xl pb-6 text-[15px] leading-relaxed text-muted lg:pb-9 lg:text-base lg:leading-[1.7]">{f.a}</p>
-              </details>
-            ))}
+                  <div>
+                    <h3 className="font-display text-lg font-medium tracking-tight 2xl:text-2xl">{title}</h3>
+                    <p className="mt-1 max-w-md text-sm leading-relaxed text-muted 2xl:max-w-lg 2xl:text-base">{text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
-        </div>
-      </section>
 
-      {/* ===== CLOSING PANEL ===== */}
-      <section className={`${wrap} pb-20 sm:pb-28`}>
-        <div className="relative isolate overflow-hidden rounded-3xl border border-line bg-white px-6 py-14 text-center shadow-[0_40px_90px_-56px_rgba(11,21,48,0.4)] sm:px-16 sm:py-20">
-          <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-brand" />
-          <div aria-hidden="true" className={`${dotField} [mask-image:radial-gradient(ellipse_at_50%_50%,black,transparent_70%)]`} />
-          <h2 className="mx-auto max-w-2xl text-balance font-display text-[clamp(28px,4vw,52px)] font-medium leading-[1.08] tracking-[-0.03em]">
-            Looking for a job instead?
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-            See our open roles and apply to join the Rare IT team.
-          </p>
-          <div className="mt-8 flex justify-center">
-            <Link
-              to="/careers"
-              className={`group inline-flex items-center gap-3 rounded-full bg-brand py-2 pl-7 pr-2 text-sm font-semibold text-white shadow-[0_14px_30px_-12px_rgba(200,16,46,0.6)] transition hover:bg-brand-dark active:scale-[0.98] ${focusRing}`}
-            >
-              View careers
-              <span className="grid size-10 place-items-center rounded-full bg-white text-brand transition group-hover:translate-x-0.5">
-                <ArrowRight size={16} />
-              </span>
-            </Link>
+          {/* FAQ */}
+          <div className="min-w-0">
+            <h2 className={h2Cls}>Common questions</h2>
+            <div className="mt-6 space-y-3 2xl:mt-8 2xl:space-y-4">
+              {faqs.map((f) => (
+                <details
+                  key={f.q}
+                  className="group rounded-xl border border-line bg-white px-5 transition open:border-brand/40 sm:px-6 2xl:rounded-2xl 2xl:px-8"
+                >
+                  <summary
+                    className={`flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left text-base font-semibold leading-snug marker:hidden 2xl:min-h-20 2xl:text-xl [&::-webkit-details-marker]:hidden ${focusRing}`}
+                  >
+                    {f.q}
+                    <span className="grid size-9 shrink-0 place-items-center rounded-full border border-line bg-white transition group-open:rotate-45 group-open:border-brand group-open:bg-brand group-open:text-white 2xl:size-11">
+                      <Plus size={18} />
+                    </span>
+                  </summary>
+                  <p className="max-w-2xl pb-6 text-[15px] leading-relaxed text-muted 2xl:pb-8 2xl:text-lg">{f.a}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </div>
       </section>
